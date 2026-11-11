@@ -27,3 +27,7 @@ not a security clearance; consult release notes for current review status.
 Windows, physical Android and iOS were not device-tested. Native macOS pixel
 capture remains unverified in this run; local 3D/direct-reader fixture results
 do not prove arbitrary 3D app support. No autoplay, Study or coaching was added.
+
+FINAL DISTRIBUTION CHECK: Play Protect blocked the replacement 1.5.0 APK after
+scanning. Installation stopped and the public APK was withdrawn. No successful
+release upgrade/data migration is claimed; the APK remains under review.

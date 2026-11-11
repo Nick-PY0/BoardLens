@@ -1,4 +1,4 @@
-# On this phone
+# On this phone (source preview)
 
 Android has two independent sections: **On this phone** reads a board in another phone app; **Computer companion** controls boards on a paired Mac/Windows computer. Phone settings use their own preferences and never change desktop settings.
 
@@ -12,4 +12,4 @@ Recognition runs locally with the MIT Fenshot tile model. Only flat, unobstructe
 
 The bundled Stockfish executable is built from the corresponding source archive in `engine-source`, GPL-3.0. Rebuild with `engine-source/build-android.sh` and an Android NDK r27+. NNUE download: official-stockfish/networks `nn-1a298aa575a0.nnue`, SHA-256 `1a298aa575a085434d29027978dc36867fe9c5bcea9376654b7a8eba1e52dfc2`. The download contains evaluation data, not executable code. The Fenshot model and its MIT notice are bundled in assets. ONNX Runtime Android is MIT licensed.
 
-Automatic update checks can be switched off on the section picker. They open the public release when an APK is available; Android controls download/installation. BoardLens does not request permission to install other packages. The previous development APK was blocked by Play Protect and is withheld; a successful development build is not security clearance.
+Automatic update checks can be switched off on the section picker. They open the public release when an APK is available; Android controls download/installation. BoardLens does not request permission to install other packages. Play Protect blocked both the development APK and the replacement release candidate; APK distribution is withheld. a successful development build is not security clearance.

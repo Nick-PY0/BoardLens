@@ -58,7 +58,7 @@ public final class ScreenService extends Service {
   private Rect target;
   private ChessPosition position;
   private boolean bottom = true;
-  private String pending = "", lastSettings = "";
+  private String pending = "", lastSettings = "", lastTurn = "Auto";
   private int stable = 0, failures = 0;
   private long lastScan = 0;
   private volatile long generation = 0;
@@ -258,6 +258,8 @@ public final class ScreenService extends Service {
       String key = settingsKey();
       if (!key.equals(lastSettings)) {
         lastSettings = key;
+        if (!settings.turn().equals(lastTurn) && !settings.turn().equals("Auto")) position = null;
+        lastTurn = settings.turn();
         generation++;
         moves.cancel();
         evaluator.cancel();
@@ -316,10 +318,6 @@ public final class ScreenService extends Service {
         status = "Waiting for a legal, stable position";
         changed();
         return;
-      }
-      if (!settings.turn().equals("Auto") && synced.white != settings.turn().equals("White")) {
-        synced.white = settings.turn().equals("White");
-        if (!synced.valid()) return;
       }
       boolean changedPosition = position == null || !position.fen().equals(synced.fen());
       position = synced;

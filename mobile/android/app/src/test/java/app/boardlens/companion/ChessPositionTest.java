@@ -33,6 +33,7 @@ public class ChessPositionTest {
     ChessPosition p = new ChessPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     ChessPosition next = p.play("e2e4").play("c7c5");
     assertEquals(next.fen(), ChessPosition.sync(p, next.placement(), "Auto").fen());
+    assertFalse(ChessPosition.sync(p, p.play("e2e4").placement(), "White").white);
   }
 
   @Test

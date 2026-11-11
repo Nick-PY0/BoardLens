@@ -17,7 +17,9 @@ No paid AI subscription is required. Normal recognition and engine analysis run 
 <p align="center">Android companion, captured in an emulator. Real app screens, not design mockups.</p>
 
 
-### Two Android sections
+### Two Android sections (source preview)
+
+<p align="center"><img src="docs/images/android-sections.png" alt="Android section picker" width="270"> <img src="docs/images/android-phone.png" alt="Standalone phone analysis development test" width="270"></p>
 
 **On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
 
@@ -28,7 +30,7 @@ The evaluation provider is independent of the move provider: use Stockfish to sc
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
 
-### Two Android sections
+### Two Android sections (source preview)
 
 **On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
 
@@ -39,7 +41,7 @@ The evaluation provider is independent of the move provider: use Stockfish to sc
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
 
-### Two Android sections
+### Two Android sections (source preview)
 
 **On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
 
@@ -50,7 +52,7 @@ The evaluation provider is independent of the move provider: use Stockfish to sc
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
 
-### Two Android sections
+### Two Android sections (source preview)
 
 **On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
 
@@ -60,7 +62,7 @@ The evaluation provider is independent of the move provider: use Stockfish to sc
 
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
-> **Android status:** The earlier development APK was withdrawn after Play Protect blocked it. The new, non-debuggable Android 1.5 candidate adds a separate phone scanner and removes the custom APK installer. See the current release notes for its review status; never bypass a Play Protect warning.
+> **Android APK withheld:** Play Protect blocked the replacement 1.5.0 release candidate after scanning it. Installation was stopped and the APK removed. The phone-scanning feature is available in source and development tests; it is not cleared for normal Android installation. The browser companion remains available. [Review status →](docs/ANDROID-REVIEW.md)
 
 ## Download & start
 
@@ -153,3 +155,8 @@ Pixel reads need a clear board and cannot always recover turn, castling or en-pa
 See [CONTRIBUTING.md](CONTRIBUTING.md). The source is organized into `desktop/` and `mobile/`; branding and real UI screenshots are in `docs/`.
 
 GPL-3.0-or-later. Bundled recognition models, artwork and other components retain their notices in [desktop/THIRD-PARTY.txt](desktop/THIRD-PARTY.txt). BoardLens is not affiliated with Chess.com, Lichess or the engine authors.
+
+<details><summary>Phone screen arrows — development test</summary>
+<img src="docs/images/android-live-screen.png" alt="Native Android arrows on a controlled offline board" width="360">
+<p>Emulator development test. The APK remains withheld after Play Protect blocked installation.</p>
+</details>

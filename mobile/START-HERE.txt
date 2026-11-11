@@ -1,3 +1,7 @@
+ANDROID APK WITHHELD — Play Protect blocked the 1.5.0 release candidate.
+The phone scanner is a source/development preview; no installation clearance
+is claimed. Use the browser computer companion while review is pending.
+
 BOARDLENS 1.5 — DESKTOP 2.12
 
 One Android app, two separate sections:
