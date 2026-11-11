@@ -5,14 +5,14 @@ import argparse,hashlib,json,re,shutil,zipfile
 ROOT=Path(__file__).resolve().parents[1]
 SKIP={'.venv','.git','.gradle','build','.idea','__pycache__','.pytest_cache','xcuserdata'}
 def include(path):
-    return not any(p in SKIP for p in path.parts) and path.name not in {'local.properties','.DS_Store'} and path.suffix not in {'.pyc','.xcuserstate','.jks','.keystore'}
+    return not any(p in SKIP for p in path.parts) and path.name not in {'local.properties','.DS_Store'} and path.suffix not in {'.pyc','.xcuserstate','.jks','.keystore','.p12','.pem'}
 def files(root):return [p for p in sorted(root.rglob('*')) if p.is_file() and include(p.relative_to(root))]
 def archive(destination,root,prefix):
     with zipfile.ZipFile(destination,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as out:
         for path in files(root):out.write(path,str(Path(prefix)/path.relative_to(root)))
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--apk',type=Path,default=ROOT/'mobile/android/app/build/outputs/apk/debug/app-debug.apk');parser.add_argument('--output',type=Path,default=ROOT/'dist');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--apk',type=Path,required=True);parser.add_argument('--output',type=Path,default=ROOT/'dist');args=parser.parse_args()
     target=args.output;target.mkdir(parents=True,exist_ok=True);desktop=ROOT/'desktop';mobile=ROOT/'mobile'
     if not args.apk.is_file():raise SystemExit('Build the signed Android APK first, then pass --apk.')
     owned=desktop/'release-files.json';owned.write_text(json.dumps(sorted(set(str(p.relative_to(desktop)) for p in files(desktop))|{'release-files.json'}),indent=2)+'\n')

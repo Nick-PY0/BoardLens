@@ -1,68 +1,29 @@
-BOARDLENS 2.11 — VALIDATION, NOVEMBER 11, 2026
+BOARDLENS 2.12 / ANDROID 1.5 — NOVEMBER 11, 2026
 
-174 automated tests passed on macOS / Python 3.12 with actual Stockfish.
-Full result: work/publish/full-tests.log in the development workspace.
+181 desktop automated tests passed on macOS with Stockfish 19.
+Android debug/release builds and four JVM chess-rule tests passed.
+An additional 1,803 legal-position comparisons matched python-chess exactly.
+Native Android fixture recognition passed Chess.com, flipped Lichess, and a
+striped monochrome board. Cold recognition can take several seconds; warm
+fixture scans ranged from about 43 to 757 ms in the selected emulator checks.
 
-REMOVAL
-Desktop Study menu, game recording/library, postgame review, What-if and guided
-lessons/puzzles are removed. The phone Study tab, controls, state payload and
-remote commands are removed. Engine presets no longer include Beginner coaching.
-Old commands are rejected rather than executing hidden features. Help contains
-38 guides for the remaining features; removed features are no longer advertised.
-Named presets and target lock have independent implementations. Existing saved
-game/progress files are retained, without reading or writing them at startup.
-Tests verify legacy saved files remain byte-identical and an old coaching preset
-selection restores as Custom settings without changing the chosen engine limits.
+Live Android MediaProjection capture, native Stockfish, separate evaluation,
+continuous screen arrows and tap-through movement were exercised on an Android
+36.1 arm64 emulator. e2-e4 changed the tracked side to Black and generated Black's
+move plus White's reply and Black's following move. Orientation flip and Stop
+were checked. Live landscape capture and orientation flip passed after adding gradient-grid
+detection. A physical A35 was not tested.
 
-REGRESSION
-Coverage includes engine time/depth/strength/styles, recognition fixtures,
-three-board tracking, history, source switching/locking, threat highlights,
-passive overlays, shortcuts, authenticated phone commands and preference saves.
-Presets still save/load/delete over the authenticated phone bridge. Missing
-engines do not silently switch the selected engine. Screen polling remains a
-75 ms target, independently of user-selected thinking time.
+Actual desktop providers tested: Stockfish, Flounder, Maia-2, Maia-3 5M/23M/79M,
+CopyCat and Boychesser. All returned legal continuations of at least three plies.
+Tests prove cancellation and separate phone-position sessions do not change the
+desktop game/engine. Companion pairing was tested through the Android UI.
 
-DESKTOP UI
-Native Cocoa Qt checks passed for all five settings tabs with optional readers,
-browser pairing, engine files and comparison opened. Content and viewport widths
-matched (311 or 320 px); horizontal scroll range and content X both stayed 0.
-The header and Board/Engine settings show no Study or coaching controls.
-Tests also cover compact settings, narrow windows and long preset names.
+The earlier public development APK was blocked by Play Protect and withdrawn.
+The replacement removes its self-installer/permission and uses a non-debuggable
+release signed with a release key and migration lineage. Functional tests are
+not a security clearance; consult release notes for current review status.
 
-ANDROID
-Android 1.4 (versionCode 6) built successfully. Its old saved-game/PGN JavaScript
-bridge was removed. The signing certificate matches the previous Downloads APK,
-so it supports an in-place update. A 411 CSS-pixel Android emulator loaded the
-new desktop-served UI: four navigation tabs, no Study/coaching controls or old
-native export bridge, working presets, phone-to-desktop setting changes, Help
-questions and unknown-question fallback. All four pages fit without horizontal
-overflow; header about 51 px. No JavaScript exceptions occurred during the checks.
-Reconnect/reload a companion session to load the desktop-served menu update.
-The updated APK also removes the unused native export bridge.
-
-VALIDATION LIMITS
-Windows, physical Android devices and iOS were not device-tested in this release.
-Native macOS live pixel capture was not reverified: earlier OS capture probes
-stalled despite permission preflight. Fixture/direct-reader tests do not prove
-current OS screen capture success. Local 3D chess still supports the built-in
-macOS Chess.app, rather than arbitrary external 3D apps. Browser site changes
-may require adapter updates. This update does not add an AI/API connection.
-
-Application files are copied to Downloads/BoardLens 2 and byte-verified.
-User preferences, keys, installed engines/models and existing saved data live
-separately and are retained. Only obsolete application modules/tests are removed
-from the installed source folder; backup copies are in work/remove-study.
-
-BRANDING AND GITHUB UPDATES
-Approved banner fits desktop expanded/compact headers and the mobile toolbar.
-The new square knight icon is used by desktop windows and Android adaptive
-launcher resources. Native Mac layout checks passed with no horizontal overflow.
-Mobile toolbar height is about 53 CSS pixels at width 411.
-Desktop checks the latest stable Nick-PY0/BoardLens GitHub release, verifies its
-manifest/archive checksum and uses a staged restart helper. Tests cover version
-ordering, pinned release URLs, missing manifests, checksum rejection, traversal
-and runtime replacement rejection, preserving unowned files, and rollback after
-a failed write. Android verifies APK checksum, identity, version and certificate
-before asking the normal system installer to install. New builds retain the
-existing development signing identity. Current release metadata uses a public
-v1.0.0 tag with desktop build 2.11.0 and Android build 1.4.0.
+Windows, physical Android and iOS were not device-tested. Native macOS pixel
+capture remains unverified in this run; local 3D/direct-reader fixture results
+do not prove arbitrary 3D app support. No autoplay, Study or coaching was added.

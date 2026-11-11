@@ -1,36 +1,48 @@
-BOARDLENS COMPANION 1.4 — DESKTOP 2.11
+BOARDLENS 1.5 — DESKTOP 2.12
 
-Install BoardLens-Companion-Android.apk on Android 8 or later. This is a
-locally signed development APK, not a Play Store release. Existing installations
-using the same signing key can update without uninstalling.
+One Android app, two separate sections:
 
-Desktop → Phone → Enable phone companion. Use the same Wi-Fi, then enter the
-shown computer address and six-digit code in the Android app. A phone/tablet
-browser can open that same address. Keep the computer awake and running;
-it reads boards and runs engines even when its window is minimized.
+ON THIS PHONE
+Scan a complete 2D board in another Android app. Android 10+, arm64.
+Open Phone engines and download the optional 99 MB Stockfish model.
+Press Start and approve full-screen capture. Allow display over other apps
+for touch-through arrows. Stop from the app or the ongoing notification.
+Phone settings save automatically and never overwrite the desktop settings.
 
-Boards: up to three reconstructed boards, arrows and evaluations.
-Analysis: candidates, replies and engine comparison.
-Settings: grouped Engine, Board, Arrows and More; named analysis presets.
-Edits sync to desktop after a short pause and save automatically. Apply now
-retries a failed sync. Keyboard shortcuts have their own Apply button.
-Controls: scan, suggest, Stop, auto suggest, live-position history, manual
-Practice moves, FEN and screenshot input. Help is available from ?.
+Choose On phone for local Stockfish. Choose Computer in Phone engines for
+installed desktop Maia, Flounder, Tiny bots or custom UCI engines analyzing
+your phone's recognized position. Pair Computer companion first. Only the
+recognized position is sent to that computer; screenshots are never sent.
+Computer-backed engines are not native Android ports.
 
-Study and coaching features are removed, including lessons, game recording,
-postgame review, What-if and the native PGN export bridge. Existing saved
-files on the computer are retained. Reconnect/reload to load the new menus.
+COMPUTER COMPANION
+Desktop → Phone → Enable phone companion. On the same Wi-Fi, enter the
+computer address and six-digit pairing code. This section controls desktop
+boards/settings; edits sync both ways and save automatically. A phone or
+tablet browser can also open the same address. Keep the computer running.
 
-The compact header sits below system bars and camera cutouts. Connection is
-local HTTP with a pairing token. Use a trusted local network. A desktop restart
-requires its new pairing code. Phone polling is about 300 ms while visible,
-independent of the desktop 75 ms capture target and selectable engine time.
+EVALUATION AND PREDICTIONS
+Choose a separate evaluation engine in desktop/companion Engine settings.
+Stockfish may score the bar while Maia recommends moves. Early suggestions
+work as soon as each provider returns its first result; one-move providers
+then predict the opponent's reply and your following move. These are
+predictions, not guaranteed play. Each extra position uses its search budget.
+Local phone evaluation uses its own maximum-strength Stockfish session.
 
-The iPhone/iPad wrapper source is unsigned; it needs Xcode and your signing
-setup for device deployment. No automatic play is included.
+UPDATES
+Desktop automatically checks/downloads verified updates and applies them on
+next launch. Turn this off in Board → App. Android can automatically check
+for releases and open GitHub; Android controls installation. No custom APK
+installer or install-packages permission is included. Existing Android 9+
+installations can migrate to the release signing certificate through Android
+key rotation without uninstalling. Keep the app's data when updating.
 
-BRANDING AND UPDATES
-New knight banner and square app icon. Desktop: Board → App → Check for updates.
-Android: Check for app updates on the connection screen, or Controls → Update
-Android app. Downloads are verified; Android asks you to confirm installation.
-First public release: https://github.com/Nick-PY0/BoardLens/releases/latest
+The earlier development APK was blocked by Play Protect and withdrawn.
+See the current release notes for the replacement APK's review/test status.
+Do not bypass Play Protect. Development/emulator tests are not a guarantee
+that every device or board style is supported.
+
+No autoplay, Study or coaching features. The unsigned iPhone/iPad wrapper
+remains computer-companion-only and requires Xcode/signing for deployment.
+
+https://github.com/Nick-PY0/BoardLens/releases/latest

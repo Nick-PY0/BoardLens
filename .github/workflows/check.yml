@@ -37,5 +37,5 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - run: chmod +x gradlew && ./gradlew :app:assembleDebug --no-daemon
+      - run: chmod +x gradlew && ./gradlew :app:assembleDebug :app:assembleRelease :app:testDebugUnitTest --no-daemon
         working-directory: mobile/android

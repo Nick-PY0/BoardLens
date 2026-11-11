@@ -170,7 +170,7 @@ class MultiBoards(QObject):
         if not w._monitoring or w._reviewing or state.closed:return
         try:path=w.analysis_command()
         except ValueError as exc:state.card.state.setText(str(exc));return
-        board=state.tracker.board.copy();settings=w.search_settings()
+        board=state.tracker.board.copy();settings=w.search_settings();w.evaluations.request(board)
         state.generation+=1;generation=state.generation
         state.last_requested=board.fen();job=state.job=EngineJob();job.session=state.session
         if w.early_suggestions.isChecked():
@@ -209,6 +209,9 @@ class MultiBoards(QObject):
             previous=state.hint_filter.displayed
             state.pinned=deepcopy(previous if previous and previous['fen']==board.fen() else raw)
         shown=state.pinned if w.stick_to_move.isChecked() else state.hint_filter.select(raw,w.steady_arrows.isChecked())
+        if state.pinned and raw:
+            from .hints import merge_continuation
+            merge_continuation(state.pinned,raw)
         arrows=[]
         current=(board.turn==bottom) if w.only_my_color.isChecked() else (w.show_white.isChecked() if board.turn else w.show_black.isChecked())
         other=not w.only_my_color.isChecked() and (w.show_black.isChecked() if board.turn else w.show_white.isChecked())
@@ -221,7 +224,7 @@ class MultiBoards(QObject):
                 arrows.append({'move':chess.Move.from_uci(lead['reply_move']),'color':'#53e2e4','reply':True,'dashed':w.dashed_reply.isChecked()})
         else:card.move.setText('Thinking…' if state.job else 'Waiting for analysis')
         if raw:
-            lead=raw.get('evaluation',raw['lines'][0]);card.bar.cp,card.bar.mate=lead['cp'],lead['mate']
+            lead=w.evaluations.score(board,raw);card.bar.cp,card.bar.mate=lead['cp'],lead['mate']
             card.score.setText(f"{lead['score']} · {lead['advantage']}"+(' · thinking' if raw.get('provisional') else ''))
         marks,messages=w.threat_marks(board,bottom);card.view.marks=marks;card.view.setToolTip("\n".join(messages));card.view.arrows=arrows;card.view.update();card.bar.update()
         if (arrows or marks) and w.overlay_enabled.isChecked() and w._monitoring and state.confirmed and not w._reviewing:

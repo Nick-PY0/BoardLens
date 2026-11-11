@@ -21,4 +21,15 @@ class LiveHintFilter:
             self.displayed=deepcopy(result);self.pending=None
         elif key!=self.pending:self.pending=key;self.since=now
         elif now-self.since>=self.hold:self.displayed=deepcopy(result);self.pending=None
+        merge_continuation(self.displayed,result)
         return self.displayed
+
+
+def merge_continuation(displayed,incoming):
+    if not displayed or not incoming or displayed.get('fen')!=incoming.get('fen'):return
+    by_move={line['move']:line for line in incoming.get('lines',[])}
+    for line in displayed.get('lines',[]):
+        newer=by_move.get(line['move'])
+        if newer and len(newer.get('pv_moves',[]))>len(line.get('pv_moves',[])):
+            for key in ('pv','pv_moves','reply','reply_move','reply_simple','future_move','future_simple'):
+                if key in newer:line[key]=newer[key]

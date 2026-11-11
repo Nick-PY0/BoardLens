@@ -243,3 +243,4 @@ class SearchSettings:
     human_elo: int = 1500
     style: str = "Balanced"
     engine_id: str = "stockfish"
+    predict_continuations: bool = True

@@ -23,6 +23,8 @@ def main():
             ctypes.windll.user32.SetProcessDpiAwarenessContext(ctypes.c_void_p(-4))
         except (AttributeError, OSError):
             pass
+    from .updater import apply_pending_on_launch,AutomaticUpdates
+    if apply_pending_on_launch():return
     from PySide6.QtWidgets import QApplication
     from .app import MainWindow
     app = QApplication(sys.argv)
@@ -32,6 +34,7 @@ def main():
     app.setWindowIcon(app_icon())
     window = MainWindow()
     window.show()
+    window.automatic_updates=AutomaticUpdates(window)
     import signal
     signal.signal(signal.SIGTERM,lambda *_:(window.close(),app.quit()))
     diagnostics=os.environ.get('BOARDLENS_DIAGNOSTICS_PATH')

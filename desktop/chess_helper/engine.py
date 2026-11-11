@@ -3,6 +3,8 @@ from __future__ import annotations
 import threading
 import time
 import os
+from copy import deepcopy
+from dataclasses import replace
 
 import chess
 import chess.engine
@@ -76,6 +78,36 @@ class EngineJob:
             return self._search(engine,board,settings)
 
     def _search(self,engine,board,settings):
+        pipeline_started=time.monotonic()
+        result=self._search_once(engine,board,settings)
+        if not result or self.cancelled.is_set() or not settings.predict_continuations:return result
+        lead=result['lines'][0]
+        if len(lead.get('pv_moves',[]))>=3:return result
+        # One-move providers can still predict a continuation. Publish the
+        # current move first; subsequent positions never replace its identity.
+        if self.on_update:self.on_update(dict(deepcopy(result),continuation_pending=True))
+        moves=list(lead.get('pv_moves') or [lead['move']]);probe=board.copy()
+        for uci in moves:
+            move=chess.Move.from_uci(uci)
+            if move not in probe.legal_moves:return result
+            probe.push(move)
+        callback=self.on_update;self.on_update=None
+        try:
+            while len(moves)<3 and not probe.is_game_over() and not self.cancelled.is_set():
+                next_result=self._search_once(engine,probe,replace(settings,multipv=1,predict_continuations=False))
+                if not next_result:break
+                move=chess.Move.from_uci(next_result['lines'][0]['move'])
+                if move not in probe.legal_moves:break
+                moves.append(move.uci());probe.push(move)
+                if callback:
+                    update=deepcopy(result);update['lines'][0].update(describe_continuation(board,moves));update['continuation_pending']=len(moves)<3;callback(update)
+        finally:self.on_update=callback
+        if self.cancelled.is_set():return None
+        refreshed=describe_continuation(board,moves)
+        result['lines'][0].update(refreshed);result['continuation_pending']=False;result['primary_elapsed']=result.get('elapsed',0);result['elapsed']=time.monotonic()-pipeline_started
+        return result
+
+    def _search_once(self,engine,board,settings):
         if self.cancelled.is_set():
             return None
         options = {}
@@ -196,6 +228,9 @@ def summarize(board, infos, engine_name,allow_unscored=False):
                       "score": (f"M{abs(mate)} {'White' if mate > 0 else 'Black'}" if mate is not None else f"{cp/100:+.2f}" if cp is not None else "—"),
                       "depth": info.get("depth", 0), "pv": " ".join(moves), "description": describe_move(board, pv[0]),
                       "reply": reply, "reply_move": pv[1].uci() if len(pv)>1 else "",
+                      "pv_moves": [move.uci() for move in pv[:12]],
+                      "future_move": pv[2].uci() if len(pv)>2 else "",
+                      "future_simple": describe_continuation(board,[move.uci() for move in pv[:3]])["future_simple"],
                       "simple": simple_move(board,pv[0]),
                       "reply_simple": simple_move(reply_board,pv[1]) if len(pv)>1 else "",
                       "insights": move_insights(board, pv[0]),
@@ -203,3 +238,17 @@ def summarize(board, infos, engine_name,allow_unscored=False):
     if not lines:
         raise ValueError("The engine returned no move. Try a longer thinking time.")
     return {"fen": board.fen(), "engine": engine_name, "lines": lines}
+
+
+def describe_continuation(board,moves):
+    probe=board.copy();pv=[];reply='';reply_simple='';future_simple=''
+    for index,uci in enumerate(moves):
+        move=chess.Move.from_uci(uci)
+        if move not in probe.legal_moves:break
+        prefix=f'{probe.fullmove_number}.' if probe.turn else (f'{probe.fullmove_number}...' if not pv else '')
+        san=probe.san(move);pv.append(prefix+san)
+        if index==1:reply=san+' — '+describe_move(probe,move);reply_simple=simple_move(probe,move)
+        if index==2:future_simple=simple_move(probe,move)
+        probe.push(move)
+    return {'pv':' '.join(pv),'pv_moves':list(moves),'reply':reply,'reply_move':moves[1] if len(moves)>1 else '',
+            'reply_simple':reply_simple,'future_move':moves[2] if len(moves)>2 else '', 'future_simple':future_simple}

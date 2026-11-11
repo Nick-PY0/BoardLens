@@ -9,7 +9,7 @@
       "How do I show it a chessboard?"
     ],
     "steps": [
-      "Board → Read from → Computer screen.",
+      "Board \u2192 Read from \u2192 Computer screen.",
       "Choose Display to read. All displays checks every connected monitor.",
       "Keep all 64 squares visible and move BoardLens away from the target.",
       "Press Scan now. Enable Auto suggest to follow moves."
@@ -29,12 +29,12 @@
     "title": "The board is not being found",
     "summary": "Scan now starts a fresh read. Check the selected display, whether the board is covered, and whether a target lock is keeping an old board selected.",
     "questions": [
-      "Why can’t it see my chessboard?",
+      "Why can\u2019t it see my chessboard?",
       "The scan keeps searching and never finds my game",
       "It stopped detecting after I changed apps"
     ],
     "steps": [
-      "Check Board → Display to read.",
+      "Check Board \u2192 Display to read.",
       "If Keep this board selected is on, return to that board or turn it off.",
       "Keep the whole board visible. Scan now clears old recognition and releases a locked suggestion.",
       "For supported themes or 3D views, try the Browser connection or Local 3D chess connection."
@@ -144,7 +144,7 @@
       "Where is the browser pairing key?"
     ],
     "steps": [
-      "Board → Computer screen → Optional connections → Connect browser.",
+      "Board \u2192 Computer screen \u2192 Optional connections \u2192 Connect browser.",
       "Connection setup explains loading BoardLens 2/BrowserReader in Chrome or Edge.",
       "Copy pairing key. Paste it into the extension popup and choose Connect.",
       "Reload the chess tab and keep it visible."
@@ -190,7 +190,7 @@
     ],
     "steps": [
       "On Mac, enable Read local 3D chess in Optional connections.",
-      "Grant BoardLens/Python Accessibility in System Settings → Privacy & Security.",
+      "Grant BoardLens/Python Accessibility in System Settings \u2192 Privacy & Security.",
       "Open the local Chess board and press Scan now."
     ],
     "details": "Its status says Ready until its supported app is active, then Connected after a board is read. Other local 3D programs and arbitrary camera/artwork screenshots are not covered.",
@@ -249,12 +249,12 @@
     "summary": "Only my color treats the color at the bottom as yours. Side to move is a separate control for uncertain live positions.",
     "questions": [
       "How does it know which color I am?",
-      "It is showing the opponent’s moves",
+      "It is showing the opponent\u2019s moves",
       "How do I change whose turn it is?"
     ],
     "steps": [
       "Enable Only my color for suggestions on your turns only.",
-      "Board → Detect bottom color normally handles orientation automatically.",
+      "Board \u2192 Detect bottom color normally handles orientation automatically.",
       "On a static live position, set Side to move to White or Black if needed."
     ],
     "details": "Only my color forces automatic orientation. A screenshot/DOM read may lack complete castling, en passant or turn history. A full FEN on Practice preserves exact metadata.",
@@ -277,7 +277,7 @@
       "Where are Maia and the tiny bots?"
     ],
     "steps": [
-      "Open Engine → Engine library.",
+      "Open Engine \u2192 Engine library.",
       "Choose the engines to download; large neural models are optional.",
       "After installation, select the engine in Analysis engine."
     ],
@@ -396,7 +396,7 @@
     ],
     "steps": [
       "Set CPU threads to the number you want per engine session.",
-      "Set Hash memory for the engine’s position cache.",
+      "Set Hash memory for the engine\u2019s position cache.",
       "Remember that three boards and engine comparison start separate searches."
     ],
     "details": "Maia and Tiny bots do not expose all of these Stockfish controls.",
@@ -420,7 +420,7 @@
       "Select Balanced, Aggressive, Defensive, Human-like or Maximum strength.",
       "Use Maia when you want a model trained on human decisions."
     ],
-    "details": "These styles do not rewrite an engine’s internal evaluation. Tiny bots keep their coded behavior. Maximum strength removes Stockfish’s skill/Elo limit.",
+    "details": "These styles do not rewrite an engine\u2019s internal evaluation. Tiny bots keep their coded behavior. Maximum strength removes Stockfish\u2019s skill/Elo limit.",
     "controls": [
       "playing_style"
     ],
@@ -432,15 +432,15 @@
     "title": "Tiny bots, Flounder and custom UCI",
     "summary": "Tiny bots choose one move without detailed evaluation or alternatives. Flounder samples Stockfish-derived choices; custom UCI uses an executable you supply.",
     "questions": [
-      "Why can’t this bot show five moves?",
+      "Why can\u2019t this bot show five moves?",
       "Why is the evaluation blank?"
     ],
     "steps": [
-      "Read the selected engine’s capability note.",
+      "Read the selected engine\u2019s capability note.",
       "For Tiny bots use one suggestion; download its shared .NET runtime through Engine library.",
       "For Custom UCI choose its executable in Engine files."
     ],
-    "details": "Reference Elo is not guaranteed at your search budget. Flounder’s target rating is approximate. Custom multiple recommendations require MultiPV support.",
+    "details": "Reference Elo is not guaranteed at your search budget. Flounder\u2019s target rating is approximate. Custom multiple recommendations require MultiPV support.",
     "controls": [
       "custom_engine"
     ],
@@ -518,7 +518,7 @@
     "id": "arrows",
     "category": "Arrows and evaluation",
     "title": "Arrow colors and alternatives",
-    "summary": "Gold is #1, blue is #2, and later colors are more alternatives. Cyan is the opponent’s best reply after #1.",
+    "summary": "Gold is #1, blue is #2, and later colors are more alternatives. Cyan is the opponent\u2019s best reply after #1.",
     "questions": [
       "Why does the blue arrow look different?",
       "What does the cyan arrow mean?",
@@ -526,7 +526,7 @@
     ],
     "steps": [
       "Choose Suggested moves in Engine.",
-      "Use Arrows → Moves to draw and rank filters to control visibility.",
+      "Use Arrows \u2192 Moves to draw and rank filters to control visibility.",
       "Opponent reply shows a continuation after the best move, not a second move for the current turn."
     ],
     "details": "Only my color, Lock move and color/rank filters can intentionally hide arrows. Rank labels identify alternatives. Dashed reply is optional; solid is the default.",
@@ -619,7 +619,7 @@
       "How do I show attacked squares?"
     ],
     "steps": [
-      "Arrows → Threats → Threat highlights.",
+      "Arrows \u2192 Threats \u2192 Threat highlights.",
       "Show attacked squares adds dots for the opponent of the bottom color.",
       "Show mate-in-one targets enables purple targets."
     ],
@@ -664,7 +664,7 @@
       "What does Play best do?"
     ],
     "steps": [
-      "Board → Read from → Practice board.",
+      "Board \u2192 Read from \u2192 Practice board.",
       "Click a piece, then its destination. Click promotion chooses a queen.",
       "Suggest requests analysis; Play best makes exactly one local move.",
       "New game resets the local board; Undo takes back a local move."
@@ -729,7 +729,7 @@
     "steps": [
       "Use Compact/Expand in the top bar.",
       "In Compact, Settings opens the same tabs in a separate window.",
-      "Full analysis expands the text; Text − / + changes its size.",
+      "Full analysis expands the text; Text \u2212 / + changes its size.",
       "Stay on top keeps the desktop window above other windows."
     ],
     "details": "Compact resizing retains the current display and position when possible. Settings content wraps and scrolls vertically.",
@@ -748,7 +748,7 @@
       "Can the GUI be on my iPad?"
     ],
     "steps": [
-      "Desktop → Phone → Enable phone companion.",
+      "Desktop \u2192 Phone \u2192 Enable phone companion.",
       "Open the Android companion or the shown address in a phone/tablet browser.",
       "Enter the six-digit code.",
       "Start with BoardLens enables the companion automatically on desktop startup."
@@ -766,7 +766,7 @@
     "title": "Phone settings sync to desktop",
     "summary": "Phone edits are sent after a short typing pause, reflected in desktop controls and saved there.",
     "questions": [
-      "Why don’t my phone settings change the desktop?",
+      "Why don\u2019t my phone settings change the desktop?",
       "Do I have to press Apply every time?"
     ],
     "steps": [
@@ -774,7 +774,7 @@
       "Apply now retries an interrupted edit.",
       "Paths sync after editing finishes; keyboard shortcuts have their own Apply button."
     ],
-    "details": "If a desktop modal dialog is open, close it before remote edits. Disabled settings reflect the selected engine’s capabilities.",
+    "details": "If a desktop modal dialog is open, close it before remote edits. Disabled settings reflect the selected engine\u2019s capabilities.",
     "controls": [],
     "aliases": [
       "mobile settings not syncing",
@@ -828,16 +828,16 @@
     "id": "updates",
     "category": "Settings and shortcuts",
     "title": "Update BoardLens from GitHub",
-    "summary": "Check for updates manually in Board → App. Android has its own app-update button.",
+    "summary": "Check for updates manually in Board \u2192 App. Android has its own app-update button.",
     "questions": [
       "How do I update BoardLens?",
       "Where is the update button?",
       "Can I update the APK?"
     ],
     "steps": [
-      "Desktop: Board → App → Check for updates.",
+      "Desktop: Board \u2192 App \u2192 Check for updates.",
       "If a newer desktop build is available, choose Download and restart.",
-      "Android: Check for app updates on the connection screen, or Controls → Update Android app.",
+      "Android: Check for app updates on the connection screen, or Controls \u2192 Update Android app.",
       "Confirm an Android installation in the system installer; grant installation access only if you want that update."
     ],
     "details": "Downloads come from Nick-PY0/BoardLens releases and are checksum-verified. Desktop keeps a rollback copy and preserves settings, engines and runtime. Android also checks the package identity, version and signing certificate. A desktop restart requires pairing the companion again.",
@@ -847,6 +847,78 @@
       "install new apk",
       "latest version",
       "github release"
+    ]
+  },
+  {
+    "id": "separate-evaluation",
+    "category": "Engines",
+    "title": "Choose the evaluation engine separately",
+    "summary": "Engine \u2192 Evaluation bar selects who scores the position. It is independent of the move engine.",
+    "details": "Use Stockfish for the bar while Maia or another engine recommends moves. Evaluation think time and depth cap apply only to the evaluator. Maia uses a human rating rather than search limits; its value head is an estimate, not Stockfish centipawns.",
+    "steps": [
+      "Choose a recommendation engine.",
+      "Choose an Evaluation engine, time, and depth cap.",
+      "The bar shows its provider and updates when that separate job finishes."
+    ],
+    "questions": [
+      "Can I use Maia moves with a Stockfish evaluation bar?",
+      "Why is the evaluation different from the selected engine?"
+    ],
+    "aliases": [
+      "separate eval engine",
+      "eval bar provider"
+    ],
+    "controls": [
+      "eval_engine",
+      "eval_seconds",
+      "eval_depth",
+      "eval_human_elo"
+    ]
+  },
+  {
+    "id": "predicted-continuation",
+    "category": "Engines",
+    "title": "Predict the next two moves",
+    "summary": "Predict opponent and my next move adds a reply and your following move for every engine.",
+    "details": "The first recommendation is shown as soon as the provider returns it. Single-move models then analyze the next two positions with the same engine. These are predictions, not guaranteed play. Each extra search uses the selected search budget. Turning this off saves work. Non-streaming models must finish their first inference before there is a result.",
+    "steps": [
+      "Enable Predict opponent and my next move in Engine.",
+      "Enable Early suggestions to show the first result before the continuation finishes.",
+      "Steady arrows keeps the display calm while calculation continues."
+    ],
+    "questions": [
+      "Can Maia predict what I play after the opponent?",
+      "Why do predictions take longer than one move?"
+    ],
+    "aliases": [
+      "early suggestions all models",
+      "three ply prediction"
+    ],
+    "controls": [
+      "predict_continuations"
+    ]
+  },
+  {
+    "id": "automatic-updates",
+    "category": "Getting started",
+    "title": "Automatic app updates",
+    "summary": "Board \u2192 App \u2192 Automatic updates checks and downloads stable desktop releases quietly. A verified update installs at the next launch.",
+    "details": "Your current game is never interrupted. Turn this off to keep manual update control. Archives are checksum checked and staged with rollback. Android checks automatically, then opens the public release; Android controls installation. APKs withheld from a release cannot be installed by the updater.",
+    "steps": [
+      "Enable Automatic updates in Board \u2192 App.",
+      "Keep using BoardLens; any download stays in the background.",
+      "Close and reopen when convenient to install."
+    ],
+    "questions": [
+      "Can it update automatically?",
+      "Will an update interrupt my game?"
+    ],
+    "aliases": [
+      "auto update",
+      "update next launch"
+    ],
+    "controls": [
+      "auto_updates"
     ]
   }
 ]

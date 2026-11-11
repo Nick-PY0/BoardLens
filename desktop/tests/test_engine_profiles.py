@@ -28,7 +28,9 @@ def test_real_strength_options_affect_chosen_recommendation_and_reset_to_full():
             job=EngineJob();job.session=session;updates=[];job.on_update=updates.append
             result=job.run(path,chess.Board(),settings)
             assert result['lines'][0]['move']==result['chosen_move']
-            assert result['recommendation_type']=='strength-limited choice' and not updates
+            assert result['recommendation_type']=='strength-limited choice'
+            # The chosen root stays fixed while later predictions are appended.
+            assert all(update['chosen_move']==result['chosen_move'] for update in updates)
             config=session.engine.protocol.config
             if settings.strength=='Skill level':assert config['Skill Level']==5 and not config['UCI_LimitStrength']
             else:assert config['UCI_Elo']==1500 and config['UCI_LimitStrength']

@@ -49,6 +49,8 @@ def summary(window):
 
 def configuration(window):
     values=asdict(window.search_settings());values['engine']=ENGINE_NAMES[window.engine_kind.currentIndex()]
+    _,evaluator,limits=window.evaluations.profile()
+    values['evaluation']={'engine':evaluator.identity,'settings':asdict(limits)}
     values['stockfish_path']=window.engine_path.text();values['custom_path']=window.custom_engine.text()
     return json.dumps(values,indent=2)
 

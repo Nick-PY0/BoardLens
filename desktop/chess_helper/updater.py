@@ -111,3 +111,62 @@ class UpdateDialog(QDialog):
         subprocess.Popen(command,start_new_session=True);self.window.close()
     def closeEvent(self,event):
         self.cancel.set();self.generation+=1;self.busy=False;super().closeEvent(event)
+
+
+def auto_enabled():
+    try:return json.loads((data_dir()/'updates/preferences.json').read_text()).get('automatic',True) is True
+    except (OSError,ValueError):return True
+
+
+def set_auto_enabled(enabled):
+    folder=data_dir()/'updates';folder.mkdir(parents=True,exist_ok=True)
+    (folder/'preferences.json').write_text(json.dumps({'automatic':bool(enabled)}))
+
+
+def pending_update():
+    """Validate the queued bytes again at launch; stale/downgrade queues are ignored."""
+    folder=data_dir()/'updates';marker=folder/'pending.json'
+    if not auto_enabled() or not marker.is_file():return None
+    try:
+        value=json.loads(marker.read_text());archive=folder/'automatic-update.zip'
+        if not newer(value['version']) or not re.fullmatch('[0-9a-f]{64}',value['sha256']) or hashlib.sha256(archive.read_bytes()).hexdigest()!=value['sha256']:raise ValueError('Invalid queued update')
+        # apply_archive performs the full manifest/path validation in the helper.
+        return archive
+    except (OSError,ValueError,KeyError):marker.unlink(missing_ok=True);return None
+
+
+def apply_pending_on_launch():
+    archive=pending_update()
+    if not archive:return False
+    import os
+    folder=data_dir()/'updates';helper=folder/('apply-'+uuid.uuid4().hex+'.py');shutil.copy2(Path(__file__).with_name('update_apply.py'),helper)
+    command=[sys.executable,str(helper),'--archive',str(archive),'--app',str(Path(__file__).resolve().parent.parent),'--backup',str(folder/'backups'/str(time.time_ns())),'--python',sys.executable,'--pid',str(os.getpid())]
+    subprocess.Popen(command,start_new_session=True);(folder/'pending.json').unlink(missing_ok=True);return True
+
+
+class AutomaticUpdates(QObject):
+    completed=Signal(str)
+    def __init__(self,window):
+        from PySide6.QtCore import QTimer
+        super().__init__(window);self.window=window;self.busy=False;self.cancel=threading.Event();self.completed.connect(self.finished)
+        self.timer=QTimer(self);self.timer.setInterval(6*60*60*1000);self.timer.timeout.connect(self.check);self.timer.start();QTimer.singleShot(2000,self.check)
+    def check(self):
+        if self.busy or not auto_enabled():return
+        self.busy=True
+        def run():
+            message=''
+            try:
+                info=latest_release()
+                if newer(info['version']) and not self.cancel.is_set():
+                    folder=data_dir()/'updates';folder.mkdir(parents=True,exist_ok=True)
+                    download_update(info,folder/'automatic-update.zip',self.cancel)
+                    if not self.cancel.is_set() and auto_enabled():
+                        temporary=folder/'pending.tmp';temporary.write_text(json.dumps({'version':info['version'],'sha256':info['sha256']}));temporary.replace(folder/'pending.json')
+                        message='Update '+info['version']+' downloaded · installs next time you open BoardLens'
+            except Exception:pass # Optional background checks never interrupt a game.
+            if not self.cancel.is_set():self.completed.emit(message)
+        threading.Thread(target=run,daemon=True,name='BoardLens-automatic-update').start()
+    def finished(self,message):
+        self.busy=False
+        if message and not self.window.closing:self.window.status(message)
+    def close(self):self.cancel.set();self.timer.stop()

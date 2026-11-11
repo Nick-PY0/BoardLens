@@ -11,11 +11,11 @@ from .recognition import position_from_read
 from .engine_config import configuration
 from . import engine_library
 
-NUMBERS={'seconds':'Think time (seconds)','depth':'Search depth','multipv':'Candidate moves','threads':'CPU threads per board','hash_mb':'Hash memory (MB)','arrow_count':'Arrow candidates','engine_skill':'Stockfish skill (0–20)','engine_elo':'Stockfish Elo','human_elo':'Maia target human rating'}
-BOOLEANS={'only_my_color':'Only my color','stick_to_move':'Stick to one move','overlay_enabled':'Computer screen arrows','arrow_labels':'Arrow rank labels','show_white':'White suggestions','show_black':'Black suggestions','show_reply':'Opponent best reply','rank_best':'Show #1','rank_second':'Show #2','rank_others':'Show #3 and later','early_suggestions':'Early suggestions while thinking','global_keys':'Global keyboard shortcuts','always_top':'Desktop stays on top','steady_arrows':'Steady arrows · keep calculating','dashed_reply':'Dashed opponent reply arrow (desktop)'}
-ENUMS={'mode':'Engine limit','source':'Board source','orientation':'Board orientation','turn':'Primary board turn','monitor':'Monitor to scan','engine_kind':'Analysis engine · choose manually','strength_mode':'Stockfish strength mode','playing_style':'Playing style','compare_a':'Compare engine A','compare_b':'Compare engine B','compare_c':'Compare engine C'}
+NUMBERS={'eval_seconds':'Evaluation think time','eval_depth':'Evaluation depth cap','eval_human_elo':'Evaluation human rating','seconds':'Think time (seconds)','depth':'Search depth','multipv':'Candidate moves','threads':'CPU threads per board','hash_mb':'Hash memory (MB)','arrow_count':'Arrow candidates','engine_skill':'Stockfish skill (0–20)','engine_elo':'Stockfish Elo','human_elo':'Maia target human rating'}
+BOOLEANS={'predict_continuations':'Predict opponent and my next move','only_my_color':'Only my color','stick_to_move':'Stick to one move','overlay_enabled':'Computer screen arrows','arrow_labels':'Arrow rank labels','show_white':'White suggestions','show_black':'Black suggestions','show_reply':'Opponent best reply','rank_best':'Show #1','rank_second':'Show #2','rank_others':'Show #3 and later','early_suggestions':'Early suggestions while thinking','global_keys':'Global keyboard shortcuts','always_top':'Desktop stays on top','steady_arrows':'Steady arrows · keep calculating','dashed_reply':'Dashed opponent reply arrow (desktop)'}
+ENUMS={'eval_engine':'Evaluation engine','mode':'Engine limit','source':'Board source','orientation':'Board orientation','turn':'Primary board turn','monitor':'Monitor to scan','engine_kind':'Analysis engine · choose manually','strength_mode':'Stockfish strength mode','playing_style':'Playing style','compare_a':'Compare engine A','compare_b':'Compare engine B','compare_c':'Compare engine C'}
 ENUMS.update(source='Read from',turn='Side to move',monitor='Display to read')
-BOOLEANS.update(threats_enabled='Threat highlights',threat_attacks='Attacked squares',threat_mates='Mate-in-one targets',lock_target='Lock target board')
+BOOLEANS.update(auto_updates='Automatic desktop updates',threats_enabled='Threat highlights',threat_attacks='Attacked squares',threat_mates='Mate-in-one targets',lock_target='Lock target board')
 PRESET_COMMANDS={'apply_preset','save_preset','delete_preset'}
 
 
@@ -24,6 +24,8 @@ class PhoneCompanion(QObject):
     def __init__(self,window):
         super().__init__(window);self.window=window;self.server=None;self.svg_cache={}
         self.requested.connect(self.handle)
+        from .phone_analysis import PhoneAnalysis
+        self.analysis=PhoneAnalysis(window)
         self.timer=QTimer(self);self.timer.setInterval(250);self.timer.timeout.connect(self.publish)
 
     def start(self,port=8789,host='0.0.0.0'):
@@ -72,13 +74,14 @@ class PhoneCompanion(QObject):
             if len(self.svg_cache)>18:self.svg_cache.clear()
             self.svg_cache[key]=chess.svg.board(board,orientation=bottom,size=600,
                 arrows=[chess.svg.Arrow(a['move'].from_square,a['move'].to_square,color=a['color']) for a in arrows],fill={m['square']:m['color']+'66' for m in marks})
-        lead=result.get('evaluation',result['lines'][0]) if result else None
+        lead=self.window.evaluations.score(board,result)
         w=self.window;current,other=(board.turn==bottom,False) if w.only_my_color.isChecked() else ((w.show_white.isChecked(),w.show_black.isChecked()) if board.turn else (w.show_black.isChecked(),w.show_white.isChecked()))
         lines=[]
         if displayed and current:
             for rank,line in enumerate(displayed['lines'][:1 if w.stick_to_move.isChecked() else w.multipv.value()],1):
                 if not w.visible_rank(rank):continue
                 item=dict(deepcopy(line),rank=rank)
+                if not w.predict_continuations.isChecked():item['future_simple']=''
                 if w.only_my_color.isChecked() or w.stick_to_move.isChecked() or not other or not w.show_reply.isChecked():
                     item['reply']=item['reply_simple']=''
                 if w.only_my_color.isChecked() or w.stick_to_move.isChecked():item['pv']=''
@@ -87,7 +90,7 @@ class PhoneCompanion(QObject):
                 'your_color':'White' if bottom else 'Black','turn_known':known,'lines':lines,'cp':lead['cp'] if lead else None,
                 'score':lead['score'] if lead else '—','advantage':lead['advantage'] if lead else 'Waiting for analysis',
                 'thinking':bool(result and result.get('provisional')),'locked':w.stick_to_move.isChecked(),
-                'evaluation_kind':result.get('evaluation_kind','engine search evaluation') if result else '',
+                'evaluation_kind':lead.get('kind',''),'evaluation_engine':lead.get('provider',''),'move_engine':result.get('engine','') if result else '', 'recommendation_evaluation_kind':result.get('evaluation_kind','') if result else '',
                 'recommendation_type':result.get('recommendation_type','best moves') if result else '',
                 'waiting_for_turn':w.only_my_color.isChecked() and board.turn!=bottom,'threats':messages}
 
@@ -103,10 +106,11 @@ class PhoneCompanion(QObject):
         for board in boards:
             board['turn_override']=w.turn.currentIndex() if board['id']=='primary' else next(s.card.turn.currentIndex() for s in w.multi.states if str(s.identity)==board['id'])
         values,schema=self.schema()
-        return {'app':'BoardLens','version':'2.11.0','updated':time.time(),'status':w.status_label.text(),'monitoring':w._monitoring,
+        return {'app':'BoardLens','version':'2.12.0','updated':time.time(),'status':w.status_label.text(),'monitoring':w._monitoring,
                 'auto_suggest':w.live_button.isChecked(),'practice':w.practice,'reviewing':w._reviewing,
                 'boards':boards,'settings':values,'schema':schema,'keys':{k:f.text() for k,f in w.key_fields.items()},
-                'engine_configuration':configuration(w),
+                'engine_configuration':configuration(w),'phone_analysis':self.analysis.snapshot(),
+                'phone_engines':[{'id':e.identity,'label':e.label,'kind':e.kind,'available':bool(w.custom_engine.text()) if e.kind=='custom' else engine_library.available(e)} for e in engine_library.ENTRIES],
                 'comparison':w.comparison.snapshot() if hasattr(w,'comparison') else None,'presets':w.analysis_presets.snapshot(),
                 'history':{'index':w._history_index,'count':len(w._history)},'desktop_minimized':w.isMinimized()}
 
@@ -124,6 +128,10 @@ class PhoneCompanion(QObject):
         if QApplication.activeModalWidget() and command!='stop':raise ValueError('Close the open desktop dialog first.')
         actions={'scan':w.scan_now,'stop':w.stop,'suggest':w.suggest,'previous':w.history_previous,'next':w.history_next,'resume':w.resume_live,
                  'save':w.save,'new_game':w.new_game,'undo':w.undo,'install_engine':w.install_engine,'minimize':w.showMinimized,'show_desktop':w.showNormal,'compare':lambda:w.open_engine_comparison(show=False)}
+        if command=='analyze_phone':return self.analysis.request(payload)
+        if command=='cancel_phone':
+            if payload.get('request_id')==self.analysis.state.get('request_id'):self.analysis.cancel()
+            return 'Phone analysis stopped'
         if command=='help_search':
             query=payload.get('query','')
             if not isinstance(query,str) or len(query)>512:raise ValueError('Use a question up to 512 characters.')
@@ -219,5 +227,7 @@ class PhoneCompanion(QObject):
             else:field.setText(value);w.engine_settings_changed()
 
     def close(self):
+        self.analysis.cancel()
+        if self.window.closing:self.analysis.close()
         self.timer.stop()
         if self.server:self.server.close();self.server=None

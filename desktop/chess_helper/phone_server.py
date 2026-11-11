@@ -32,10 +32,11 @@ class PhoneServer:
                 return good
             def do_GET(self):
                 path=urlsplit(self.path).path
-                if path=='/api/health':return self.send_json(200,{'app':'BoardLens','version':'2.11.0','pairing':True})
-                if path=='/api/state':
+                if path=='/api/health':return self.send_json(200,{'app':'BoardLens','version':'2.12.0','pairing':True})
+                if path in ('/api/state','/api/phone-position'):
                     if not self.authorized():return self.send_json(401,{'error':'Pair with the code shown on your computer.'})
                     with owner.lock:state=owner.snapshot
+                    if path=='/api/phone-position':state={'phone_analysis':state.get('phone_analysis',{})}
                     return self.send_json(200,state)
                 logos={'/branding/banner.png':'boardlens-banner.png','/branding/icon.png':'boardlens-icon.png'}
                 if path in logos:

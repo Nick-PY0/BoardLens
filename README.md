@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/brand/banner.png" alt="BoardLens" width="660"></p>
 <p align="center"><strong>Your best move. On every screen.</strong><br>Open-source chess cheating and analysis software for desktop and Android.</p>
 <p align="center"><a href="https://github.com/Nick-PY0/BoardLens/releases/latest"><strong>Download the first public release</strong></a> · <a href="#features">Features</a> · <a href="#phone--tablet">Mobile</a> · <a href="docs/ENGINES.md">Engines</a></p>
-<p align="center"><img alt="License GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-173d2b?style=flat-square"> <img alt="Mac and Windows" src="https://img.shields.io/badge/desktop-macOS%20%7C%20Windows-173d2b?style=flat-square"> <img alt="Android companion" src="https://img.shields.io/badge/mobile-Android%208%2B-91dfb4?style=flat-square"></p>
+<p align="center"><img alt="License GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-173d2b?style=flat-square"> <img alt="Mac and Windows" src="https://img.shields.io/badge/desktop-macOS%20%7C%20Windows-173d2b?style=flat-square"> <img alt="Android companion" src="https://img.shields.io/badge/mobile-Android%20companion%20%2B%20phone%20scanner-91dfb4?style=flat-square"></p>
 
 BoardLens sees a supported chessboard on your computer, follows its moves and brings engine recommendations, explanations and click-through arrows to your screen. Prefer a clean desktop? Put the interface on your phone while your computer keeps scanning and thinking.
 
@@ -16,7 +16,51 @@ No paid AI subscription is required. Normal recognition and engine analysis run 
 <p align="center"><img src="docs/images/android-boards.png" alt="Android companion showing the board and evaluation" width="310"> <img src="docs/images/android-analysis.png" alt="Android move analysis" width="310"></p>
 <p align="center">Android companion, captured in an emulator. Real app screens, not design mockups.</p>
 
-> **Android APK status:** The development APK is temporarily withheld after Play Protect blocked the emulator install. The browser companion and mobile source remain available. Android download/install testing is under review.
+
+### Two Android sections
+
+**On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
+
+**Computer companion** keeps the existing Wi-Fi desktop dashboard. Pair once to optionally use the computer's installed engines for phone-screen positions too. Maia-2, all Maia-3 sizes, Flounder, Tiny bots and custom UCI providers stay computer-backed. Only the recognized FEN is sent; phone screenshots stay on the phone. Choosing a phone engine never changes the desktop engine or game.
+
+The evaluation provider is independent of the move provider: use Stockfish to score the bar while Maia recommends moves. One-move providers can publish their first move, then predict the opponent's reply and your next move. Non-streaming models must finish their first inference before an early result exists. Predictions are possible continuations, not guaranteed play.
+
+Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
+
+
+### Two Android sections
+
+**On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
+
+**Computer companion** keeps the existing Wi-Fi desktop dashboard. Pair once to optionally use the computer's installed engines for phone-screen positions too. Maia-2, all Maia-3 sizes, Flounder, Tiny bots and custom UCI providers stay computer-backed. Only the recognized FEN is sent; phone screenshots stay on the phone. Choosing a phone engine never changes the desktop engine or game.
+
+The evaluation provider is independent of the move provider: use Stockfish to score the bar while Maia recommends moves. One-move providers can publish their first move, then predict the opponent's reply and your next move. Non-streaming models must finish their first inference before an early result exists. Predictions are possible continuations, not guaranteed play.
+
+Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
+
+
+### Two Android sections
+
+**On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
+
+**Computer companion** keeps the existing Wi-Fi desktop dashboard. Pair once to optionally use the computer's installed engines for phone-screen positions too. Maia-2, all Maia-3 sizes, Flounder, Tiny bots and custom UCI providers stay computer-backed. Only the recognized FEN is sent; phone screenshots stay on the phone. Choosing a phone engine never changes the desktop engine or game.
+
+The evaluation provider is independent of the move provider: use Stockfish to score the bar while Maia recommends moves. One-move providers can publish their first move, then predict the opponent's reply and your next move. Non-streaming models must finish their first inference before an early result exists. Predictions are possible continuations, not guaranteed play.
+
+Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
+
+
+### Two Android sections
+
+**On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
+
+**Computer companion** keeps the existing Wi-Fi desktop dashboard. Pair once to optionally use the computer's installed engines for phone-screen positions too. Maia-2, all Maia-3 sizes, Flounder, Tiny bots and custom UCI providers stay computer-backed. Only the recognized FEN is sent; phone screenshots stay on the phone. Choosing a phone engine never changes the desktop engine or game.
+
+The evaluation provider is independent of the move provider: use Stockfish to score the bar while Maia recommends moves. One-move providers can publish their first move, then predict the opponent's reply and your next move. Non-streaming models must finish their first inference before an early result exists. Predictions are possible continuations, not guaranteed play.
+
+Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
+
+> **Android status:** The earlier development APK was withdrawn after Play Protect blocked it. The new, non-debuggable Android 1.5 candidate adds a separate phone scanner and removes the custom APK installer. See the current release notes for its review status; never bypass a Play Protect warning.
 
 ## Download & start
 
@@ -29,7 +73,7 @@ Get the files from [Releases](https://github.com/Nick-PY0/BoardLens/releases/lat
 | Android | Phone browser for now; APK temporarily withheld | Open the desktop companion address on the same Wi-Fi. |
 | iPhone / iPad | Phone browser, or unsigned iOS source ZIP | Open the desktop companion address. Native source needs Xcode and your signing setup. |
 
-The desktop launcher creates its Python environment and prepares official Stockfish. Optional engines download only when you choose them. The portable desktop ZIP is Python source with launchers, rather than a signed native installer. The Android APK is a locally signed development distribution.
+The desktop launcher creates its Python environment and prepares official Stockfish. Optional engines download only when you choose them. The portable desktop ZIP is Python source with launchers, rather than a signed native installer. The Android release uses a release signing key and Android signing-key rotation for supported upgrades.
 
 1. Open a complete supported board on your computer.
 2. **Board → Read from → Computer screen**; choose a display or all displays.
@@ -81,7 +125,7 @@ Your computer remains the screen reader and engine host. Its window can stay min
 - Change engine/arrow settings and named presets; edits sync and save on the computer.
 - Scan, suggest, Stop, pause/resume, browse history and control local Practice positions.
 - Set keyboard shortcuts, upload a screenshot, copy a FEN/configuration and search Help.
-- Native Android respects system bars, camera cutouts and the keyboard. Update directly from GitHub through Android's installer.
+- Native Android respects system bars, camera cutouts and the keyboard. Automatic update checks open GitHub; Android handles installation.
 - Any reachable phone/tablet browser can use the same local companion page. The native iOS wrapper is source-only and unsigned.
 
 **Connect:** desktop **Phone → Enable phone companion**, then enter the displayed computer address and six-digit code on the phone. Use the same trusted local network. Keep the computer awake. Restarting the companion requires its new pairing code.
@@ -94,13 +138,13 @@ Different engines expose different capabilities. Maia predicts human moves; Tiny
 
 ## Updates
 
-Updates are manual. Desktop verifies the release checksum, restarts, preserves the Python runtime and user data, and keeps rollback copies. Android verifies the checksum, package identity, version and signing certificate, then uses the normal Android confirmation screen. Nothing installs silently. [Update and release details →](docs/UPDATES.md)
+Desktop automatically checks and downloads checksum-verified stable updates, then applies them at the next launch with rollback and preserved user data. Switch this off under **Board → App**. Android automatically checks releases and opens GitHub for installation through Android; it has no custom APK installer or install-packages permission. [Update and release details →](docs/UPDATES.md)
 
-The first public release is **v1.0.0**, containing desktop build **2.11.0** and Android build **1.4.0**. These separate build numbers are recorded in the update manifest.
+The first public release is **v1.0.0**. The next release uses desktop **2.12.0** and Android **1.5.0**; the update manifest records both build numbers.
 
 ## What is verified
 
-The included validation report records **174 passing automated tests on macOS**, native Mac layout checks and Android-emulator checks. Windows and physical Android/iOS devices have not been tested for this release. The fixed screen-polling target is 75 ms; recognition, engine thinking, display capture and network time still affect end-to-end latency. Current native OS pixel capture has not been reverified; fixture tests are not proof of current capture permission/behavior.
+The included validation report records **180 passing automated tests on macOS**, native Mac layout checks and Android-emulator checks. Windows and physical Android/iOS devices have not been tested for this release. The fixed screen-polling target is 75 ms; recognition, engine thinking, display capture and network time still affect end-to-end latency. Current native OS pixel capture has not been reverified; fixture tests are not proof of current capture permission/behavior.
 
 Pixel reads need a clear board and cannot always recover turn, castling or en-passant history. Use exact FEN or a supported direct reader when that metadata matters. Threat checks and engine explanations are estimates. There is no autoplay, stealth/anti-detection guarantee, Study, coaching, puzzles or game-journal feature in this release. Use assistance where your game mode permits it.
 
