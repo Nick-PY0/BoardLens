@@ -16,6 +16,8 @@ No paid AI subscription is required. Normal recognition and engine analysis run 
 <p align="center"><img src="docs/images/android-boards.png" alt="Android companion showing the board and evaluation" width="310"> <img src="docs/images/android-analysis.png" alt="Android move analysis" width="310"></p>
 <p align="center">Android companion, captured in an emulator. Real app screens, not design mockups.</p>
 
+> **Android APK status:** The development APK is temporarily withheld after Play Protect blocked the emulator install. The browser companion and mobile source remain available. Android download/install testing is under review.
+
 ## Download & start
 
 Get the files from [Releases](https://github.com/Nick-PY0/BoardLens/releases/latest).
@@ -24,7 +26,7 @@ Get the files from [Releases](https://github.com/Nick-PY0/BoardLens/releases/lat
 | --- | --- | --- |
 | Mac | `BoardLens-Mac-Windows.zip` | Extract, then open **Start BoardLens.command**. Allow Screen Recording when needed. |
 | Windows | `BoardLens-Mac-Windows.zip` | Install 64-bit Python 3.12, extract, then open **Start BoardLens.bat**. |
-| Android 8+ | `BoardLens-Companion-Android.apk` | Install, then pair with the desktop app on the same Wi-Fi. |
+| Android | Phone browser for now; APK temporarily withheld | Open the desktop companion address on the same Wi-Fi. |
 | iPhone / iPad | Phone browser, or unsigned iOS source ZIP | Open the desktop companion address. Native source needs Xcode and your signing setup. |
 
 The desktop launcher creates its Python environment and prepares official Stockfish. Optional engines download only when you choose them. The portable desktop ZIP is Python source with launchers, rather than a signed native installer. The Android APK is a locally signed development distribution.
