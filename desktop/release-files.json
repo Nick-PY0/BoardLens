@@ -140,6 +140,7 @@
   "packaging/build_native.py",
   "packaging/native/Launcher.cs",
   "packaging/native/Launcher.m",
+  "packaging/native/Launcher.manifest",
   "packaging/native/start.py",
   "pyproject.toml",
   "release-files.json",
