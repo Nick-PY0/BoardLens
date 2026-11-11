@@ -1,4 +1,4 @@
-BOARDLENS 2.12 / ANDROID 1.5 — NOVEMBER 11, 2026
+BOARDLENS 2.13 / ANDROID 1.5 — NOVEMBER 11, 2026
 
 181 desktop automated tests passed on macOS with Stockfish 19.
 Android debug/release builds and four JVM chess-rule tests passed.
@@ -24,10 +24,18 @@ The replacement removes its self-installer/permission and uses a non-debuggable
 release signed with a release key and migration lineage. Functional tests are
 not a security clearance; consult release notes for current review status.
 
-Windows, physical Android and iOS were not device-tested. Native macOS pixel
+Windows physical desktops, physical Android and iOS were not device-tested. Native macOS pixel
 capture remains unverified in this run; local 3D/direct-reader fixture results
 do not prove arbitrary 3D app support. No autoplay, Study or coaching was added.
 
 FINAL DISTRIBUTION CHECK: Play Protect blocked the replacement 1.5.0 APK after
 scanning. Installation stopped and the public APK was withdrawn. No successful
 release upgrade/data migration is claimed; the APK remains under review.
+
+NATIVE DESKTOP APPS
+Windowed Cocoa .app (Apple Silicon and Intel) and C# WinExe (Windows x64).
+Each packaged self-test exercises private runtime startup, actual ONNX fixture
+recognition, GUI icon loading and a legal bundled Stockfish 19 result. Windows
+checks GetConsoleWindow() is zero. Normal Mac LaunchServices startup and saved
+preferences are checked separately during deployment. No physical Windows
+installation or live OS capture permission success is claimed.

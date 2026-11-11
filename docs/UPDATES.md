@@ -2,7 +2,7 @@
 
 Desktop Board → App → Automatic updates is enabled by default. It checks at startup and every six hours, downloads the stable release quietly, verifies SHA-256, and applies the staged archive on the next launch. It does not interrupt live analysis. Turn the toggle off for manual updates. Check for updates still offers Download and restart.
 
-The portable updater validates the complete owned-file manifest and paths, preserves the Python runtime and user data, backs up replaced files, and rolls back on failure. A queued archive is hash checked again before application.
+The portable updater validates the complete owned-file manifest and paths, preserves the Python runtime and user data, backs up replaced files, and rolls back on failure. A queued archive is hash checked again before application. Native `.app` and `.exe` builds use the same updater in their private application directory and restart without Terminal; their bundled runtime and original app bundle stay intact. Download a new native ZIP when a runtime/platform upgrade is needed.
 
 Android's section picker has Automatic update checks and Check for updates. It opens the public GitHub release when a newer APK is available. Android handles downloads and installation. BoardLens has no custom APK installer or REQUEST_INSTALL_PACKAGES permission. Nothing silently installs. A withdrawn or missing APK is reported as unavailable.
 

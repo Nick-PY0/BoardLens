@@ -1,9 +1,13 @@
-BOARDLENS 2.12 — START HERE
+BOARDLENS 2.13 — START HERE
 
-Mac: double-click Start BoardLens.command.
-Windows: install 64-bit Python 3.12, then double-click Start BoardLens.bat.
-The launcher prepares dependencies and official Stockfish. Normal screen
-recognition and analysis run locally after setup.
+Mac: unzip the matching Mac download, then open BoardLens.app.
+Apple Silicon and Intel downloads are separate. macOS 14 or newer is required.
+Windows: unzip the complete Windows download, then open BoardLens.exe.
+Keep its Resources folder beside it. Windows 10/11, 64-bit, is required.
+No Terminal or separate Python install is needed. The first launch prepares
+private app files locally; Stockfish is included and works offline.
+Settings and optional engines use your existing BoardLens app-data folder.
+The older .command/.bat launchers in the source ZIP are developer fallbacks.
 
 Open a board, choose Computer screen and a display in Board, then Scan now.
 Auto suggest follows visible moves. Stop cancels reading and thinking.
@@ -78,7 +82,7 @@ squares and projected bounds. Other local 3D applications are not covered.
 Copy buttons show Copied to clipboard when text is available.
 
 PHONE
-Use BoardLens-Companion-Android.apk (1.4), or a phone/tablet browser.
+Use a phone/tablet browser while the Android APK is withheld for review.
 Desktop → Phone → Enable phone companion. Enter its address and six-digit code
 on the same Wi-Fi. Keep the computer awake and running; its window can minimize.
 Boards, Analysis, Settings and Controls mirror the live analysis and settings.
@@ -92,5 +96,5 @@ TEST-REPORT.txt records validation and known platform limits.
 BRANDING AND UPDATES
 New knight banner and square app icon. Desktop: Board → App → Check for updates.
 Android: Check for app updates on the connection screen, or Controls → Update
-Android app. Downloads are verified; Android asks you to confirm installation.
+Android app. Desktop updates are verified. Android opens GitHub when an APK is available.
 First public release: https://github.com/Nick-PY0/BoardLens/releases/latest
