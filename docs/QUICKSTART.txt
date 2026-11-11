@@ -1,0 +1,93 @@
+BOARDLENS 2.11 — START HERE
+
+Mac: double-click Start BoardLens.command.
+Windows: install 64-bit Python 3.12, then double-click Start BoardLens.bat.
+The launcher prepares dependencies and official Stockfish. Normal screen
+recognition and analysis run locally after setup.
+
+Open a board, choose Computer screen and a display in Board, then Scan now.
+Auto suggest follows visible moves. Stop cancels reading and thinking.
+Keep all 64 squares visible. Use offline, analysis, or assistance-permitted games.
+
+WHAT CHANGED
+Study, coaching presets, lessons, game recording/review and What-if are removed
+from desktop and phone. Previously saved files remain untouched in the
+application-data folder. Engine settings, named analysis presets, threat
+highlights, target lock, live-position history and the local Practice board stay.
+Help covers the remaining features. Android 1.4 removes its unused PGN bridge.
+Reconnect/reload your phone companion to load the new four-tab interface.
+
+BOARD AND ARROWS
+Screen capture has a fixed 75 ms target; engine think time stays selectable.
+Scan now starts a fresh read; Auto suggest follows later moves. Up to three
+visible boards have independent positions, engines and recommendations.
+Keep this board selected locks one target; turn it off to follow other apps.
+Covered/missing pixel targets pause. Unlock after moving a pixel board.
+
+Gold = #1, blue = #2, cyan = opponent reply AFTER #1. Arrows controls filters.
+Steady arrows smooth changing suggestions while the engine keeps calculating.
+Lock move holds the first suggestion until the board changes or Scan now.
+Only my color follows the bottom color. Screen arrows let mouse clicks through.
+Positive scores favor White; negative favor Black. The bar is not a calibrated
+win percentage. Tiny bots do not supply numerical evaluations.
+Previous/Next pauses live tracking to browse observed positions. Resume live
+returns to the current target. This does not undo moves in another app.
+
+SETTINGS AND ENGINES
+Settings save automatically after a short pause and on close. Quick and Deep
+are built-in analysis presets; save your own named configurations in Engine.
+Presets never download an engine or silently switch to a different engine.
+Compact keeps a large board; Expand puts settings beside it. Full analysis
+expands the explanation. Text − / + changes its size. Help has sectioned guides
+with steps, explanations and offline question matching.
+
+Stockfish: full strength, skill 0–20 or native Elo limits. Time, Depth,
+Time + depth, or Adaptive limits. Aggressive/Defensive rerank close candidates
+within half a pawn. Human-like uses deterministic weighted close choices.
+These are GUI ranking styles, not native engine personalities.
+Maia-3 5M/23M/79M and Maia-2 Rapid: optional human-move prediction models.
+Their target ratings are not guaranteed playing strength; scores describe
+human-game outcomes. Depth/time controls do not apply to model inference.
+Flounder: a Stockfish-based sampled-move selector with approximate target rating.
+Tiny bots: original optional bot sources with a shared verified .NET runtime.
+They supply one chosen move without evaluation, depth or alternative lines.
+Custom UCI selects another installed executable; alternative lines need MultiPV.
+Engine comparison runs 2–3 selected engines on one position. Stop cancels it.
+Use Engine library to choose optional downloads, including large neural models.
+Installed engines are skipped; selecting an engine never downloads it silently.
+
+CONNECTIONS AND THEMES
+Supported 2D screen scanning works without an optional connection. Arbitrary
+3D screenshots and every possible piece theme are not covered.
+Browser connection: Board → Computer screen → Optional connections → Connect
+browser. Chrome/Edge → Extensions → Developer mode → Load unpacked → choose
+BrowserReader. Copy pairing key into the extension popup, Connect, then reload
+the chess tab. Keep the tab visible. Supported Chess.com/Lichess board data is
+read independently of artwork; Chess.com 3D arrows use projected coordinates.
+Positions and hints travel over 127.0.0.1:8788 on this computer. The extension
+cannot play moves or change settings. Pairing keys persist across restarts;
+status reports disconnects and key repair. Site changes may need adapter updates.
+
+Local 3D chess: on macOS, enable Read local 3D chess in Optional connections.
+Grant BoardLens/Python Accessibility in System Settings → Privacy & Security.
+This independent reader supports the built-in macOS Chess.app's 64 accessible
+squares and projected bounds. Other local 3D applications are not covered.
+Copy buttons show Copied to clipboard when text is available.
+
+PHONE
+Use BoardLens-Companion-Android.apk (1.4), or a phone/tablet browser.
+Desktop → Phone → Enable phone companion. Enter its address and six-digit code
+on the same Wi-Fi. Keep the computer awake and running; its window can minimize.
+Boards, Analysis, Settings and Controls mirror the live analysis and settings.
+Changes sync to desktop automatically; Apply now retries interrupted edits.
+The Android shell handles system bars/camera cutouts. iPhone/iPad source is
+provided unsigned and needs Xcode and signing for device installation.
+No automatic moves. Practice offers one manual Play best action at a time.
+
+TEST-REPORT.txt records validation and known platform limits.
+
+BRANDING AND UPDATES
+New knight banner and square app icon. Desktop: Board → App → Check for updates.
+Android: Check for app updates on the connection screen, or Controls → Update
+Android app. Downloads are verified; Android asks you to confirm installation.
+First public release: https://github.com/Nick-PY0/BoardLens/releases/latest

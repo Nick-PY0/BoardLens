@@ -1,0 +1,53 @@
+BOARDLENS 2 — THIRD-PARTY NOTICES
+BoardLens source: GPL-3.0-or-later; see LICENSE.
+
+Fenshot tile recognition model and screenshot fixtures: MIT,
+Copyright (c) 2026 SORTINO LABS S.R.L. (kibitzo.com).
+https://github.com/scoriiu/fenshot
+Pinned upstream commit: be5b491bc51b2e2a231b7616d9256748ee8ab5b9
+Model SHA-256: 883f6a8e639e6d6b6399b3fda0508ad772e3c6f9cefa2e678a13f27b9fa6248d
+License: chess_helper/assets/licenses/Fenshot-MIT.txt
+Our detection code adapts the upstream gradient-grid method using NumPy.
+The tile preprocessing and label order follow Fenshot's documented model API.
+
+Original gradient detection: tensorflow_chessbot, MIT,
+Copyright (c) 2016 Sameer Ansari.
+https://github.com/Elucidation/tensorflow_chessbot
+License: chess_helper/assets/licenses/TensorflowChessbot-MIT.txt
+
+Cburnett SVG pieces: Colin M. L. Burnett, GPL v2 or later.
+https://github.com/lichess-org/lila/tree/master/public/piece/cburnett
+Attribution: chess_helper/assets/licenses/Lichess-artwork.txt
+License: chess_helper/assets/licenses/Cburnett-GPL2.txt
+
+Stockfish 19, GPL v3, downloaded from official releases on first setup.
+https://github.com/official-stockfish/Stockfish/releases/tag/sf_19
+https://github.com/official-stockfish/Stockfish/tree/sf_19
+The installer verifies the pinned GitHub release asset SHA-256 digest.
+
+Dependencies installed separately by the launcher:
+PySide6 Essentials / Qt for Python: LGPL v3 / GPL v3 / commercial.
+https://doc.qt.io/qtforpython-6/licenses.html
+ONNX Runtime: MIT. https://github.com/microsoft/onnxruntime
+python-chess: GPL v3+. https://github.com/niklasf/python-chess
+OpenCV: Apache 2.0. https://opencv.org/license/
+NumPy: BSD 3-Clause. https://numpy.org/doc/stable/license.html
+pynput: LGPL v3. https://github.com/moses-palmer/pynput
+
+Optional engine library (no optional bot/model is bundled or downloaded by selection):
+Tiny Chess Bot Challenge originals: https://github.com/SebLague/Tiny-Chess-Bot-Challenge-Results
+Pinned source commit fcebda936c5882efdeb61382592bda77f2c1e6c0. Ratings/names: https://sebastian.itch.io/tiny-chess-bots
+Original bot sources are downloaded individually. Their source publication does not contain a repository-wide license; consult each author's rights before redistributing those sources. BoardLens distributes its own adapter and the separately licensed framework only.
+Chess-Challenge API/core: Sebastian Lague, MIT. Included license/source in assets/tiny/source.
+Roslyn: .NET Foundation and contributors, MIT. License: assets/licenses/Roslyn-MIT.txt. Source https://github.com/dotnet/roslyn/tree/v4.14.0
+The bundled managed adapter includes its C# project and corresponding source. It uses a downloaded official .NET runtime (MIT), SHA-512 verified against Microsoft's release metadata.
+
+Maia-2: CSSLab, MIT, official commit 67bee6ce7e2f264344fe6d2026a2e18c76a82efa.
+https://github.com/CSSLab/maia2/tree/67bee6ce7e2f264344fe6d2026a2e18c76a82efa
+Maia-3: CSSLab, AGPL-3.0, official commit 1e13597c42d4858b7cfd7cfdae01e297263364b2.
+https://github.com/CSSLab/maia3/tree/1e13597c42d4858b7cfd7cfdae01e297263364b2
+Both are separate optional runtimes; upstream licenses and package notices remain installed with them. Licenses also included in assets/licenses. Model terms are supplied by the upstream projects/model hosts.
+
+Flounder selection method adapted from bhale22/Blundermindwithbots (GPL-3.0):
+https://github.com/bhale22/Blundermindwithbots, src/40-engines.js.
+License: assets/licenses/Blundermind-GPL3.txt. BoardLens uses the local Stockfish build; published Flounder rating calibration is approximate here.

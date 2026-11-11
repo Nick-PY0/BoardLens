@@ -1,0 +1,36 @@
+BOARDLENS COMPANION 1.4 — DESKTOP 2.11
+
+Install BoardLens-Companion-Android.apk on Android 8 or later. This is a
+locally signed development APK, not a Play Store release. Existing installations
+using the same signing key can update without uninstalling.
+
+Desktop → Phone → Enable phone companion. Use the same Wi-Fi, then enter the
+shown computer address and six-digit code in the Android app. A phone/tablet
+browser can open that same address. Keep the computer awake and running;
+it reads boards and runs engines even when its window is minimized.
+
+Boards: up to three reconstructed boards, arrows and evaluations.
+Analysis: candidates, replies and engine comparison.
+Settings: grouped Engine, Board, Arrows and More; named analysis presets.
+Edits sync to desktop after a short pause and save automatically. Apply now
+retries a failed sync. Keyboard shortcuts have their own Apply button.
+Controls: scan, suggest, Stop, auto suggest, live-position history, manual
+Practice moves, FEN and screenshot input. Help is available from ?.
+
+Study and coaching features are removed, including lessons, game recording,
+postgame review, What-if and the native PGN export bridge. Existing saved
+files on the computer are retained. Reconnect/reload to load the new menus.
+
+The compact header sits below system bars and camera cutouts. Connection is
+local HTTP with a pairing token. Use a trusted local network. A desktop restart
+requires its new pairing code. Phone polling is about 300 ms while visible,
+independent of the desktop 75 ms capture target and selectable engine time.
+
+The iPhone/iPad wrapper source is unsigned; it needs Xcode and your signing
+setup for device deployment. No automatic play is included.
+
+BRANDING AND UPDATES
+New knight banner and square app icon. Desktop: Board → App → Check for updates.
+Android: Check for app updates on the connection screen, or Controls → Update
+Android app. Downloads are verified; Android asks you to confirm installation.
+First public release: https://github.com/Nick-PY0/BoardLens/releases/latest

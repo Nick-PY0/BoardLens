@@ -1,0 +1,8 @@
+PySide6-Essentials==6.12.0
+opencv-python-headless>=4.10,<5
+numpy>=1.26,<3
+python-chess==1.999
+pynput>=1.7.7,<2
+onnxruntime>=1.20,<2
+pyobjc-framework-ScreenCaptureKit>=10,<14; sys_platform == "darwin"
+pyobjc-framework-ApplicationServices>=10,<14; sys_platform == "darwin"

@@ -1,0 +1,10 @@
+{
+ "manifest_version":3,"name":"BoardLens Browser Reader","version":"2.8.0",
+ "description":"Optional local board reader for Chess.com and Lichess analysis and bot boards.",
+ "permissions":["storage"],"host_permissions":["http://127.0.0.1:8788/*"],
+ "background":{"service_worker":"background.js"},"action":{"default_popup":"popup.html"},
+ "content_scripts":[
+  {"matches":["https://www.chess.com/*","https://lichess.org/*"],"js":["reader.js"],"world":"MAIN","run_at":"document_idle"},
+  {"matches":["https://www.chess.com/*","https://lichess.org/*"],"js":["content.js"],"run_at":"document_idle"}
+ ]
+}

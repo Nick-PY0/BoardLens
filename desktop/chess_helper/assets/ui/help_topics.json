@@ -1,0 +1,852 @@
+[
+  {
+    "id": "start",
+    "category": "Getting started",
+    "title": "Start reading a board",
+    "summary": "Choose Computer screen, keep the whole board visible, then use Scan now. Auto suggest follows later moves.",
+    "questions": [
+      "How do I start using BoardLens?",
+      "How do I show it a chessboard?"
+    ],
+    "steps": [
+      "Board → Read from → Computer screen.",
+      "Choose Display to read. All displays checks every connected monitor.",
+      "Keep all 64 squares visible and move BoardLens away from the target.",
+      "Press Scan now. Enable Auto suggest to follow moves."
+    ],
+    "details": "Screen reading and engine thinking are separate. Use the separate connections for supported 3D boards.",
+    "controls": [
+      "source",
+      "monitor",
+      "scan",
+      "watch"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "no-board",
+    "category": "Getting started",
+    "title": "The board is not being found",
+    "summary": "Scan now starts a fresh read. Check the selected display, whether the board is covered, and whether a target lock is keeping an old board selected.",
+    "questions": [
+      "Why can’t it see my chessboard?",
+      "The scan keeps searching and never finds my game",
+      "It stopped detecting after I changed apps"
+    ],
+    "steps": [
+      "Check Board → Display to read.",
+      "If Keep this board selected is on, return to that board or turn it off.",
+      "Keep the whole board visible. Scan now clears old recognition and releases a locked suggestion.",
+      "For supported themes or 3D views, try the Browser connection or Local 3D chess connection."
+    ],
+    "details": "Pixel recognition supports known 2D artwork. Arbitrary 3D screenshots are not supported. OS screen-recording permission is needed for pixels.",
+    "controls": [],
+    "aliases": [
+      "cannot find board",
+      "new board not detected",
+      "searching forever",
+      "screen empty"
+    ]
+  },
+  {
+    "id": "scan",
+    "category": "Getting started",
+    "title": "Scan now and Auto suggest",
+    "summary": "Scan now refreshes from the visible board immediately. Auto suggest keeps reading and requesting new analysis after moves.",
+    "questions": [
+      "What is the difference between Scan now and Auto suggest?",
+      "How do I force a refresh?"
+    ],
+    "steps": [
+      "Use Scan now after switching games or when a position is stale.",
+      "Use Auto suggest for continuous tracking.",
+      "Keep this board selected stays active during a rescan; turn it off if you want a different target."
+    ],
+    "details": "Scan now cancels obsolete reads and analysis. It never clicks a move in the real game.",
+    "controls": [
+      "scan",
+      "watch",
+      "early_suggestions"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "stop",
+    "category": "Getting started",
+    "title": "Stop scanning and thinking",
+    "summary": "STOP cancels live reads and engine searches, then hides screen overlays.",
+    "questions": [
+      "How do I stop everything?",
+      "How do I pause the bot?"
+    ],
+    "steps": [
+      "Press STOP, Escape while the main window is active, or the configured Stop shortcut.",
+      "Use Auto suggest or Scan now to start live reading again."
+    ],
+    "details": "Previous/Next pauses live tracking for history navigation.",
+    "controls": [
+      "stop"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "sources",
+    "category": "Boards and connections",
+    "title": "Choose where the position comes from",
+    "summary": "Practice is a local board you can edit. Computer screen follows another visible app. Screenshot reads a file you choose.",
+    "questions": [
+      "What does Read from mean?",
+      "How do I analyze an image?"
+    ],
+    "steps": [
+      "Practice board: click pieces or load a FEN.",
+      "Computer screen: choose a display and scan.",
+      "Screenshot: choose Open screenshot, then a complete supported 2D board image."
+    ],
+    "details": "Orientation controls which color appears at the bottom. Side to move corrects uncertain live turn detection.",
+    "controls": [
+      "source",
+      "orientation",
+      "turn"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "connections",
+    "category": "Boards and connections",
+    "title": "Screen scanning or an optional connection?",
+    "summary": "Standard 2D boards can use screen scanning alone. Browser and Local 3D chess are separate optional ways to read supported apps directly.",
+    "questions": [
+      "Do I need the browser reader for local 3D chess?",
+      "Why are there two connections?",
+      "Can I use it without the extension?"
+    ],
+    "steps": [
+      "Use Computer screen for supported flat 2D boards.",
+      "Use Browser connection for supported Chess.com/Lichess positions and themes.",
+      "Use Local 3D chess for the built-in macOS Chess app."
+    ],
+    "details": "A connection being off does not disable the other reading methods. Local 3D chess currently supports macOS Chess.app, rather than every 3D chess program.",
+    "controls": [],
+    "aliases": [
+      "browser off local on",
+      "difference between readers",
+      "without browser reader"
+    ]
+  },
+  {
+    "id": "browser",
+    "category": "Boards and connections",
+    "title": "Connect the browser",
+    "summary": "Turn on Connect browser to reveal its status and pairing controls. One pairing key connects the optional local extension.",
+    "questions": [
+      "How do I connect Chess.com or Lichess?",
+      "Where is the browser pairing key?"
+    ],
+    "steps": [
+      "Board → Computer screen → Optional connections → Connect browser.",
+      "Connection setup explains loading BoardLens 2/BrowserReader in Chrome or Edge.",
+      "Copy pairing key. Paste it into the extension popup and choose Connect.",
+      "Reload the chess tab and keep it visible."
+    ],
+    "details": "The loopback service uses port 8788. Positions stay on this computer. The extension cannot play moves or change settings. Browser data can preserve more metadata than a screenshot.",
+    "controls": [
+      "browser_reader_button"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "browser-repair",
+    "category": "Boards and connections",
+    "title": "Repair a disconnected browser",
+    "summary": "The extension retries temporary interruptions. Its status distinguishes a missing key, an offline desktop, and an invalid pairing.",
+    "questions": [
+      "Why does the browser disconnect?",
+      "It says key repair or context invalidated",
+      "The browser reader needs to reconnect"
+    ],
+    "steps": [
+      "Keep Connect browser enabled in BoardLens.",
+      "If the key is rejected, copy the current key into the extension and reconnect.",
+      "After an extension update, reload the extension once and reload the chess tab.",
+      "Keep the chess tab visible; switching away normally releases its feed."
+    ],
+    "details": "The browser pairing key survives desktop restarts. This differs from the phone code, which changes when its companion restarts.",
+    "controls": [],
+    "aliases": [
+      "reader repair",
+      "extension offline",
+      "pairing key wrong"
+    ]
+  },
+  {
+    "id": "local",
+    "category": "Boards and connections",
+    "title": "Read Local 3D chess",
+    "summary": "Local 3D chess reads the built-in macOS Chess app through Accessibility, independently of the browser connection.",
+    "questions": [
+      "How do I use local 3D chess?",
+      "Why does the local connection need permission?"
+    ],
+    "steps": [
+      "On Mac, enable Read local 3D chess in Optional connections.",
+      "Grant BoardLens/Python Accessibility in System Settings → Privacy & Security.",
+      "Open the local Chess board and press Scan now."
+    ],
+    "details": "Its status says Ready until its supported app is active, then Connected after a board is read. Other local 3D programs and arbitrary camera/artwork screenshots are not covered.",
+    "controls": [
+      "native_reader_button"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "target",
+    "category": "Boards and connections",
+    "title": "Keep one board selected",
+    "summary": "Keep this board selected prevents other apps or boards from replacing your target. A covered or missing target pauses instead of switching.",
+    "questions": [
+      "How do I stop it switching to another board?",
+      "Why does it keep showing my old board?",
+      "How do I unlock the target?"
+    ],
+    "steps": [
+      "Read a live board first. If several are present, choose the target in Board.",
+      "Turn on Keep this board selected.",
+      "Turn it off to follow other apps again."
+    ],
+    "details": "Pixel targets remain at their captured area; unlock and rescan after moving/resizing them. Direct readers keep their source identity. Overlays hide when another app covers a locked target.",
+    "controls": [
+      "lock_target"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "multi",
+    "category": "Boards and connections",
+    "title": "Analyze several boards",
+    "summary": "Up to three boards have independent positions, engine sessions and recommendations.",
+    "questions": [
+      "Can I analyze three boards at once?",
+      "How do I get back to one board?"
+    ],
+    "steps": [
+      "Show complete boards on your selected displays.",
+      "Use Scan now to discover them.",
+      "Use Boards to see their cards together, or Focus for the primary board."
+    ],
+    "details": "Cards disappear when boards are no longer detected. New-board discovery also runs periodically. Each engine session adds its own thread and memory usage.",
+    "controls": [],
+    "aliases": [
+      "multiple boards",
+      "three chessboards",
+      "all boards"
+    ]
+  },
+  {
+    "id": "orientation",
+    "category": "Boards and connections",
+    "title": "Your color and whose turn it is",
+    "summary": "Only my color treats the color at the bottom as yours. Side to move is a separate control for uncertain live positions.",
+    "questions": [
+      "How does it know which color I am?",
+      "It is showing the opponent’s moves",
+      "How do I change whose turn it is?"
+    ],
+    "steps": [
+      "Enable Only my color for suggestions on your turns only.",
+      "Board → Detect bottom color normally handles orientation automatically.",
+      "On a static live position, set Side to move to White or Black if needed."
+    ],
+    "details": "Only my color forces automatic orientation. A screenshot/DOM read may lack complete castling, en passant or turn history. A full FEN on Practice preserves exact metadata.",
+    "controls": [
+      "only_my_color",
+      "orientation",
+      "turn",
+      "show_white",
+      "show_black"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "engine",
+    "category": "Engines",
+    "title": "Choose an engine",
+    "summary": "Analysis engine selects the recommendation provider manually. The Engine library manages optional downloads.",
+    "questions": [
+      "How do I choose another engine?",
+      "Where are Maia and the tiny bots?"
+    ],
+    "steps": [
+      "Open Engine → Engine library.",
+      "Choose the engines to download; large neural models are optional.",
+      "After installation, select the engine in Analysis engine."
+    ],
+    "details": "Selecting an unavailable engine gives a setup message. BoardLens never downloads or switches engines silently. Installed engines are skipped in download batches.",
+    "controls": [
+      "engine_kind",
+      "custom_engine",
+      "engine_path"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "maia",
+    "category": "Engines",
+    "title": "Maia human-style predictions",
+    "summary": "Maia-2 and Maia-3 predict human choices at a target rating. They do not use Stockfish search depth or time limits.",
+    "questions": [
+      "Why are depth and time disabled for Maia?",
+      "What does Maya rating mean?",
+      "How do I download Maia without reinstalling?"
+    ],
+    "steps": [
+      "Download the chosen Maia entry in Engine library.",
+      "Select it manually and set Human target rating.",
+      "Request suggestions normally."
+    ],
+    "details": "No separate reinstall button is needed. Its scores are human-game outcome estimates, not objective Stockfish evaluations or guaranteed playing Elo. Maia-2 uses Rapid rating bins; models need their optional runtime and weights.",
+    "controls": [
+      "human_elo"
+    ],
+    "aliases": [
+      "maia disabled settings",
+      "maya model",
+      "human moves"
+    ]
+  },
+  {
+    "id": "strength",
+    "category": "Engines",
+    "title": "Stockfish skill and Elo",
+    "summary": "Full strength searches without a strength limit. Skill level and Elo rating deliberately change its selected recommendation.",
+    "questions": [
+      "How do I make Stockfish weaker?",
+      "What does skill 10 mean?"
+    ],
+    "steps": [
+      "Choose Stockfish.",
+      "Set Stockfish strength to Full strength, Skill level or Elo rating.",
+      "Adjust the active skill/Elo control."
+    ],
+    "details": "The supported Elo range depends on the installed Stockfish build. #1 is its strength-limited choice; alternatives can have better objective scores. The evaluation bar uses the strongest searched evaluation.",
+    "controls": [
+      "strength_mode",
+      "engine_skill",
+      "engine_elo"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "limits",
+    "category": "Engines",
+    "title": "Think time, depth and adaptive limits",
+    "summary": "Time sets seconds of thinking. Depth sets a search depth. Time + depth stops at the first limit. Adaptive stays under both caps.",
+    "questions": [
+      "How long should the engine think?",
+      "What is time versus depth?",
+      "Why did a five second search finish early?"
+    ],
+    "steps": [
+      "Time: use seconds only.",
+      "Depth: use a fixed depth; elapsed time can vary widely.",
+      "Time + depth: whichever limit is reached first stops the search.",
+      "Adaptive: reduce time/depth based on move count, checks and captures."
+    ],
+    "details": "Stop cancels thinking. Maia uses a model pass; Tiny bots support their own timed move choice, not full Stockfish depth analysis.",
+    "controls": [
+      "mode",
+      "seconds",
+      "depth"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "speed",
+    "category": "Engines",
+    "title": "Make suggestions arrive sooner",
+    "summary": "Screen refresh targets 75 ms independently of engine think time. Early suggestions can display intermediate results while the full search continues.",
+    "questions": [
+      "Why do the arrows take so long?",
+      "Can it refresh faster without changing engine time?",
+      "The board updates slowly"
+    ],
+    "steps": [
+      "Use Early suggestions to see an early result.",
+      "For a faster completed search, reduce Think time yourself or choose a shallower supported limit.",
+      "Use fewer suggested moves and suitable threads per board to reduce work."
+    ],
+    "details": "The 75 ms screen interval is fixed, not a guaranteed move-to-arrow delay. Capture permission, recognition, engine startup and drawing add latency. Direct connections bypass artwork recognition.",
+    "controls": [
+      "early_suggestions"
+    ],
+    "aliases": [
+      "arrow delay",
+      "slow refresh",
+      "instant board update"
+    ]
+  },
+  {
+    "id": "performance",
+    "category": "Engines",
+    "title": "Threads and memory",
+    "summary": "CPU threads and hash memory apply per analyzed board. More is not always faster on a busy computer.",
+    "questions": [
+      "What do threads and hash mean?",
+      "Why is my computer using lots of CPU?"
+    ],
+    "steps": [
+      "Set CPU threads to the number you want per engine session.",
+      "Set Hash memory for the engine’s position cache.",
+      "Remember that three boards and engine comparison start separate searches."
+    ],
+    "details": "Maia and Tiny bots do not expose all of these Stockfish controls.",
+    "controls": [
+      "threads",
+      "hash_mb"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "styles",
+    "category": "Engines",
+    "title": "Playing styles",
+    "summary": "Balanced keeps the native recommendation. Other supported styles rerank close candidates using visible tactical and positional facts.",
+    "questions": [
+      "What does aggressive or defensive do?",
+      "How do I get human-like moves?"
+    ],
+    "steps": [
+      "Choose an engine with style support.",
+      "Select Balanced, Aggressive, Defensive, Human-like or Maximum strength.",
+      "Use Maia when you want a model trained on human decisions."
+    ],
+    "details": "These styles do not rewrite an engine’s internal evaluation. Tiny bots keep their coded behavior. Maximum strength removes Stockfish’s skill/Elo limit.",
+    "controls": [
+      "playing_style"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "bots",
+    "category": "Engines",
+    "title": "Tiny bots, Flounder and custom UCI",
+    "summary": "Tiny bots choose one move without detailed evaluation or alternatives. Flounder samples Stockfish-derived choices; custom UCI uses an executable you supply.",
+    "questions": [
+      "Why can’t this bot show five moves?",
+      "Why is the evaluation blank?"
+    ],
+    "steps": [
+      "Read the selected engine’s capability note.",
+      "For Tiny bots use one suggestion; download its shared .NET runtime through Engine library.",
+      "For Custom UCI choose its executable in Engine files."
+    ],
+    "details": "Reference Elo is not guaranteed at your search budget. Flounder’s target rating is approximate. Custom multiple recommendations require MultiPV support.",
+    "controls": [
+      "custom_engine"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "compare",
+    "category": "Engines",
+    "title": "Compare engines side by side",
+    "summary": "Comparison runs two or three chosen engines on the same position without changing your main engine.",
+    "questions": [
+      "How do I compare Maia with Stockfish?",
+      "Can I compare three engines?"
+    ],
+    "steps": [
+      "Expand Compare engines in Engine.",
+      "Choose engines A and B; choose C or None.",
+      "Press Compare engines."
+    ],
+    "details": "Each comparison keeps its own results and errors. Human estimates and objective engine evaluations are labelled separately.",
+    "controls": [
+      "compare_a",
+      "compare_b",
+      "compare_c"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "presets",
+    "category": "Engines",
+    "title": "Save and load a named preset",
+    "summary": "Presets store engine and display choices. Quick analysis and Deep analysis are built in.",
+    "questions": [
+      "How do I save my engine setup?",
+      "What do presets save?"
+    ],
+    "steps": [
+      "Configure the engine and arrows.",
+      "Use Save preset and enter a name.",
+      "Choose a saved preset to load it; Manage renames, updates or removes custom entries."
+    ],
+    "details": "Presets include limits, strength, style, move count, arrow filters and threats. They exclude screen refresh, display choice, connection keys and readers. Missing engines must be installed first.",
+    "controls": [],
+    "aliases": [
+      "named configuration",
+      "load preset"
+    ]
+  },
+  {
+    "id": "preferences",
+    "category": "Settings and shortcuts",
+    "title": "Settings save automatically",
+    "summary": "Your preferences save after a short editing pause and when you close BoardLens. Installed engines live outside the app folder.",
+    "questions": [
+      "Will it remember my settings after closing?",
+      "My settings keep resetting",
+      "How do I save my choices?"
+    ],
+    "steps": [
+      "Finish editing a value and wait briefly.",
+      "Save now writes immediately.",
+      "Apply keybinds activates shortcut edits.",
+      "Keep the application-data folder when updating the application."
+    ],
+    "details": "Phone changes sync to desktop and then save. Invalid unfinished shortcut text is not saved. Your selected analysis preset is preserved.",
+    "controls": [],
+    "aliases": [
+      "remember my choices",
+      "losing my settings",
+      "preferences reset",
+      "settings not saving"
+    ]
+  },
+  {
+    "id": "arrows",
+    "category": "Arrows and evaluation",
+    "title": "Arrow colors and alternatives",
+    "summary": "Gold is #1, blue is #2, and later colors are more alternatives. Cyan is the opponent’s best reply after #1.",
+    "questions": [
+      "Why does the blue arrow look different?",
+      "What does the cyan arrow mean?",
+      "Are both arrows moves I should play now?"
+    ],
+    "steps": [
+      "Choose Suggested moves in Engine.",
+      "Use Arrows → Moves to draw and rank filters to control visibility.",
+      "Opponent reply shows a continuation after the best move, not a second move for the current turn."
+    ],
+    "details": "Only my color, Lock move and color/rank filters can intentionally hide arrows. Rank labels identify alternatives. Dashed reply is optional; solid is the default.",
+    "controls": [
+      "arrow_count",
+      "multipv",
+      "rank_best",
+      "rank_second",
+      "rank_others",
+      "arrow_labels",
+      "show_reply",
+      "dashed_reply"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "arrow-steady",
+    "category": "Arrows and evaluation",
+    "title": "Stop suggestions flickering",
+    "summary": "Steady arrows smooths intermediate replacements while analysis continues. Lock move keeps the first displayed move until the position changes.",
+    "questions": [
+      "Why do the recommended moves keep changing?",
+      "How do I keep one arrow while the engine calculates?"
+    ],
+    "steps": [
+      "Use Steady arrows to keep calculating with fewer visible changes.",
+      "Use Lock move when you want one fixed recommendation for the current position.",
+      "Changing the board or pressing Scan now releases that locked suggestion."
+    ],
+    "details": "Evaluation still updates. The first hint and completed engine result are immediate; provisional replacements need to remain consistent briefly.",
+    "controls": [
+      "steady_arrows",
+      "stick_to_move"
+    ],
+    "aliases": [
+      "arrows flickering",
+      "freeze one suggestion",
+      "stick one move"
+    ]
+  },
+  {
+    "id": "arrow-clicks",
+    "category": "Arrows and evaluation",
+    "title": "Screen arrows let clicks through",
+    "summary": "Screen overlays are passive. You should still be able to move pieces in the target app with arrows visible.",
+    "questions": [
+      "Do the arrows block my mouse?",
+      "How do I turn screen arrows off?"
+    ],
+    "steps": [
+      "Toggle Arrows in the top bar, Screen arrows in the Arrows tab, or the arrow shortcut.",
+      "This changes screen overlays without stopping monitoring or engine thinking."
+    ],
+    "details": "The mirrored board and phone can still show their own hints. Covered or unconfirmed target boards may hide screen overlays temporarily.",
+    "controls": [
+      "overlay_enabled"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "eval",
+    "category": "Arrows and evaluation",
+    "title": "Read the evaluation bar",
+    "summary": "Positive values favor White; negative values favor Black. M means the engine found a forced mate. The bar is not a winning percentage.",
+    "questions": [
+      "Why does it say White is winning?",
+      "Is +2 a 100 percent chance to win?",
+      "What does M3 mean?"
+    ],
+    "steps": [
+      "Read the signed score next to the board. +1.00 is roughly a pawn-sized engine advantage for White.",
+      "A neutral dash means there is no supplied evaluation yet.",
+      "Use Full analysis for the complete explanation and variations."
+    ],
+    "details": "Strength-limited suggestions and Maia predictions are labelled. Maia scores describe human-game outcomes; Tiny bots do not supply an evaluation.",
+    "controls": [],
+    "aliases": [
+      "win percentage",
+      "evaluation always white",
+      "score meaning"
+    ]
+  },
+  {
+    "id": "threats",
+    "category": "Arrows and evaluation",
+    "title": "Threat highlights",
+    "summary": "Red rings mark possible material loss in legal capture exchanges. Purple rings mark mate-in-one targets for the side to move.",
+    "questions": [
+      "What are the red and purple circles?",
+      "How do I show attacked squares?"
+    ],
+    "steps": [
+      "Arrows → Threats → Threat highlights.",
+      "Show attacked squares adds dots for the opponent of the bottom color.",
+      "Show mate-in-one targets enables purple targets."
+    ],
+    "details": "These bounded capture checks are estimates. They do not prove every tactic or assess all sacrifices. Hover the mirrored board for explanations.",
+    "controls": [
+      "threats_enabled",
+      "threat_attacks",
+      "threat_mates"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "history",
+    "category": "Practice and history",
+    "title": "Review previous live positions",
+    "summary": "Previous and Next browse observed positions while live reading pauses. Resume live returns to the current target.",
+    "questions": [
+      "Does Undo change the real game?",
+      "How do I go back through moves?"
+    ],
+    "steps": [
+      "Use Previous/Next below the mirrored board.",
+      "Resume live returns to current play.",
+      "On Practice, Undo removes a local move."
+    ],
+    "details": "History never undoes moves in another app. Resume live to continue following your current board.",
+    "controls": [
+      "previous",
+      "next",
+      "live",
+      "undo"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "practice",
+    "category": "Practice and history",
+    "title": "Use the local Practice board",
+    "summary": "Practice is an editable board inside BoardLens. It never controls the external game.",
+    "questions": [
+      "How do I play moves without changing my real board?",
+      "What does Play best do?"
+    ],
+    "steps": [
+      "Board → Read from → Practice board.",
+      "Click a piece, then its destination. Click promotion chooses a queen.",
+      "Suggest requests analysis; Play best makes exactly one local move.",
+      "New game resets the local board; Undo takes back a local move."
+    ],
+    "details": "Practice moves stay inside BoardLens. External boards receive suggestions only.",
+    "controls": [
+      "move",
+      "new_game"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "fen",
+    "category": "Practice and history",
+    "title": "Load and copy a FEN position",
+    "summary": "FEN describes one exact chess position, including whose turn it is.",
+    "questions": [
+      "What is position FEN?",
+      "How do I load an exact position?"
+    ],
+    "steps": [
+      "Load FEN on Practice for exact turn, castling and en passant metadata.",
+      "Copy FEN shares the current position."
+    ],
+    "details": "Invalid FEN is rejected. Pixel reads cannot recover every historical right from artwork alone.",
+    "controls": [],
+    "aliases": [
+      "import position",
+      "copy game",
+      "load chess notation"
+    ]
+  },
+  {
+    "id": "keys",
+    "category": "Settings and shortcuts",
+    "title": "Keyboard shortcuts",
+    "summary": "Keys configures shortcuts for suggestions, scanning, overlays, history, Stop and one local Practice move.",
+    "questions": [
+      "How do I change keybinds?",
+      "My keyboard shortcuts do not work"
+    ],
+    "steps": [
+      "Enter pynput notation such as <ctrl>+<alt>+s or <cmd>+<shift>+b.",
+      "Use Apply keybinds to validate and activate all entries.",
+      "Global shortcuts work outside BoardLens when OS permissions allow them; otherwise use focused-window shortcuts."
+    ],
+    "details": "Default Ctrl+Alt keys: S Suggest, A Auto suggest, B Scan, H Arrows, X Stop, Left/Right History, L Resume, M one Practice move. Escape stops while the main window is active.",
+    "controls": [
+      "global_keys"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "layout",
+    "category": "Settings and shortcuts",
+    "title": "Compact, full analysis and staying on top",
+    "summary": "Compact prioritizes the board. Expanded keeps settings beside it. Full analysis gives the workspace to the explanation.",
+    "questions": [
+      "Where did my settings go in compact view?",
+      "How do I make the analysis text bigger?"
+    ],
+    "steps": [
+      "Use Compact/Expand in the top bar.",
+      "In Compact, Settings opens the same tabs in a separate window.",
+      "Full analysis expands the text; Text − / + changes its size.",
+      "Stay on top keeps the desktop window above other windows."
+    ],
+    "details": "Compact resizing retains the current display and position when possible. Settings content wraps and scrolls vertically.",
+    "controls": [
+      "always_top"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "phone",
+    "category": "Phone and tablet",
+    "title": "Pair a phone or tablet",
+    "summary": "Enable the desktop companion, use the same network, then enter its computer address and six-digit code on your phone.",
+    "questions": [
+      "How do I connect my Android phone?",
+      "Can the GUI be on my iPad?"
+    ],
+    "steps": [
+      "Desktop → Phone → Enable phone companion.",
+      "Open the Android companion or the shown address in a phone/tablet browser.",
+      "Enter the six-digit code.",
+      "Start with BoardLens enables the companion automatically on desktop startup."
+    ],
+    "details": "The computer must stay awake and running; minimizing its GUI is fine. The connection port can be changed before enabling the companion. iOS native source still needs your signing setup.",
+    "controls": [
+      "phone_auto",
+      "phone_port"
+    ],
+    "aliases": []
+  },
+  {
+    "id": "phone-sync",
+    "category": "Phone and tablet",
+    "title": "Phone settings sync to desktop",
+    "summary": "Phone edits are sent after a short typing pause, reflected in desktop controls and saved there.",
+    "questions": [
+      "Why don’t my phone settings change the desktop?",
+      "Do I have to press Apply every time?"
+    ],
+    "steps": [
+      "Wait for Synced with your computer.",
+      "Apply now retries an interrupted edit.",
+      "Paths sync after editing finishes; keyboard shortcuts have their own Apply button."
+    ],
+    "details": "If a desktop modal dialog is open, close it before remote edits. Disabled settings reflect the selected engine’s capabilities.",
+    "controls": [],
+    "aliases": [
+      "mobile settings not syncing",
+      "phone changes not saved"
+    ]
+  },
+  {
+    "id": "phone-repair",
+    "category": "Phone and tablet",
+    "title": "Reconnect the phone",
+    "summary": "After the companion restarts, pair again with its new code. Keep the desktop running on the same reachable network.",
+    "questions": [
+      "My phone cannot reach the computer",
+      "Why did the pairing code change?"
+    ],
+    "steps": [
+      "Check the address in the desktop Phone tab.",
+      "Keep the companion enabled and the computer awake.",
+      "Check Wi-Fi and local firewall access.",
+      "Enter the current six-digit code."
+    ],
+    "details": "The phone code differs from the persistent browser-extension key. A local address is not reachable from arbitrary internet connections.",
+    "controls": [],
+    "aliases": [
+      "mobile offline",
+      "phone disconnected",
+      "pair code rejected"
+    ]
+  },
+  {
+    "id": "copy",
+    "category": "Settings and shortcuts",
+    "title": "Copy buttons",
+    "summary": "Copy buttons show Copied to clipboard when text is available. An empty value reports that there is nothing to copy.",
+    "questions": [
+      "Did it copy the pairing key?",
+      "Where did my copied text go?"
+    ],
+    "steps": [
+      "Use a Copy button for a position, configuration or pairing value.",
+      "Paste the text into the app or field where you need it."
+    ],
+    "details": "The clipboard belongs to the device where you tapped Copy. The phone reports a browser clipboard restriction if copying fails.",
+    "controls": [],
+    "aliases": [
+      "copy feedback",
+      "clipboard notice"
+    ]
+  },
+  {
+    "id": "updates",
+    "category": "Settings and shortcuts",
+    "title": "Update BoardLens from GitHub",
+    "summary": "Check for updates manually in Board → App. Android has its own app-update button.",
+    "questions": [
+      "How do I update BoardLens?",
+      "Where is the update button?",
+      "Can I update the APK?"
+    ],
+    "steps": [
+      "Desktop: Board → App → Check for updates.",
+      "If a newer desktop build is available, choose Download and restart.",
+      "Android: Check for app updates on the connection screen, or Controls → Update Android app.",
+      "Confirm an Android installation in the system installer; grant installation access only if you want that update."
+    ],
+    "details": "Downloads come from Nick-PY0/BoardLens releases and are checksum-verified. Desktop keeps a rollback copy and preserves settings, engines and runtime. Android also checks the package identity, version and signing certificate. A desktop restart requires pairing the companion again.",
+    "controls": [],
+    "aliases": [
+      "upgrade desktop",
+      "install new apk",
+      "latest version",
+      "github release"
+    ]
+  }
+]
