@@ -6,12 +6,16 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.8")]
+
 static class BoardLensLauncher {
     const string Hash="@PAYLOAD_SHA@";
     static string Root=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"BoardLens","native");
     static string Package=Path.Combine(Root,"packages",Hash.Substring(0,20));
     static string Smoke;
     [STAThread] static int Main(string[] args) {
+        AppContext.SetSwitch("Switch.System.IO.UseLegacyPathHandling",false);
+        AppContext.SetSwitch("Switch.System.IO.BlockLongPaths",false);
         Application.EnableVisualStyles();
         for(int i=0;i+1<args.Length;i++)if(args[i]=="--self-test")Smoke=Path.GetFullPath(args[i+1]);
         try {
@@ -28,7 +32,7 @@ static class BoardLensLauncher {
     static void Prepare(){
         string payload=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Resources","payload.zip");
         using(var stream=File.OpenRead(payload))using(var sha=SHA256.Create()){string actual=BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();if(actual!=Hash)throw new Exception("The app package checksum did not match. Download the complete Windows ZIP again.");}
-        Directory.CreateDirectory(Path.GetDirectoryName(Package));string stage=Package+"-stage-"+Guid.NewGuid().ToString("N");Directory.CreateDirectory(stage);
+        Directory.CreateDirectory(Path.GetDirectoryName(Package));string stage=Path.Combine(Path.GetDirectoryName(Package),".stage-"+Guid.NewGuid().ToString("N").Substring(0,12));Directory.CreateDirectory(stage);
         try{using(var zip=ZipFile.OpenRead(payload)){long size=0;foreach(var entry in zip.Entries){size+=entry.Length;if(size>4L*1024*1024*1024)throw new Exception("Unexpected package size.");string destination=Path.GetFullPath(Path.Combine(stage,entry.FullName));if(!destination.StartsWith(stage+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new Exception("Unsafe package entry.");if(entry.FullName.EndsWith("/")){Directory.CreateDirectory(destination);continue;}Directory.CreateDirectory(Path.GetDirectoryName(destination));entry.ExtractToFile(destination);}}
             File.WriteAllText(Path.Combine(stage,".ready"),"ready");if(Directory.Exists(Package)){if(File.Exists(Path.Combine(Package,".ready")))Directory.Delete(stage,true);else throw new Exception("An incomplete package exists. Close BoardLens and retry.");}else Directory.Move(stage,Package);
         }catch{if(Directory.Exists(stage))Directory.Delete(stage,true);throw;}

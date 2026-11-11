@@ -9,7 +9,7 @@ def include(path):
 def files(root):return [p for p in sorted(root.rglob('*')) if p.is_file() and include(p.relative_to(root))]
 def archive(destination,root,prefix):
     with zipfile.ZipFile(destination,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as out:
-        for path in files(root):out.write(path,str(Path(prefix)/path.relative_to(root)))
+        for path in files(root):out.write(path,(Path(prefix)/path.relative_to(root)).as_posix())
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--apk',type=Path,required=True);parser.add_argument('--output',type=Path,default=ROOT/'dist');parser.add_argument('--withhold-android',action='store_true');args=parser.parse_args()
@@ -17,7 +17,7 @@ def main():
     if args.withhold_android:(target/'BoardLens-Companion-Android.apk').unlink(missing_ok=True)
     desktop=ROOT/'desktop';mobile=ROOT/'mobile'
     if not args.apk.is_file():raise SystemExit('Build the signed Android APK first, then pass --apk.')
-    owned=desktop/'release-files.json';owned.write_text(json.dumps(sorted(set(str(p.relative_to(desktop)) for p in files(desktop))|{'release-files.json'}),indent=2)+'\n')
+    owned=desktop/'release-files.json';owned.write_text(json.dumps(sorted(set(p.relative_to(desktop).as_posix() for p in files(desktop))|{'release-files.json'}),indent=2)+'\n')
     archive(target/'BoardLens-Mac-Windows.zip',desktop,'BoardLens');archive(target/'BoardLens-Mobile-Source.zip',mobile,'BoardLens-Mobile');archive(target/'BoardLens-iPhone-iPad-Source.zip',mobile/'ios','BoardLens-iOS')
     with zipfile.ZipFile(target/'BoardLens-iPhone-iPad-Source.zip','a',zipfile.ZIP_DEFLATED) as out:
         for name in ('LICENSE','START-HERE.txt','TEST-REPORT.txt'):out.write(mobile/name,'BoardLens-iOS/'+name)

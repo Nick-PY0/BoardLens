@@ -36,10 +36,10 @@ def main():
  prepare(runtime)
  version=re.search(r'__version__\s*=\s*"([^"]+)"',(SOURCE/'chess_helper/__init__.py').read_text()).group(1)
  files=[p for p in sorted(SOURCE.rglob('*')) if p.is_file() and included(p.relative_to(SOURCE))]
- owned=SOURCE/'release-files.json';owned.write_text(json.dumps(sorted(set(str(p.relative_to(SOURCE)) for p in files)|{'release-files.json'}),indent=2)+'\n')
+ owned=SOURCE/'release-files.json';owned.write_text(json.dumps(sorted(set(p.relative_to(SOURCE).as_posix() for p in files)|{'release-files.json'}),indent=2)+'\n')
  files=[p for p in sorted(SOURCE.rglob('*')) if p.is_file() and included(p.relative_to(SOURCE))]
  with zipfile.ZipFile(payload/'source.zip','w',zipfile.ZIP_DEFLATED,compresslevel=6) as archive:
-  for p in files:archive.write(p,'BoardLens/'+str(p.relative_to(SOURCE)))
+  for p in files:archive.write(p,'BoardLens/'+p.relative_to(SOURCE).as_posix())
  for src,dest in [(SOURCE/'packaging/native/start.py',payload/'start.py'),(SOURCE/'chess_helper/update_apply.py',payload/'update_apply.py'),(SOURCE/'LICENSE',payload/'LICENSE'),(SOURCE/'THIRD-PARTY.txt',payload/'THIRD-PARTY.txt')]:shutil.copy2(src,dest)
  sys.path.insert(0,str(SOURCE));from chess_helper.installer import install_stockfish
  engine=payload/'engine';engine.mkdir(exist_ok=True)
@@ -56,7 +56,7 @@ def main():
  else:
   with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
    for p in sorted(payload.rglob('*')):
-    if p.is_file():z.write(p,str(p.relative_to(payload)))
+    if p.is_file():z.write(p,p.relative_to(payload).as_posix())
  digest=sha(archive);meta=dict(metadata,payload_sha256=digest)
  icon=SOURCE/'chess_helper/assets/ui/boardlens-icon.png'
  if sys.platform=='darwin':
@@ -84,12 +84,12 @@ def main():
   Image.open(icon).save(work/'BoardLens.ico',sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])
   cs=work/'Launcher.cs';cs.write_text((SOURCE/'packaging/native/Launcher.cs').read_text().replace('@PAYLOAD_SHA@',digest))
   compiler=Path(os.environ['WINDIR'])/'Microsoft.NET/Framework64/v4.0.30319/csc.exe'
-  run([compiler,'/nologo','/target:winexe','/platform:x64','/optimize+','/win32icon:'+str(work/'BoardLens.ico'),'/reference:System.Windows.Forms.dll','/reference:System.Drawing.dll','/reference:System.IO.Compression.dll','/reference:System.IO.Compression.FileSystem.dll','/out:'+str(app/'BoardLens.exe'),cs])
+  run([compiler,'/nologo','/target:winexe','/platform:x64','/optimize+','/win32icon:'+str(work/'BoardLens.ico'),'/win32manifest:'+str(SOURCE/'packaging/native/Launcher.manifest'),'/reference:System.Windows.Forms.dll','/reference:System.Drawing.dll','/reference:System.IO.Compression.dll','/reference:System.IO.Compression.FileSystem.dll','/out:'+str(app/'BoardLens.exe'),cs])
   meta['app_path']=str(app/'BoardLens.exe')
   (app/'READ-ME.txt').write_text('Unzip the complete folder, then open BoardLens.exe. No Python install or Terminal is needed. Keep the Resources folder beside the app. Settings use your normal BoardLens app-data folder.\n')
   destination=out/'BoardLens-Windows-x64.zip'
   with zipfile.ZipFile(destination,'w',zipfile.ZIP_STORED) as z:
    for p in app.rglob('*'):
-    if p.is_file():z.write(p,str(Path('BoardLens')/p.relative_to(app)))
+    if p.is_file():z.write(p,(Path('BoardLens')/p.relative_to(app)).as_posix())
  meta.update(asset=destination.name,sha256=sha(destination));(out/'native-build.json').write_text(json.dumps(meta,indent=2));print(json.dumps(meta,indent=2))
 if __name__=='__main__':main()
