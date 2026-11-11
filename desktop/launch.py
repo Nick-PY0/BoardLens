@@ -10,9 +10,12 @@ ROOT = Path(__file__).resolve().parent
 
 
 def launch():
+    from chess_helper.processes import windowless_children
+    windowless_children()
     os.chdir(ROOT)
     venv = ROOT / ".venv"
-    python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    native=os.environ.get('BOARDLENS_NATIVE_PYTHON')
+    python = Path(native) if native else venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     uv = shutil.which("uv")
     if not uv and Path("/opt/homebrew/bin/uv").is_file():
         uv = "/opt/homebrew/bin/uv"
@@ -24,16 +27,17 @@ def launch():
             subprocess.run([sys.executable, "-m", "venv", str(venv)], check=True)
         else:
             raise RuntimeError("Install Python 3.12 or newer from https://www.python.org/downloads/ and run this launcher again.")
-    marker = venv / "boardlens-requirements.txt"
+    marker = (Path(native).parent.parent if native and os.name!="nt" else Path(native).parent if native else venv) / "boardlens-requirements.txt"
     requirements = ROOT / "requirements.txt"
     if not marker.exists() or marker.read_bytes() != requirements.read_bytes():
         print("Installing desktop and chess dependencies...", flush=True)
-        args = [uv, "pip", "install", "--python", str(python)] if uv else [str(python), "-m", "pip", "install"]
+        args = [uv, "pip", "install", "--python", str(python)] if uv and not native else [str(python), "-m", "pip", "install"]
         subprocess.run(args + ["-r", str(requirements)], check=True)
         marker.write_bytes(requirements.read_bytes())
     # Downloads only if no compatible UCI engine is already available.
     subprocess.run([str(python), str(ROOT / "tools" / "setup_engine.py")], check=True)
     print("Starting BoardLens...", flush=True)
+    if native:os.execv(str(python),[str(python),"-m","chess_helper"])
     return subprocess.call([str(python), "-m", "chess_helper"])
 
 

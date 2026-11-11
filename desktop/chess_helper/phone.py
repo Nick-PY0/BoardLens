@@ -106,7 +106,7 @@ class PhoneCompanion(QObject):
         for board in boards:
             board['turn_override']=w.turn.currentIndex() if board['id']=='primary' else next(s.card.turn.currentIndex() for s in w.multi.states if str(s.identity)==board['id'])
         values,schema=self.schema()
-        return {'app':'BoardLens','version':'2.12.0','updated':time.time(),'status':w.status_label.text(),'monitoring':w._monitoring,
+        return {'app':'BoardLens','version':'2.13.0','updated':time.time(),'status':w.status_label.text(),'monitoring':w._monitoring,
                 'auto_suggest':w.live_button.isChecked(),'practice':w.practice,'reviewing':w._reviewing,
                 'boards':boards,'settings':values,'schema':schema,'keys':{k:f.text() for k,f in w.key_fields.items()},
                 'engine_configuration':configuration(w),'phone_analysis':self.analysis.snapshot(),

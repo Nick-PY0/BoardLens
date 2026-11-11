@@ -32,7 +32,7 @@ class PhoneServer:
                 return good
             def do_GET(self):
                 path=urlsplit(self.path).path
-                if path=='/api/health':return self.send_json(200,{'app':'BoardLens','version':'2.12.0','pairing':True})
+                if path=='/api/health':return self.send_json(200,{'app':'BoardLens','version':'2.13.0','pairing':True})
                 if path in ('/api/state','/api/phone-position'):
                     if not self.authorized():return self.send_json(401,{'error':'Pair with the code shown on your computer.'})
                     with owner.lock:state=owner.snapshot

@@ -3,6 +3,8 @@ import sys
 
 
 def main():
+    from .processes import windowless_children
+    windowless_children()
     # Some macOS download/cache tools propagate Finder's hidden flag to every
     # plugin. Qt intentionally skips hidden plugins, even at an explicit path.
     if sys.platform == "darwin":
@@ -29,12 +31,29 @@ def main():
     from .app import MainWindow
     app = QApplication(sys.argv)
     app.setApplicationName("BoardLens")
+    app.setApplicationDisplayName("BoardLens")
+    if sys.platform=="darwin" and os.environ.get("BOARDLENS_NATIVE_PYTHON"):
+        from Foundation import NSProcessInfo
+        NSProcessInfo.processInfo().setProcessName_("BoardLens")
     app.setOrganizationName("BoardLens")
     from .branding import app_icon
     app.setWindowIcon(app_icon())
+    server=None
+    if not os.environ.get('BOARDLENS_TEST_MODE'):
+        from .instance import claim
+        server=claim(app)
+        if server is None:return
     window = MainWindow()
+    if server:
+        from .instance import attach
+        attach(server,window)
     window.show()
-    window.automatic_updates=AutomaticUpdates(window)
+    smoke=os.environ.get('BOARDLENS_NATIVE_SMOKE')
+    if smoke:
+        from .native_smoke import begin
+        from PySide6.QtCore import QTimer
+        QTimer.singleShot(100,lambda:begin(app,window,smoke))
+    else:window.automatic_updates=AutomaticUpdates(window)
     import signal
     signal.signal(signal.SIGTERM,lambda *_:(window.close(),app.quit()))
     diagnostics=os.environ.get('BOARDLENS_DIAGNOSTICS_PATH')
