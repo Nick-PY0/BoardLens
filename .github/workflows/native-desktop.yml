@@ -1,8 +1,14 @@
 name: Native desktop apps
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Optional existing draft release to upload after tests
+        required: false
+        default: ''
+        type: string
 permissions:
-  contents: read
+  contents: write
 jobs:
   package:
     strategy:
@@ -52,6 +58,32 @@ jobs:
           assert result['legal_move'] and not result.get('error'),result
           print(json.dumps(result,indent=2))
           PY
+      - name: Upload verified app to draft release
+        if: success() && inputs.release_tag != ''
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOARDLENS_RELEASE: ${{ inputs.release_tag }}
+          BOARDLENS_PLATFORM: ${{ matrix.name }}
+        run: |
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          tag=os.environ['BOARDLENS_RELEASE']
+          release=json.loads(subprocess.check_output(['gh','release','view',tag,'--json','isDraft'],text=True))
+          assert release['isDraft'],'Only a draft release can receive build uploads'
+          data=json.loads(Path('native-dist/native-build.json').read_text())
+          asset=Path('native-dist')/data['asset']
+          h=hashlib.sha256()
+          with asset.open('rb') as f:
+              for part in iter(lambda:f.read(1024*1024),b''): h.update(part)
+          assert h.hexdigest()==data['sha256']
+          smoke=json.loads(Path('native-dist/smoke.json').read_text())
+          assert smoke['legal_move'] and not smoke.get('error')
+          data.pop('app_path',None);smoke.pop('python',None)
+          data['smoke']=smoke
+          metadata=Path('native-dist')/('native-'+os.environ['BOARDLENS_PLATFORM']+'.json')
+          metadata.write_text(json.dumps(data,indent=2))
+          subprocess.run(['gh','release','upload',tag,str(asset),str(metadata),'--clobber'],check=True)
       - name: Collect startup logs
         if: always()
         shell: python
