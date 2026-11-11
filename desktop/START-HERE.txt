@@ -1,4 +1,4 @@
-BOARDLENS 2.11 — START HERE
+BOARDLENS 2.12 — START HERE
 
 Mac: double-click Start BoardLens.command.
 Windows: install 64-bit Python 3.12, then double-click Start BoardLens.bat.
@@ -10,12 +10,15 @@ Auto suggest follows visible moves. Stop cancels reading and thinking.
 Keep all 64 squares visible. Use offline, analysis, or assistance-permitted games.
 
 WHAT CHANGED
-Study, coaching presets, lessons, game recording/review and What-if are removed
-from desktop and phone. Previously saved files remain untouched in the
-application-data folder. Engine settings, named analysis presets, threat
-highlights, target lock, live-position history and the local Practice board stay.
-Help covers the remaining features. Android 1.4 removes its unused PGN bridge.
-Reconnect/reload your phone companion to load the new four-tab interface.
+Choose the evaluation engine separately under Engine → Evaluation bar.
+Stockfish can score the bar while Maia recommends moves. Predict next turn
+extends one-move providers with an opponent reply and your following move.
+Automatic desktop updates download quietly and install on next launch; turn
+this off in Board → App. User settings and engines remain in app data.
+
+The Android source preview has separate On this phone and Computer companion
+sections. Its APK is withheld after Play Protect blocked the release candidate.
+The browser computer companion is available. Study and coaching stay removed.
 
 BOARD AND ARROWS
 Screen capture has a fixed 75 ms target; engine think time stays selectable.

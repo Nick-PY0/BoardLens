@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFileDialog,
     QMessageBox, QPushButton, QDoubleSpinBox, QScrollArea, QSpinBox, QSplitter,
     QTabWidget, QTextBrowser, QVBoxLayout, QWidget, QStackedWidget, QToolButton, QMenu)
 
+from . import __version__
 from .toggle import ToggleButton as QCheckBox
 from .capture import BoardRegion, bgr_pixmap, capture, input_point, screen_key
 from .controls import ClickMove, Hotkeys
@@ -143,7 +144,7 @@ class MainWindow(QMainWindow):
         self.overlay = BoardOverlay()
         self.live_worker = LiveWorker(self)
         self.live_worker.signals.completed.connect(self.live_finished)
-        self.setWindowTitle("BoardLens 2.11.0 · Live screen analysis")
+        self.setWindowTitle(f"BoardLens {__version__} · Live screen analysis")
         self.setWindowIcon(app_icon())
         self.resize(1400, 900)
         self.setMinimumSize(1180, 740)
