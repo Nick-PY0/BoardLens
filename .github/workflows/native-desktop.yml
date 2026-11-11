@@ -34,6 +34,7 @@ jobs:
           $target = Get-Content native-dist/native-build.json | ConvertFrom-Json
           $report = Join-Path $PWD 'native-dist/smoke.json'
           $p = Start-Process -FilePath $target.app_path -ArgumentList @('--self-test', $report) -PassThru -Wait
+          if (Test-Path $report) { Get-Content $report }
           if ($p.ExitCode -ne 0) { throw 'Native launcher self-test failed' }
           $result = Get-Content $report | ConvertFrom-Json
           if (-not $result.legal_move -or $result.error -or $result.console_window -ne 0) { throw ($result | ConvertTo-Json) }
@@ -51,12 +52,27 @@ jobs:
           assert result['legal_move'] and not result.get('error'),result
           print(json.dumps(result,indent=2))
           PY
+      - name: Collect startup logs
+        if: always()
+        shell: python
+        run: |
+          import os,shutil
+          from pathlib import Path
+          base=Path(os.environ.get('LOCALAPPDATA',str(Path.home()/'Library/Application Support')))/'BoardLens/native/logs'
+          if base.exists():
+              for file in base.glob('*.log'):
+                  target=Path('native-dist')/file.name
+                  target.parent.mkdir(exist_ok=True)
+                  shutil.copy2(file,target)
+                  print(file.read_text(errors='replace')[-12000:])
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
         with:
           name: BoardLens-${{ matrix.name }}
           path: |
             native-dist/*.zip
             native-dist/native-build.json
             native-dist/smoke.json
+            native-dist/*.log
           compression-level: 0
           retention-days: 14

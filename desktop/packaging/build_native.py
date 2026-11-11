@@ -72,10 +72,8 @@ def main():
   info={'CFBundleName':'BoardLens','CFBundleDisplayName':'BoardLens','CFBundleIdentifier':'app.boardlens.desktop','CFBundleExecutable':'BoardLens','CFBundlePackageType':'APPL','CFBundleShortVersionString':version,'CFBundleVersion':version,'CFBundleIconFile':'BoardLens.icns','LSMinimumSystemVersion':'14.0','NSHighResolutionCapable':True,'NSPrincipalClass':'NSApplication','NSAppleEventsUsageDescription':'BoardLens reads supported local chess positions when you enable that connection.'}
   with (app/'Contents/Info.plist').open('wb') as f:plistlib.dump(info,f)
   run(['/usr/bin/clang','-fobjc-arc','-framework','Cocoa','-Wno-deprecated-declarations',SOURCE/'packaging/native/Launcher.m','-o',binary/'BoardLens'])
-  for item in [app,*app.rglob('*')]:
-   for name in ('com.apple.FinderInfo','com.apple.ResourceFork'):
-    try:os.removexattr(item,name)
-    except OSError:pass
+  for name in ('com.apple.FinderInfo','com.apple.ResourceFork'):
+   subprocess.run(['/usr/bin/xattr','-dr',name,str(app)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
   run(['/usr/bin/codesign','--force','--sign','-',app])
   run(['/usr/bin/codesign','--verify','--strict',app])
   meta['app_path']=str(app)
