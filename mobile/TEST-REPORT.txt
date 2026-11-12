@@ -1,6 +1,6 @@
-BOARDLENS ANDROID 1.8.0 / CODE 10 — NOVEMBER 12, 2026
+BOARDLENS ANDROID 1.8.1 / CODE 11 — NOVEMBER 12, 2026
 
-35 Android JVM/Robolectric tests and release lint pass. New checks cover:
+38 Android JVM/Robolectric tests and release lint pass. New checks cover:
 - still-frame confirmation without a second neural inference;
 - animation invalidation and overlay-pixel masks;
 - independent move/evaluation timers, validation and persistence;
@@ -39,3 +39,14 @@ installation/security checks stay enabled.
 Existing synthetic discovery coverage: 160/186 exact, 26 rejected, zero accepted
 wrong. No universal theme/3D claim. Models → Test installed engines runs actual
 engine inference on the phone. No autoplay, Study or coaching features.
+
+MAIA STARTUP REGRESSION
+The production Java Maia adapter was run with the shipped ONNX Runtime 1.24.3
+version and actual weights on the Mac host: 52 reference positions across all
+four models passed. A service-level test reproduced and fixed idle-board
+startup after download/settings changes while the phone UI is visible. A UI
+test verifies explicit model selection without changing the evaluation engine.
+These three optional real-model tests run when BOARDLENS_MAIA_TEST_MODELS is set;
+ordinary CI can skip them when their large data files are absent. No new A35
+Maia inference result is inferred from host tests. The user's exact phone error
+was requested; a separate device-specific failure may still need its message.

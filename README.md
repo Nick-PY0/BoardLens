@@ -32,18 +32,18 @@ The evaluation provider is independent of the move provider: use Stockfish to sc
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
 
-> **Android 1.8:** [Download the phone-only APK](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.0). Host/model checks and the full APK build pass; this exact APK still needs physical A35 installation and live capture/overlay testing. Keep normal Android security checks enabled. [Test status →](mobile/TEST-REPORT.txt)
+> **Android 1.8.1:** [Download the phone-only APK](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.1). Host/model checks and the full APK build pass; this exact APK still needs physical A35 installation and live capture/overlay testing. Keep normal Android security checks enabled. [Test status →](mobile/TEST-REPORT.txt)
 
 ## Download & start
 
-Get [desktop downloads](https://github.com/Nick-PY0/BoardLens/releases/latest) or [Android 1.8](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.0).
+Get [desktop downloads](https://github.com/Nick-PY0/BoardLens/releases/latest) or [Android 1.8.1](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.1).
 
 | Device | Download | Start |
 | --- | --- | --- |
 | Mac (Apple Silicon) | `BoardLens-Mac-AppleSilicon.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Mac (Intel) | `BoardLens-Mac-Intel.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Windows 10/11 (64-bit) | `BoardLens-Windows-x64.zip` | Extract the entire folder, then open **BoardLens.exe**. Keep Resources beside it. |
-| Android | [BoardLens Android APK](https://github.com/Nick-PY0/BoardLens/releases/download/android-v1.8.0/BoardLens-Companion-Android.apk) | Phone screen → Settings → Models & downloads, then Start. Computer companion is optional. |
+| Android | [BoardLens Android APK](https://github.com/Nick-PY0/BoardLens/releases/download/android-v1.8.1/BoardLens-Companion-Android.apk) | Phone screen → Settings → Models & downloads, then Start. Computer companion is optional. |
 | iPhone / iPad | Phone browser, or unsigned iOS source ZIP | Open the desktop companion address. Native source needs Xcode and your signing setup. |
 
 The desktop app includes a private Python runtime, recognition models and Stockfish 19. No Terminal or Python installation is required. The first launch prepares its files in your user profile; later launches reuse them. Settings and optional engines remain in the normal BoardLens app-data folder, including when upgrading from the source version. Optional engines download only when selected. The Mac apps are ad-hoc signed, not notarized; Windows is unsigned. [Desktop installation and build details →](docs/DESKTOP-APPS.md)
@@ -114,7 +114,7 @@ Different engines expose different capabilities. Maia predicts human moves; Tiny
 
 Desktop automatically checks and downloads checksum-verified stable updates, then applies them at the next launch with rollback and preserved user data. Switch this off under **Board → App**. Android automatically checks releases and opens GitHub for installation through Android; it has no custom APK installer or install-packages permission. [Update and release details →](docs/UPDATES.md)
 
-The first public release is **v1.0.0**. The new desktop is **2.16.0**, with Android **1.8.0** available separately. See the latest release for the exact downloadable build and installation-test status.
+The first public release is **v1.0.0**. The new desktop is **2.16.0**, with Android **1.8.1** available separately. See the latest release for the exact downloadable build and installation-test status.
 
 ## What is verified
 

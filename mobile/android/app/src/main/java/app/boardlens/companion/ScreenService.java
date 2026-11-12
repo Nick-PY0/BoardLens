@@ -63,10 +63,12 @@ public final class ScreenService extends Service {
   private BoardGeometry targetGeometry;
   private ChessPosition position;
   private boolean bottom = true;
-  private String lastSettings = "", lastTurn = "Auto";
+  private String lastSettings = "", lastTurn = "Auto",lastOrientation="Auto";
   private int failures = 0;
   private final ReadConfirmation<BoardReader.Read> confirmation=new ReadConfirmation<>();
   private final Runnable tickTask=this::tick;private long lastTick;
+  private long modelRevision;private final Runnable settingsTask=this::applyCurrentSettings;
+  private final android.content.SharedPreferences.OnSharedPreferenceChangeListener modelListener=(p,key)->modelReady(key);
   private long lastScan = 0;
   private final java.util.concurrent.atomic.AtomicLong generation = new java.util.concurrent.atomic.AtomicLong();
   private boolean cleanFrame = false,needsRead=true;
@@ -76,7 +78,31 @@ public final class ScreenService extends Service {
   private final LatestWorkQueue moveWorker = new LatestWorkQueue("BoardLens-moves"),
       evalWorker = new LatestWorkQueue("BoardLens-evaluation");
 
-  private void preferenceChanged(String key){if("evaluation_enabled".equals(key)&&!settings.evaluationEnabled()){evaluator.cancel();evalWorker.submit(evaluator::close);evaluation="Evaluation off";evaluationBadge="Off";whiteShare=.5f;renderOverlay();changed();}}
+  private void preferenceChanged(String key){
+    if("evaluation_enabled".equals(key)&&!settings.evaluationEnabled()){evaluator.cancel();evalWorker.submit(evaluator::close);evaluation="Evaluation off";evaluationBadge="Off";whiteShare=.5f;renderOverlay();changed();}
+    if(capture!=null){capture.removeCallbacks(settingsTask);capture.postDelayed(settingsTask,80);}
+  }
+  void modelReady(String key){
+    if(settings==null||capture==null)return;
+    EngineCatalog.Entry primary=EngineCatalog.get(settings.engine()),eval=EngineCatalog.get(settings.evaluator());
+    boolean stockfish="verified".equals(key)&&(primary.kind().equals("stockfish")||settings.evaluationEnabled()&&eval.kind().equals("stockfish"));
+    if(!stockfish&&!primary.id().equals(key)&&!(settings.evaluationEnabled()&&eval.id().equals(key)))return;
+    capture.post(()->{modelRevision++;applyCurrentSettings();});
+  }
+  void applyCurrentSettings(){
+    if(!running||settings==null)return;
+    String key=settingsKey();if(key.equals(lastSettings))return;
+    lastSettings=key;
+    if(!settings.turn().equals(lastTurn)||!settings.orientation().equals(lastOrientation)){
+      if(!settings.turn().equals(lastTurn)&&!settings.turn().equals("Auto"))position=null;
+      lastTurn=settings.turn();lastOrientation=settings.orientation();baseline=null;confirmation.clear();needsRead=true;requestTick();return;
+    }
+    if(position!=null&&target!=null){
+      lastAnalyzedSettings=key;pinned=null;displayedFen="";displayedMove="";lastArrows=Collections.emptyList();
+      analyze(position,new Rect(target),bottom);
+    }
+  }
+
 
   @Override
   public IBinder onBind(Intent i) {
@@ -113,6 +139,8 @@ public final class ScreenService extends Service {
       active = this;
       settings = new PhoneSettings(this);
       settings.p.registerOnSharedPreferenceChangeListener(preferenceListener);
+      getSharedPreferences("phone-model-files",0).registerOnSharedPreferenceChangeListener(modelListener);
+      getSharedPreferences("engine-files",0).registerOnSharedPreferenceChangeListener(modelListener);
       NotificationManager nm = getSystemService(NotificationManager.class);
       nm.createNotificationChannel(
           new NotificationChannel(
@@ -222,7 +250,7 @@ public final class ScreenService extends Service {
   }
 
   private String settingsKey() {
-    return new java.util.TreeMap<>(settings.p.getAll()).toString();
+    return new java.util.TreeMap<>(settings.p.getAll()).toString()+":"+modelRevision;
   }
 
   private int[] fingerprint(Bitmap b, Rect r) {
@@ -277,7 +305,7 @@ public final class ScreenService extends Service {
       if (!key.equals(lastSettings)) {
         lastSettings = key;
         if (!settings.turn().equals(lastTurn) && !settings.turn().equals("Auto")) position = null;
-        lastTurn = settings.turn();
+        lastTurn = settings.turn();lastOrientation=settings.orientation();
         generation.incrementAndGet();
         moves.cancel();
         evaluator.cancel();
@@ -365,7 +393,7 @@ public final class ScreenService extends Service {
     long token = generation.incrementAndGet();
     moves.cancel();
     evaluator.cancel();
-    suggestion = "Thinking…";
+    suggestion = EngineCatalog.get(settings.engine()).maia()?"Starting "+EngineCatalog.get(settings.engine()).name()+"…":"Thinking…";
     evaluation = "Updating "+EngineCatalog.get(settings.evaluator()).name()+" evaluation…";
     evaluationBadge="…";whiteShare=.5f;renderOverlay();
     changed();
@@ -473,6 +501,8 @@ public final class ScreenService extends Service {
   public void onDestroy() {
     terminating=true;
     if(settings!=null)settings.p.unregisterOnSharedPreferenceChangeListener(preferenceListener);
+    getSharedPreferences("phone-model-files",0).unregisterOnSharedPreferenceChangeListener(modelListener);
+    getSharedPreferences("engine-files",0).unregisterOnSharedPreferenceChangeListener(modelListener);
     active = null;
     running = false;
     generation.incrementAndGet();

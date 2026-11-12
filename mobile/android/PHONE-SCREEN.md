@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.8
+# Phone screen analysis — Android 1.8.1
 
 The app has two sections in one menu:
 
@@ -9,7 +9,7 @@ The app has two sections in one menu:
 
 Android 10+ and an ARM64 phone are required for local analysis. Open Phone screen → Settings → Models & downloads. The twelve Tiny bots are built in. Download Stockfish's 99 MB evaluation file and any Maia models you choose. Optional Maia 2/3 files total about 509 MB; LC0 adds about 19 MB, for about 626 MB including Stockfish. Maia 3 79M uses more RAM and CPU than 5M.
 
-Select a move engine and a separate evaluation engine. Press Start, allow full-display screen sharing and, for arrows, Display over other apps. Press Home or Open another app. Keep the complete board visible. Analysis continues while the foreground-service session runs, including after leaving or dismissing the interface. Stop in the app or notification ends capture. Settings save automatically.
+Tap Use for moves on a downloaded model card, or select a move engine in Settings. The evaluation engine stays independent. Download completion and settings changes re-analyze the last recognized position, even while the app UI is visible. Press Start, allow full-display screen sharing and, for arrows, Display over other apps. Press Home or Open another app. Keep the complete board visible. Analysis continues while the foreground-service session runs, including after leaving or dismissing the interface. Stop in the app or notification ends capture. Settings save automatically.
 
 Android requests approval for each new capture session. Locking, revoking access, force-stop, protected screens and OS power restrictions can interrupt it. The app does not silently restart screen sharing. It uses no Accessibility service or boot receiver. Screens are processed locally and not saved or uploaded. No autoplay, Study or coaching is included.
 
