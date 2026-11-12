@@ -39,6 +39,7 @@ class Permissions(QObject):
         self.resume = False
         self.reason = ''
         self.manual_open = False
+        self.dismissed = False
         self.page = QWidget()
         layout = QVBoxLayout(self.page)
         layout.setContentsMargins(28, 24, 28, 24)
@@ -79,7 +80,7 @@ class Permissions(QObject):
         self.restart = QPushButton('Restart BoardLens')
         self.restart.clicked.connect(self.restart_app)
         bottom.addWidget(self.restart)
-        self.back = QPushButton('Back')
+        self.back = QPushButton('Use app without scanning')
         self.back.clicked.connect(self.leave)
         bottom.addWidget(self.back)
         layout.addLayout(bottom)
@@ -135,6 +136,7 @@ class Permissions(QObject):
             if self.blocked:
                 self.refresh()
             return True
+        self.dismissed = False
         self.resume = self.resume or resume
         self.pause()
         return False
@@ -152,7 +154,8 @@ class Permissions(QObject):
             w._last_read = None
         self.blocked = True
         self.render()
-        w.workspace_stack.setCurrentWidget(self.page)
+        if not self.dismissed:
+            w.workspace_stack.setCurrentWidget(self.page)
         w.status_label.setText(self.reason + ' permission required · screen reading is paused')
 
     def refresh(self, *_):
@@ -192,18 +195,19 @@ class Permissions(QObject):
         self.ax_status.setText('Accessibility: ' + ('Allowed' if self.access.accessibility else
                               'Not enabled for this BoardLens copy · only needed for the local 3D reader'))
         if not self.access.accessibility and os.environ.get('BOARDLENS_NATIVE_LAUNCHER'):
-            self.ax_status.setText(self.ax_status.text()+'\nEnable Applications → BoardLens.app. Entries for Python or another copy do not grant this app access.')
+            self.ax_status.setText(self.ax_status.text()+'\nUse Applications → BoardLens.app. If it is already on, remove the old BoardLens entry with −, add this app with +, and enable it again. Then restart BoardLens. Updates from an older temporary signature may need this once.')
         self.allow.setVisible(not self.access.screen)
         self.ax_button.setVisible(not self.access.accessibility)
-        self.back.setEnabled(not required)
+        self.back.setEnabled(True)
 
     def leave(self):
-        if not self.missing():
-            self.manual_open = False
-            self.window.workspace_stack.setCurrentIndex(0)
+        self.manual_open = False
+        self.dismissed = True
+        self.window.workspace_stack.setCurrentIndex(0)
 
     def open(self):
         self.manual_open = True
+        self.dismissed = False
         self.access = self.reader()
         self.render()
         self.window.workspace_stack.setCurrentWidget(self.page)

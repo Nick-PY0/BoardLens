@@ -30,12 +30,16 @@ def launch():
     marker = (Path(native).parent.parent if native and os.name!="nt" else Path(native).parent if native else venv) / "boardlens-requirements.txt"
     requirements = ROOT / "requirements.txt"
     if not marker.exists() or marker.read_bytes() != requirements.read_bytes():
+        if os.environ.get('BOARDLENS_BUNDLED_RUNTIME'):
+            raise RuntimeError('This update needs a newer Mac installer. Download the latest BoardLens app; your saved settings and engines will stay saved.')
         print("Installing desktop and chess dependencies...", flush=True)
         args = [uv, "pip", "install", "--python", str(python)] if uv and not native else [str(python), "-m", "pip", "install"]
         subprocess.run(args + ["-r", str(requirements)], check=True)
         marker.write_bytes(requirements.read_bytes())
     # Downloads only if no compatible UCI engine is already available.
-    subprocess.run([str(python), str(ROOT / "tools" / "setup_engine.py")], check=True)
+    engine=os.environ.get('STOCKFISH_EXECUTABLE','')
+    if not (native and engine and Path(engine).is_file()):
+        subprocess.run([str(python), str(ROOT / "tools" / "setup_engine.py")], check=True)
     print("Starting BoardLens...", flush=True)
     if native:
         if os.environ.get('BOARDLENS_EMBEDDED_PYTHON'):

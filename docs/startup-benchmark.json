@@ -1,0 +1,31 @@
+[
+  {
+    "case": "legacy-first",
+    "total_seconds": 76.111,
+    "self_test_seconds": 8.099,
+    "runtime_in_bundle": false,
+    "window": null
+  },
+  {
+    "case": "bundled-first",
+    "total_seconds": 7.454,
+    "self_test_seconds": 1.336,
+    "runtime_in_bundle": true,
+    "window": {
+      "version": "2.15.2",
+      "window_seconds": 2.689,
+      "runtime_in_bundle": true
+    }
+  },
+  {
+    "case": "bundled-repeat",
+    "total_seconds": 3.34,
+    "self_test_seconds": 1.422,
+    "runtime_in_bundle": true,
+    "window": {
+      "version": "2.15.2",
+      "window_seconds": 1.56,
+      "runtime_in_bundle": true
+    }
+  }
+]

@@ -7,7 +7,7 @@ def main():
     windowless_children()
     # Some macOS download/cache tools propagate Finder's hidden flag to every
     # plugin. Qt intentionally skips hidden plugins, even at an explicit path.
-    if sys.platform == "darwin":
+    if sys.platform == "darwin" and not os.environ.get("BOARDLENS_BUNDLED_RUNTIME"):
         import stat
         from pathlib import Path
         import PySide6
@@ -48,6 +48,15 @@ def main():
         from .instance import attach
         attach(server,window)
     window.show()
+    startup_report=os.environ.get('BOARDLENS_STARTUP_REPORT')
+    if startup_report:
+        import json,time
+        from pathlib import Path
+        from PySide6.QtCore import QTimer
+        def report_startup():
+            started=float(os.environ.get('BOARDLENS_LAUNCH_STARTED',time.time()))
+            Path(startup_report).write_text(json.dumps({'version':__import__('chess_helper').__version__,'window_seconds':round(time.time()-started,3),'runtime_in_bundle':bool(os.environ.get('BOARDLENS_BUNDLED_RUNTIME'))}))
+        QTimer.singleShot(0,report_startup)
     smoke=os.environ.get('BOARDLENS_NATIVE_SMOKE')
     if smoke:
         from .native_smoke import begin
@@ -66,6 +75,7 @@ def main():
             value={'version':__import__('chess_helper').__version__,'route':window._scan_route,'status':window.status_label.text(),
                    'fen':window.tracker.board.fen(),'white_bottom':window.white_bottom,'confirmed':window._screen_confirmed,
                    'native_status':window.native_reader.status,'arrows':[a['move'].uci() for a in window.board_view.arrows],
+                   'permissions':{'screen':window.permissions.access.screen,'accessibility':window.permissions.access.accessibility} if window.permissions else None,
                    'overlay_visible':window.overlay.isVisible(),'overlay':panel.diagnostics() if panel else None,
                    'settings':{'seconds':window.seconds.value(),'multipv':window.multipv.value()},
                    'source':getattr(window._last_read,'source_id',None)}

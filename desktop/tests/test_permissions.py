@@ -62,3 +62,21 @@ def test_stop_while_waiting_does_not_auto_resume(qt, monkeypatch):
         assert not rescans
     finally:
         w.close()
+
+
+def test_permission_page_can_be_dismissed_without_starting_capture(qt, monkeypatch):
+    w, state = setup_window(qt, Access(False, False))
+    calls = []
+    monkeypatch.setattr(w.live_worker, 'submit', lambda *args: calls.append(args))
+    try:
+        w.scan_now()
+        assert w.permissions.blocked and w.permissions.back.isEnabled()
+        w.permissions.leave()
+        w.permissions.refresh()
+        assert w.workspace_stack.currentWidget() is not w.permissions.page
+        assert w.permissions.blocked and not w._monitoring and not calls
+        w.scan_now()
+        assert w.workspace_stack.currentWidget() is w.permissions.page
+        assert not calls
+    finally:
+        w.close()

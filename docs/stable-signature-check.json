@@ -1,0 +1,13 @@
+{
+  "different_builds_keep_same_identity": true,
+  "builds": [
+    {
+      "requirement": "identifier \"app.boardlens.desktop\" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"47ZL75737G\"",
+      "cdhash": "9b95309bb67e4b21fdc31a4f8073cda4f39ca1f9"
+    },
+    {
+      "requirement": "identifier \"app.boardlens.desktop\" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"47ZL75737G\"",
+      "cdhash": "6ac06c88a9adc0743625dfde42467e7118bdd89d"
+    }
+  ]
+}

@@ -14,13 +14,17 @@ static NSString *digest(NSString *path) {
 static void fail(NSString *message) {NSAlert *alert=[NSAlert new];alert.messageText=@"BoardLens could not start";alert.informativeText=message;[alert runModal];[NSApp terminate:nil];}
 int main(int argc,const char *argv[]) {
     @autoreleasepool {
-        [NSApplication sharedApplication];[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+        NSString *smoke=nil;for(int i=1;i+1<argc;i++)if(strcmp(argv[i],"--self-test")==0)smoke=[NSString stringWithUTF8String:argv[i+1]];
+        [NSApplication sharedApplication];[NSApp setActivationPolicy:smoke?NSApplicationActivationPolicyProhibited:NSApplicationActivationPolicyRegular];
         NSString *resources=NSBundle.mainBundle.resourcePath;
         NSDictionary *meta=[NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:[resources stringByAppendingPathComponent:@"metadata.json"]] options:0 error:nil];
         if(!meta){fail(@"The app package is incomplete. Download the complete Mac app again.");return 1;}
         NSString *base=[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/BoardLens/native"];
-        NSString *key=meta[@"payload_sha256"],*target=[[base stringByAppendingPathComponent:@"packages"] stringByAppendingPathComponent:[key substringToIndex:20]];
-        NSString *smoke=nil;for(int i=1;i+1<argc;i++)if(strcmp(argv[i],"--self-test")==0)smoke=[NSString stringWithUTF8String:argv[i+1]];
+        if(smoke && getenv("BOARDLENS_ISOLATED_BOOTSTRAP"))base=[NSString stringWithUTF8String:getenv("BOARDLENS_ISOLATED_BOOTSTRAP")];
+        BOOL bundled=[meta[@"layout"] isEqualToString:@"bundled-v2"];
+        NSString *key=meta[@"payload_sha256"];
+        NSString *target=bundled?[resources stringByAppendingPathComponent:@"native"]:[[base stringByAppendingPathComponent:@"packages"] stringByAppendingPathComponent:[key substringToIndex:20]];
+        setenv("BOARDLENS_LAUNCH_STARTED",[[NSString stringWithFormat:@"%.6f",NSDate.date.timeIntervalSince1970] UTF8String],1);
         if(!smoke && [NSBundle.mainBundle.bundlePath hasPrefix:@"/Volumes/"]){
             NSAlert *install=[NSAlert new];install.alertStyle=NSAlertStyleInformational;
             install.messageText=@"Install BoardLens first";
@@ -30,11 +34,11 @@ int main(int argc,const char *argv[]) {
         NSWindow *window=[[NSWindow alloc] initWithContentRect:NSMakeRect(0,0,420,130) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:NO];window.title=@"BoardLens";[window center];
         NSTextField *label=[NSTextField labelWithString:@"Preparing BoardLens…"];label.font=[NSFont systemFontOfSize:17 weight:NSFontWeightMedium];label.frame=NSMakeRect(28,74,370,26);[window.contentView addSubview:label];
         NSProgressIndicator *progress=[[NSProgressIndicator alloc] initWithFrame:NSMakeRect(28,38,364,18)];progress.style=NSProgressIndicatorStyleBar;progress.indeterminate=YES;[progress startAnimation:nil];[window.contentView addSubview:progress];
-        if(![[NSFileManager defaultManager] fileExistsAtPath:[target stringByAppendingPathComponent:@".ready"]]){[window makeKeyAndOrderFront:nil];[NSApp activateIgnoringOtherApps:YES];}
+        if(!bundled && !smoke && ![[NSFileManager defaultManager] fileExistsAtPath:[target stringByAppendingPathComponent:@".ready"]]){[window makeKeyAndOrderFront:nil];[NSApp activateIgnoringOtherApps:YES];}
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED,0),^{
             @try {
                 NSFileManager *files=NSFileManager.defaultManager;
-                if(![files fileExistsAtPath:[target stringByAppendingPathComponent:@".ready"]]){
+                if(!bundled && ![files fileExistsAtPath:[target stringByAppendingPathComponent:@".ready"]]){
                     NSString *payload=[resources stringByAppendingPathComponent:@"payload.zip"];
                     if(![digest(payload) isEqualToString:key])@throw [NSException exceptionWithName:@"Checksum" reason:@"The application package checksum did not match. Download a fresh copy." userInfo:nil];
                     NSString *stage=[[base stringByAppendingPathComponent:@"packages"] stringByAppendingPathComponent:[@"stage-" stringByAppendingString:NSUUID.UUID.UUIDString]];
@@ -44,6 +48,8 @@ int main(int argc,const char *argv[]) {
                     [@"ready" writeToFile:[stage stringByAppendingPathComponent:@".ready"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
                     if(![files moveItemAtPath:stage toPath:target error:&error]){if([files fileExistsAtPath:[target stringByAppendingPathComponent:@".ready"]])[files removeItemAtPath:stage error:nil];else @throw [NSException exceptionWithName:@"Install" reason:error.localizedDescription userInfo:nil];}
                 }
+                if(bundled && ![digest([target stringByAppendingPathComponent:@"source.zip"]) isEqualToString:meta[@"source_sha256"]])
+                    @throw [NSException exceptionWithName:@"Checksum" reason:@"The bundled application source checksum did not match." userInfo:nil];
                 dispatch_async(dispatch_get_main_queue(),^{
                     NSString *logs=[base stringByAppendingPathComponent:@"logs"];[NSFileManager.defaultManager createDirectoryAtPath:logs withIntermediateDirectories:YES attributes:nil error:nil];NSString *log=[logs stringByAppendingPathComponent:@"latest.log"];
                     freopen(log.fileSystemRepresentation,"a",stdout);freopen(log.fileSystemRepresentation,"a",stderr);
@@ -64,9 +70,10 @@ int main(int argc,const char *argv[]) {
                     int (*runMain)(void)=dlsym(library,"Py_RunMain");
                     if(!initConfig||!setArgv||!setString||!initialize||!clearConfig||!runMain){fail(@"The bundled Python runtime is incomplete.");return;}
                     setenv("BOARDLENS_EMBEDDED_PYTHON","1",1);setenv("PYTHONNOUSERSITE","1",1);
+                    if(bundled){setenv("BOARDLENS_BUNDLED_RUNTIME","1",1);setenv("PYTHONDONTWRITEBYTECODE","1",1);}
                     setenv("BOARDLENS_NATIVE_LAUNCHER",NSBundle.mainBundle.bundlePath.fileSystemRepresentation,1);
                     char *args[]={(char *)python.fileSystemRepresentation,(char *)script.fileSystemRepresentation,NULL};
-                    PyConfig config;initConfig(&config);config.user_site_directory=0;
+                    PyConfig config;initConfig(&config);config.user_site_directory=0;config.write_bytecode=bundled?0:1;
                     PyStatus state=setArgv(&config,2,args);
                     if(!state._type)state=setString(&config,&config.executable,python.fileSystemRepresentation);
                     if(!state._type)state=setString(&config,&config.home,home.fileSystemRepresentation);

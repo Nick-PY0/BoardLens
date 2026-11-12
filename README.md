@@ -17,11 +17,13 @@ No paid AI subscription is required. Normal recognition and engine analysis run 
 <p align="center">Android companion, captured in an emulator. Real app screens, not design mockups.</p>
 
 
-### Two Android sections (source preview)
+### One companion, phone analysis in its menu
 
-<p align="center"><img src="docs/images/android-sections.png" alt="Android section picker" width="270"> <img src="docs/images/android-phone.png" alt="Standalone phone analysis development test" width="270"></p>
+<p align="center"><img src="docs/images/companion-preview.png" alt="Updated companion component preview" width="270"> <img src="docs/images/phone-preview.png" alt="Phone analysis component preview" width="270"></p>
 
-**On this phone** reads a visible 2D board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
+These new previews render shared production views in an isolated Android component harness. No capture or overlay service runs in that harness.
+
+**Phone analysis** uses the companion’s visual style and appears in its menu. It reads a supported visible board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
 
 **Computer companion** keeps the existing Wi-Fi desktop dashboard. Pair once to optionally use the computer's installed engines for phone-screen positions too. Maia-2, all Maia-3 sizes, Flounder, Tiny bots and custom UCI providers stay computer-backed. Only the recognized FEN is sent; phone screenshots stay on the phone. Choosing a phone engine never changes the desktop engine or game.
 
@@ -38,8 +40,8 @@ Get the files from [Releases](https://github.com/Nick-PY0/BoardLens/releases/lat
 
 | Device | Download | Start |
 | --- | --- | --- |
-| Mac (Apple Silicon) | `BoardLens-Mac-AppleSilicon.zip` | Extract, then open **BoardLens.app**. macOS 14+. |
-| Mac (Intel) | `BoardLens-Mac-Intel.zip` | Extract, then open **BoardLens.app**. macOS 14+. |
+| Mac (Apple Silicon) | `BoardLens-Mac-AppleSilicon.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
+| Mac (Intel) | `BoardLens-Mac-Intel.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Windows 10/11 (64-bit) | `BoardLens-Windows-x64.zip` | Extract the entire folder, then open **BoardLens.exe**. Keep Resources beside it. |
 | Android | Phone browser for now; APK temporarily withheld | Open the desktop companion address on the same Wi-Fi. |
 | iPhone / iPad | Phone browser, or unsigned iOS source ZIP | Open the desktop companion address. Native source needs Xcode and your signing setup. |
@@ -112,11 +114,11 @@ Different engines expose different capabilities. Maia predicts human moves; Tiny
 
 Desktop automatically checks and downloads checksum-verified stable updates, then applies them at the next launch with rollback and preserved user data. Switch this off under **Board → App**. Android automatically checks releases and opens GitHub for installation through Android; it has no custom APK installer or install-packages permission. [Update and release details →](docs/UPDATES.md)
 
-The first public release is **v1.0.0**. The current release **v1.2.0** uses desktop **2.13.0** and Android source **1.5.0**. The Android APK remains withheld; the update manifest records its review status.
+The first public release is **v1.0.0**. The new desktop is **2.15.2**, with Android **1.6.0** in development. See the latest release for the exact downloadable build and installation-test status.
 
 ## What is verified
 
-The validation report records **181 automated desktop tests**, plus packaged app tests on Apple Silicon macOS, Intel macOS and a Windows CI runner. Each packaged test launches the actual GUI app with its private runtime, recognizes a fixture and asks bundled Stockfish for a legal move. Windows verifies no console window. A Windows physical desktop and physical Android/iOS devices have not been tested. The fixed screen-polling target is 75 ms; recognition, engine thinking, display capture and network time still affect end-to-end latency. Current native OS pixel capture has not been reverified; fixture tests are not proof of capture permission/behavior.
+The validation report records **199 automated desktop tests**, plus packaged app tests on Apple Silicon macOS, Intel macOS and a Windows CI runner. Each packaged test launches the actual GUI app with its private runtime, recognizes a fixture and asks bundled Stockfish for a legal move. Windows verifies no console window. A Windows physical desktop and physical Android/iOS devices have not been tested. The fixed screen-polling target is 75 ms; recognition, engine thinking, display capture and network time still affect end-to-end latency. Current native OS pixel capture has not been reverified; fixture tests are not proof of capture permission/behavior.
 
 Pixel reads need a clear board and cannot always recover turn, castling or en-passant history. Use exact FEN or a supported direct reader when that metadata matters. Threat checks and engine explanations are estimates. There is no autoplay, stealth/anti-detection guarantee, Study, coaching, puzzles or game-journal feature in this release. Use assistance where your game mode permits it.
 
@@ -130,3 +132,33 @@ GPL-3.0-or-later. Bundled recognition models, artwork and other components retai
 <img src="docs/images/android-live-screen.png" alt="Native Android arrows on a controlled offline board" width="360">
 <p>Emulator development test. The APK remains withheld after Play Protect blocked installation.</p>
 </details>
+
+### Clearer controls and permissions
+
+- **Show moves while thinking** displays the first useful result before the engine finishes.
+- **Prediction length** counts individual moves (plies). A three-ply line is your move, a possible opponent reply, then your response.
+- **Reply time budget** limits extra prediction passes. Maia 2 and all Maia 3 model sizes use one pass per position; this is not a pretend search-depth setting. A running pass can finish after the budget. Tiny bots retain their coded search and accept a clock budget.
+- **Manual** means individual settings; named presets remember a chosen engine and its controls.
+- The Mac permission page pauses screen reading when required access is missing. Source updates preserve the installed native host and saved choices.
+- The new context classifier extends tested piece artwork and uses projected board coordinates for arrows. Coverage is experimental; see [actual recognition results](docs/recognition/README.md). Hidden or indistinguishable pieces cannot be reconstructed from a screenshot.
+
+### Mac installation
+
+Download the Apple silicon or Intel DMG, open it, and drag **BoardLens → Applications**. Eject the installer and open the installed app. The installer uses a fixed, Retina-ready layout and a rounded app icon. Settings stay in your user profile when you replace the app.
+
+Accessibility is checked quietly on launch. Only the local 3D reader needs it; ordinary 2D screen reading uses Screen Recording, and global shortcuts use the native hotkey system. Restoring saved settings never opens an Accessibility request. Use **Board → App → Permissions** for an explicit permission action.
+
+### Mac permission recovery and quicker startup
+
+The Mac build now starts from its bundled runtime instead of unpacking Python
+on first launch. Isolated local checks showed the window in 2.7 seconds on a
+fresh bootstrap and 1.6 seconds on repeat; timing varies by computer. The engine
+still uses your selected thinking limit.
+
+The permission page can be dismissed with **Use app without scanning**. Live
+scanning stays paused while required macOS access is denied. Restoring saved
+settings does not open OS prompts. Developer ID builds use a stable signing
+identity; builds marked ad hoc can require renewed access after a native update.
+If an older entry is switched on but access remains denied, remove the old
+BoardLens entry, add Applications → BoardLens.app, enable it and reopen the app.
+Source updates preserve the installed native host. See [installer details](desktop/packaging/INSTALLER.md).

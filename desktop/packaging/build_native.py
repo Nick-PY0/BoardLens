@@ -27,7 +27,7 @@ def prepare(runtime):
  return python
 
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--work',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--runtime',type=Path);args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--work',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--runtime',type=Path);parser.add_argument('--sign-identity',default=os.environ.get('BOARDLENS_CODESIGN_IDENTITY'),help='Developer ID name or fingerprint; auto-detects one local Developer ID. Use - for an ad hoc development build.');args=parser.parse_args()
  work=args.work.resolve();out=args.out.resolve();work.mkdir(parents=True,exist_ok=True);out.mkdir(parents=True,exist_ok=True);payload=work/'payload';payload.mkdir(exist_ok=True)
  runtime=args.runtime.resolve() if args.runtime else payload/'runtime'
  if runtime!=payload/'runtime':
@@ -51,19 +51,24 @@ def main():
  if not engine_source.exists():raise RuntimeError('The corresponding Stockfish source archive is missing.')
  shutil.copy2(engine_source,payload/'Stockfish-corresponding-source.tar.gz');shutil.copy2(SOURCE/'chess_helper/assets/licenses/Stockfish-GPL3.txt' if (SOURCE/'chess_helper/assets/licenses/Stockfish-GPL3.txt').exists() else SOURCE/'LICENSE',payload/'Stockfish-GPL3.txt')
  metadata={'version':version,'platform':platform.system(),'architecture':platform.machine(),'source_sha256':sha(payload/'source.zip')};(payload/'metadata.json').write_text(json.dumps(metadata,indent=2))
- archive=work/'payload.zip';archive.unlink(missing_ok=True)
- if sys.platform=='darwin':run(['/usr/bin/ditto','-c','-k',payload,archive])
+ archive=work/'payload.zip'
+ if sys.platform=='darwin':
+  # The DMG/ZIP already compresses the installed bundle. Do not make users
+  # unpack a second, private copy of Python/Qt on first launch or every upgrade.
+  meta=dict(metadata,layout='bundled-v2')
  else:
+  archive.unlink(missing_ok=True)
   with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
    for p in sorted(payload.rglob('*')):
     if p.is_file():z.write(p,p.relative_to(payload).as_posix())
- digest=sha(archive);meta=dict(metadata,payload_sha256=digest)
+  digest=sha(archive);meta=dict(metadata,payload_sha256=digest)
  icon=SOURCE/'chess_helper/assets/ui/boardlens-icon-mac.png' if sys.platform=='darwin' else SOURCE/'chess_helper/assets/ui/boardlens-icon-rounded.png'
  if sys.platform=='darwin':
   app=Path(tempfile.mkdtemp(prefix='boardlens-native-'))/'BoardLens.app'
   if app.exists():shutil.rmtree(app)
   resources=app/'Contents/Resources';binary=app/'Contents/MacOS';resources.mkdir(parents=True);binary.mkdir()
-  shutil.copy2(archive,resources/'payload.zip');(resources/'metadata.json').write_text(json.dumps(meta))
+  shutil.copytree(payload,resources/'native',symlinks=True)
+  (resources/'metadata.json').write_text(json.dumps(meta))
   iconset=work/'BoardLens.iconset';iconset.mkdir(exist_ok=True)
   for n in [16,32,128,256,512]:
    for scale in [1,2]:run(['/usr/bin/sips','-z',n*scale,n*scale,icon,'--out',iconset/(f'icon_{n}x{n}'+('@2x.png' if scale==2 else '.png'))],stdout=subprocess.DEVNULL)
@@ -72,10 +77,14 @@ def main():
   info={'CFBundleName':'BoardLens','CFBundleDisplayName':'BoardLens','CFBundleIdentifier':'app.boardlens.desktop','CFBundleExecutable':'BoardLens','CFBundlePackageType':'APPL','CFBundleShortVersionString':version,'CFBundleVersion':version,'CFBundleIconFile':'BoardLens.icns','LSMinimumSystemVersion':'14.0','NSHighResolutionCapable':True,'NSPrincipalClass':'NSApplication','NSAppleEventsUsageDescription':'BoardLens reads supported local chess positions when you enable that connection.'}
   with (app/'Contents/Info.plist').open('wb') as f:plistlib.dump(info,f)
   run(['/usr/bin/clang','-arch',platform.machine(),'-mmacosx-version-min=14.0','-fobjc-arc','-I'+str(runtime/'include/python3.12'),'-framework','Cocoa','-Wno-deprecated-declarations',SOURCE/'packaging/native/Launcher.m','-o',binary/'BoardLens'])
+  for item in [app,*app.rglob('*')]:
+   if item.is_symlink():continue
+   flags=item.stat().st_flags
+   if flags&stat.UF_HIDDEN:os.chflags(item,flags&~stat.UF_HIDDEN)
   for name in ('com.apple.FinderInfo','com.apple.ResourceFork'):
    subprocess.run(['/usr/bin/xattr','-dr',name,str(app)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-  run(['/usr/bin/codesign','--force','--sign','-',app])
-  run(['/usr/bin/codesign','--verify','--strict',app])
+  from mac_signing import signing_identity,sign_app
+  meta['signing']=sign_app(app,signing_identity(args.sign_identity))
   meta['app_path']=str(app)
   destination=out/('BoardLens-Mac-'+('AppleSilicon' if platform.machine()=='arm64' else 'Intel')+'.zip');destination.unlink(missing_ok=True);run(['/usr/bin/ditto','-c','-k','--keepParent',app,destination])
  else:

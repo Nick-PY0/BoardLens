@@ -5,7 +5,7 @@ import chess,cv2
 from PySide6.QtCore import QTimer
 
 def begin(app,window,path):
-    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);started=time.monotonic();report={'version':__import__('chess_helper').__version__,'python':sys.executable,'application':app.applicationName(),'icon_loaded':not app.windowIcon().isNull(),'tty':bool(sys.stdout and sys.stdout.isatty())}
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);started=time.monotonic();report={'version':__import__('chess_helper').__version__,'python':sys.executable,'application':app.applicationName(),'icon_loaded':not app.windowIcon().isNull(),'tty':bool(sys.stdout and sys.stdout.isatty()),'runtime_in_bundle':bool(os.environ.get('BOARDLENS_BUNDLED_RUNTIME'))}
     if sys.platform=='darwin':
         from Foundation import NSBundle
         import Quartz
