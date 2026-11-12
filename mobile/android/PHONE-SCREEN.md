@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.8.2
+# Phone screen analysis — Android 1.8.3
 
 The app has two sections in one menu:
 
@@ -15,13 +15,13 @@ Android requests approval for each new capture session. Locking, revoking access
 
 ## Times and on-screen evaluation
 
-Tap the timing button on the main Phone screen to edit move and evaluation seconds independently. Saving a move timer while in Depth mode selects Time + depth so the timer actually applies. Detailed depth/limit controls remain in Settings. Maia is one-pass inference, so its native timer is not faked.
+Tap the timing button on the main Phone screen to edit move and evaluation seconds independently. Saving a move timer while in Depth mode selects Time + depth so the timer actually applies. Detailed depth/limit controls remain in Settings. All four Maia move models show a thinking-time budget too. They produce one main prediction, publish it when ready and use any remaining budget for optional reply passes. At least one pass is allowed to finish, and an in-flight reply can finish after the deadline. Longer time does not deepen or strengthen the main Maia prediction. With Predict replies off, Maia performs one pass. Maia evaluation remains a single value pass with no search timer.
 
 Evaluation Off cancels and unloads the evaluation engine, hides its bars and saves processing power. Screen evaluation is a separate display-only toggle: it can show a passive bar above/beside the board or at a chosen screen edge while other apps remain touchable. It reports the score from White's perspective and updates during Stockfish thinking.
 
 ## Local engines
 
-Stockfish 19 supports time, depth, threads, skill and multiple alternatives. Flounder is a labelled Stockfish-based strength mode. All four official Maia exports run through Android ONNX Runtime: Maia 2 Rapid, Maia 3 5M, 23M and 79M. Maia exposes rating, threads and continuation controls rather than a fictitious native search-depth setting. The original twelve C# Tiny bots execute inside the APK's .NET Android runtime and provide one recommendation each; they manage their own search depth and receive an adjustable clock budget.
+Stockfish 19 supports time, depth, threads, skill and multiple alternatives. Flounder is a labelled Stockfish-based strength mode. All four official Maia exports run through Android ONNX Runtime: Maia 2 Rapid, Maia 3 5M, 23M and 79M. Maia exposes rating, threads, a reply-calculation time budget and continuation controls rather than a fictitious native search-depth setting. Its selected weights load while scanning starts. A bounded 64-position cache holds complete move rankings, so repeating a position, changing the number of alternatives or reaching a predicted position can reuse inference. The cache distinguishes the model, encoded rating, threads and complete FEN, clears on engine close and never stores screenshots. New positions still require a real model pass. The original twelve C# Tiny bots execute inside the APK's .NET Android runtime and provide one recommendation each; they manage their own search depth and receive an adjustable clock budget.
 
 LC0 0.32.1 is an optional on-device CPU engine with a 19 MB network from the official release. It uses neural tree search and can be slower than Stockfish on a phone. Its depth is engine-specific; time limits are the simplest control. The bundled Android executable is built from the included GPL source with Eigen and 16 KB ELF alignment. Desktop LC0 downloads use a Mac universal Accelerate build or the official Windows OpenBLAS archive.
 

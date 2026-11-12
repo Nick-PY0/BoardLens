@@ -9,11 +9,16 @@ final class LocalEngines implements AutoCloseable {
  record Evaluated(String text,float whiteShare,String badge){}
  interface RecommendationUpdate { void result(PhoneEngine.Result result,boolean rootComplete); }
  private final PhoneEngine stockfish=new PhoneEngine();private final MaiaLocal maia=new MaiaLocal();private final TinyLocal tiny=new TinyLocal();
+ private final java.util.function.LongSupplier clock;
+ LocalEngines(){this(System::nanoTime);}
+ LocalEngines(java.util.function.LongSupplier clock){this.clock=clock;}
  private volatile boolean cancelled;
  void prepare(Context c,PhoneSettings settings,boolean eval)throws Exception{
   if(eval&&!settings.evaluationEnabled())return;
   String id=eval?settings.evaluator():settings.engine();EngineCatalog.Entry engine=EngineCatalog.get(id);
-  if(EngineCatalog.ready(c,id)&&!engine.maia()&&!engine.tiny())stockfish.prepare(c,id,settings,eval);
+  if(!EngineCatalog.ready(c,id))return;
+  if(engine.maia())maia.prepare(c,engine.id(),settings.threads());
+  else if(!engine.tiny())stockfish.prepare(c,engine.id(),settings,eval);
  }
 
  private PhoneEngine.Result one(Context c,ChessPosition board,PhoneSettings settings,String id,boolean eval,PhoneEngine.Update update)throws Exception{
@@ -24,6 +29,7 @@ final class LocalEngines implements AutoCloseable {
  }
  PhoneEngine.Result recommend(Context c,ChessPosition board,PhoneSettings settings,BooleanSupplier current,RecommendationUpdate update)throws Exception{
   cancelled=false;String id=EngineCatalog.get(settings.engine()).id();
+  long started=clock.getAsLong();
   if(!current.getAsBoolean())throw new CancellationException();
   PhoneEngine.Result root=one(c,board,settings,id,false,update==null?null:r->update.result(r,false));if(cancelled||!current.getAsBoolean())throw new CancellationException();
   // The chosen move is complete now. Optional reply searches must never delay
@@ -32,8 +38,12 @@ final class LocalEngines implements AutoCloseable {
   if(!settings.predict()||settings.predictionPlies()<2||root.lines().isEmpty())return root;
   PhoneEngine.Line first=root.lines().get(0);List<String> pv=new ArrayList<>();ChessPosition next=board;
   for(String move:first.pv()){if(pv.size()>=settings.predictionPlies()||!next.legal().contains(move))break;pv.add(move);next=next.play(move);}
-  long until=System.nanoTime()+(long)(settings.predictionSeconds()*1000000000L);
-  while(pv.size()<settings.predictionPlies()&&!next.legal().isEmpty()&&System.nanoTime()<until){
+  // Maia makes one main prediction, rather than deepening a search. Its visible
+  // thinking-time budget includes that pass and limits further reply passes.
+  // Never discard the first move or wait out a timer just to simulate thinking.
+  boolean human=EngineCatalog.get(id).maia();
+  long until=(human?started:clock.getAsLong())+(long)((human?settings.seconds():settings.predictionSeconds())*1000000000L);
+  while(pv.size()<settings.predictionPlies()&&!next.legal().isEmpty()&&clock.getAsLong()<until){
    if(cancelled||!current.getAsBoolean())throw new CancellationException();PhoneEngine.Result reply;
    try{reply=one(c,next,settings,id,false,null);}catch(CancellationException cancelledSearch){throw cancelledSearch;}catch(Exception optionalPredictionFailed){break;}
    if(reply.lines().isEmpty())break;String move=reply.lines().get(0).move();if(!next.legal().contains(move))throw new java.io.IOException("Engine returned an illegal continuation");pv.add(move);next=next.play(move);

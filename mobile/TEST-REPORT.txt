@@ -1,6 +1,6 @@
-BOARDLENS ANDROID 1.8.2 / CODE 12 — NOVEMBER 12, 2026
+BOARDLENS ANDROID 1.8.3 / CODE 13 — NOVEMBER 12, 2026
 
-47 Android JVM/Robolectric tests and release lint pass. New checks cover:
+51 Android JVM/Robolectric tests and release lint pass. New checks cover:
 - still-frame confirmation without a second neural inference;
 - animation invalidation and overlay-pixel masks;
 - independent move/evaluation timers, validation and persistence;
@@ -31,7 +31,7 @@ exports/model hashes are unchanged; their prior 156 parity checks and the twelve
 Tiny bots' 72 legal/terminal host checks still describe those unchanged files.
 
 The owner confirmed Android 1.7 scans the live A35 screen, with slow acquisition.
-This new 1.8.2 APK has not yet been installed/timed on the physical A35. Capture,
+This new 1.8.3 APK has not yet been installed/timed on the physical A35. Capture,
 overlay interaction and background longevity for this exact APK remain device
 checks. The owner chose to do phone installation/testing. Normal Android
 installation/security checks stay enabled.
@@ -85,6 +85,41 @@ Those are component totals under host load, not A35 per-move latency.
 
 The optional real Stockfish test uses BOARDLENS_STOCKFISH_TEST_ENGINE. Together
 with the three real-Maia tests, it runs locally when its files are provided;
-CI without those external files skips four tests. The complete release APK
+CI without those external files skips seven tests in this version. The complete release APK
 includes all twelve Tiny bots and all on-phone engine adapters, preserves its
 release signing identity, and passes 16 KB native/ZIP alignment checks.
+
+MAIA PERFORMANCE AND TIME CONTROLS — ANDROID 1.8.3
+All four Maia move models show the same saved thinking-time control. For Maia,
+the budget starts before the main inference and limits additional reply passes.
+The first pass is always delivered, even if it exceeds the budget; an in-flight
+reply may finish after the deadline. No repeated identical inference, arbitrary
+wait, deeper-search claim or automatic engine/model switching is added. Maia
+evaluation still uses one value pass and has no fictitious search-time field.
+
+Selected Maia weights/vocabulary are prepared on the engine worker while the
+scanner starts. A bounded LRU cache keeps 64 immutable, complete move rankings,
+keyed by model, encoded rating, threads and full FEN. It supports different
+alternative counts and reuses positions previously evaluated for prediction.
+Close clears the cache and session. ONNX idle thread spinning is disabled to
+reduce contention with recognition/evaluation when multiple threads are used.
+The official model files, hashes, policy order and values are unchanged.
+
+The real-model before/after host benchmark used seven repeated searches per
+model with different alternative counts. Median repeat times on the Mac host:
+  Maia 2:      4.430 ms before; 0.007 ms with a cache hit
+  Maia 3 5M:   7.417 ms before; 0.008 ms with a cache hit
+  Maia 3 23M: 16.242 ms before; 0.006 ms with a cache hit
+  Maia 3 79M: 29.552 ms before; 0.007 ms with a cache hit
+These are cache-hit/component times, not new-position inference speedups or
+phone screen-to-arrow timing. First cold loads still took roughly 100–800 ms
+on this host; preparing them overlaps scanner startup rather than eliminating
+the work. Larger models still cost more for uncached positions.
+
+Tests verify all four timer fields save, preserve the independent evaluator
+and leave search-depth preferences intact. Controlled-clock real-model tests
+verify budget exhaustion still publishes the main move, extra budget permits
+replies, an actual predicted position needs no new inference, a changed rating
+misses the cache, and 70 different inputs retain at most 64 cache entries and
+release them on close. The 52 reference-position top-move checks and repeated-value checks still pass.
+No physical A35 timing or installation is inferred from these host results.

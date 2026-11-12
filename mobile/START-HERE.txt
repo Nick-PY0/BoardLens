@@ -1,4 +1,4 @@
-BOARDLENS ANDROID 1.8.2 / CODE 12
+BOARDLENS ANDROID 1.8.3 / CODE 13
 
 PHONE SCREEN — NO COMPUTER NEEDED
 Open BoardLens → Phone screen → Settings → Models & downloads.
@@ -28,6 +28,11 @@ Phone-screen settings are separate and never change the desktop engine/game.
 ENGINE CONTROLS
 Stockfish: time, depth, threads, skill and ranked alternatives.
 Maia: one-pass human-move prediction, target rating and CPU threads.
+All four Maia models now have a thinking-time field. It limits extra reply
+calculations after the first prediction, which is always delivered when ready.
+A running pass may finish after the budget. More time does not strengthen the
+main Maia prediction. A small cache reuses predicted positions when play
+reaches them. Model weights warm when scanning starts; downloads are unchanged.
 Tiny bots: one move, coded depth, adjustable clock budget.
 Predict replies: possible future moves. Three plies = your move, opponent reply,
 your response. Reply budget limits additional passes, not an artificial delay.
@@ -49,4 +54,4 @@ This signed APK passes host/package checks, but A35 installation, live capture
 and background behavior for this exact release still need physical testing.
 Keep normal Android security checks enabled.
 
-https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.2
+https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.3
