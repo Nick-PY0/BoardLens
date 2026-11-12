@@ -1,49 +1,42 @@
-BOARDLENS MOBILE 1.6 / DESKTOP 2.15.1 — NOVEMBER 11, 2026
+BOARDLENS ANDROID 1.7.0 / CODE 9
 
-One companion app. Phone analysis is a feature in its menu and uses the same
-colors, typography, buttons and spacing as the computer companion.
+PHONE SCREEN — NO COMPUTER NEEDED
+Open BoardLens → Phone screen → Settings → Models & downloads.
+Twelve Tiny bots are built in. Download Stockfish's 99 MB model for the default
+move engine/evaluation, or choose optional Maia 2 / Maia 3 5M, 23M or 79M.
+Select recommendation and evaluation engines separately. Settings save.
+Models → Test installed engines checks real engine execution on your device.
 
-COMPUTER
-Desktop → Phone → Enable companion. Connect over the same Wi-Fi with the
-computer address and six-digit code. Settings sync with the desktop and save.
+Press Start, approve entire-screen sharing, and enable Display over other apps
+for arrows. Press Home or Open another app. Keep all 64 squares visible.
+A foreground-service session continues when the interface is in the background
+or dismissed. Stop in the app or notification ends it. Android requires new
+sharing approval for each session. Locking, force-stop, revoked access and OS
+restrictions can interrupt capture. Protected screens cannot be read.
 
-PHONE ANALYSIS
-Open Phone in the companion menu, or On this phone from the start screen.
-Press Start, allow sharing the entire display, and allow arrows over other
-apps. Press Home or Open another app. A visible foreground-service notification
-keeps the user-started session running while the interface is in the background.
-Use Stop in the app or notification to end it. Force-stop, revoked permission,
-protected screens, device locking or OS restrictions can interrupt capture.
-Screen sharing is never silently restarted after the OS ends the session.
-
-Stockfish runs locally on Android 10+ / arm64. Its optional 99 MB evaluation
-file downloads only when selected. Computer mode uses the paired computer's
-Maia 2, Maia 3, Tiny bots or other installed engines. Only the recognized
-position is sent, never the phone screenshot. The computer must stay running.
-Phone analysis settings are separate from settings for the computer's boards.
+COMPUTER COMPANION — OPTIONAL, SEPARATE SECTION
+Desktop → Phone → Enable companion. Use the same trusted Wi-Fi and enter the
+computer address and six-digit code. Desktop settings sync with this dashboard.
+Phone-screen settings are separate and never change the desktop engine/game.
 
 ENGINE CONTROLS
-Search engines: select time, depth, or the first of both limits. The evaluation
-bar has an independent engine. Manual means individual settings, not a preset.
-Show moves while thinking displays the first useful result before completion.
-Predict replies adds possible later moves. Prediction length counts plies:
-3 = your move, opponent reply, your response. The reply budget limits extra
-passes after the first recommendation; it is not an artificial delay.
-Maia 2 and all Maia 3 sizes predict one move per pass. They do not have a native
-search-depth setting. An in-progress model pass may finish after the reply
-budget. Tiny bots use their coded search depth and an adjustable clock budget.
+Stockfish: time, depth, threads, skill and ranked alternatives.
+Maia: one-pass human-move prediction, target rating and CPU threads.
+Tiny bots: one move, coded depth, adjustable clock budget.
+Predict replies: possible future moves. Three plies = your move, opponent reply,
+your response. Reply budget limits additional passes, not an artificial delay.
+Steady arrows reduces switching; Lock move holds one until a real change.
+Only my color follows the side at the bottom of the recognized board.
 
-BOARD RECOGNITION
-The whole supported board must be visible. Pixel recognition is not universal.
-The new context model and projected geometry are experimental for 3D piece
-artwork; not every 3D style, camera angle or theme is verified. Visually hidden
-or indistinguishable pieces cannot be recovered from pixels alone. See the
-recognition coverage report for exact synthetic and Android fixture results.
+LIMITS
+Android 10+ / ARM64 for local analysis. Recognition is experimental for unusual
+artwork and projected 3D boards; all themes/angles are not guaranteed. A fresh
+midgame scan may need the side-to-move override. No Accessibility service,
+screen recording/upload, autoplay, Study or coaching.
 
-DISTRIBUTION
-The previous 1.5.0/code7 APK was blocked by Play Protect. New source, UI and
-component tests do not establish release installation or physical A35 success.
-Keep normal Android security checks enabled. Check the GitHub release for the
-exact current APK/test status. No autoplay, Study or coaching features.
+Automatic checks find new Android releases. Android asks before installation.
+This signed APK passes host/package checks, but A35 installation, live capture
+and background behavior for this exact release still need physical testing.
+Keep normal Android security checks enabled.
 
-https://github.com/Nick-PY0/BoardLens/releases/latest
+https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.7.0

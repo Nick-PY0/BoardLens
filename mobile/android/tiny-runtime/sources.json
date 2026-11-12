@@ -1,0 +1,55 @@
+{
+  "commit": "fcebda936c5882efdeb61382592bda77f2c1e6c0",
+  "repository": "https://github.com/SebLague/Tiny-Chess-Bot-Challenge-Results",
+  "bots": [
+    {
+      "bot": 17,
+      "original_sha256": "4b5aeb1a89b18e6c3bb2e9a3f993dd4be1b00b7113ad9012e7a84fb0a182acbc"
+    },
+    {
+      "bot": 278,
+      "original_sha256": "3dc71df38ca3b076239f629e632f53f8883f8bc3dbd55fea17b79b1042cd7bfe"
+    },
+    {
+      "bot": 153,
+      "original_sha256": "f8af17ac167b43c5b7b72d26371bd11b013a3fe4123302be9ea99da7e25c4d0b"
+    },
+    {
+      "bot": 70,
+      "original_sha256": "d027e9e0fd000759f1b6d5dcb1a2c145a8889cba15f5a507b1bc783e61e5116f"
+    },
+    {
+      "bot": 253,
+      "original_sha256": "1d964843ac03bdf93b950112475dd387bb2c16b21d49ff31cf3abdd331bcecf4"
+    },
+    {
+      "bot": 425,
+      "original_sha256": "f09b0152d6c7c8ff3f834c3936cae3e98d3c6a0106bcbb71d8b76fa49905c0da"
+    },
+    {
+      "bot": 266,
+      "original_sha256": "bf47651a80ba9b962b9290075e3584c0a13c605b83418251e255dfde74558d48"
+    },
+    {
+      "bot": 303,
+      "original_sha256": "0e89f85049cde1288fe554707495113abeb80722aa5ec53bf2daf15af7f5093e"
+    },
+    {
+      "bot": 628,
+      "original_sha256": "ea027f0e874f1f63b8107cf5805f2e13eae280a1101c61d333095764ad66f947"
+    },
+    {
+      "bot": 529,
+      "original_sha256": "ad7cac0623707e721502159cc16549b518a48592da7952a94c4b44c284160280"
+    },
+    {
+      "bot": 610,
+      "original_sha256": "b207c388e07c9d052e74f66c1809c4950bc20555177168cf5c65e7cb783fc60a"
+    },
+    {
+      "bot": 614,
+      "original_sha256": "8961dd5fe26591a265a9978ea500c9fce2eac9292ce886c77cb58119b5633c21"
+    }
+  ],
+  "adapter_changes": "303 GC attack disabled; shared API checks cancellation and a hard wall-clock deadline. Scripted openings in bots 278/253 are used only if legal, for positions joined without move history."
+}

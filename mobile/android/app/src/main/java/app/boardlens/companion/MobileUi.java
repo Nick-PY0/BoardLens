@@ -12,6 +12,12 @@ import android.widget.*;
 final class MobileUi {
   static final int BG=0xff0e151b, SURFACE=0xff182229, BORDER=0xff2b3942,
       FG=0xffedf4f4, MUTED=0xffa1b2bc, ACCENT=0xffa1e6cc, INK=0xff12251f;
+  static void inset(android.app.Activity activity,View root){
+    if(android.os.Build.VERSION.SDK_INT>=30){
+      activity.getWindow().setDecorFitsSystemWindows(false);
+      root.setOnApplyWindowInsetsListener((v,insets)->{android.graphics.Insets safe=insets.getInsets(android.view.WindowInsets.Type.systemBars()|android.view.WindowInsets.Type.displayCutout()|android.view.WindowInsets.Type.ime());v.setPadding(safe.left,safe.top,safe.right,safe.bottom);return android.view.WindowInsets.CONSUMED;});root.requestApplyInsets();
+    }else root.setFitsSystemWindows(true);
+  }
   final Context c;
   MobileUi(Context context){c=context;}
   int dp(int n){return Math.round(n*c.getResources().getDisplayMetrics().density);}
@@ -24,7 +30,7 @@ final class MobileUi {
     t.setFontFeatureSettings("tnum");t.setIncludeFontPadding(false);
     if(bold)t.setTypeface(Typeface.create("sans-serif-medium",Typeface.NORMAL));return t;
   }
-  LinearLayout column(){LinearLayout v=new LinearLayout(c);v.setOrientation(1);return v;}
+  LinearLayout column(){LinearLayout v=new LinearLayout(c);v.setOrientation(LinearLayout.VERTICAL);return v;}
   LinearLayout card(){LinearLayout v=column();v.setPadding(dp(16),dp(16),dp(16),dp(16));v.setBackground(shape(SURFACE,20));return v;}
   void gap(LinearLayout v,int height){v.addView(new View(c),new LinearLayout.LayoutParams(1,dp(height)));}
   Button button(String label,boolean primary,Runnable action){
@@ -43,13 +49,21 @@ final class MobileUi {
     state.setOnClickListener(v->{checked[0]=!checked[0];state.setText(checked[0]?"On":"Off");state.setTextColor(checked[0]?INK:FG);state.setBackground(shape(checked[0]?ACCENT:BORDER,24));state.setSelected(checked[0]);state.setContentDescription(title+": "+(checked[0]?"On":"Off"));change.accept(checked[0]);});
     state.setBackground(shape(on?ACCENT:BORDER,24));LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(dp(64),dp(48));p.leftMargin=dp(12);row.addView(state,p);return row;
   }
+  View choice(String title,String[] items,int selected,java.util.function.IntConsumer change){
+    LinearLayout col=column();col.addView(text(title,14,MUTED,false));gap(col,6);
+    LinearLayout row=new LinearLayout(c);row.setGravity(Gravity.CENTER_VERTICAL);row.setPadding(dp(14),0,dp(12),0);row.setBackground(shape(SURFACE,14));
+    final int[] at={Math.max(0,selected)};TextView value=text(items[at[0]],15,FG,true);value.setSingleLine();value.setEllipsize(android.text.TextUtils.TruncateAt.END);row.addView(value,new LinearLayout.LayoutParams(0,dp(48),1));value.setGravity(Gravity.CENTER_VERTICAL);
+    View arrow=new View(c){final android.graphics.Paint pen=new android.graphics.Paint(3);protected void onDraw(android.graphics.Canvas canvas){pen.setColor(FG);pen.setStrokeWidth(dp(2));pen.setStrokeCap(android.graphics.Paint.Cap.ROUND);pen.setStyle(android.graphics.Paint.Style.STROKE);android.graphics.Path path=new android.graphics.Path();path.moveTo(dp(4),dp(8));path.lineTo(dp(10),dp(14));path.lineTo(dp(16),dp(8));canvas.drawPath(path,pen);}};row.addView(arrow,new LinearLayout.LayoutParams(dp(20),dp(22)));row.setFocusable(true);row.setContentDescription(title+": "+items[at[0]]);
+    row.setOnClickListener(v->new android.app.AlertDialog.Builder(c).setTitle(title).setSingleChoiceItems(items,at[0],(dialog,index)->{at[0]=index;value.setText(items[index]);row.setContentDescription(title+": "+items[index]);change.accept(index);dialog.dismiss();}).setNegativeButton("Cancel",null).show());col.addView(row);return col;
+  }
   static final class Stepper extends LinearLayout {
     private int value;private final int min,max;private final TextView label;private final java.util.function.IntConsumer changed;
-    Stepper(MobileUi ui,int low,int high,int current,java.util.function.IntConsumer listener){
+    Stepper(MobileUi ui,int low,int high,int current,java.util.function.IntConsumer listener){this(ui,low,high,current,1,listener);}
+    Stepper(MobileUi ui,int low,int high,int current,int step,java.util.function.IntConsumer listener){
       super(ui.c);min=low;max=high;value=Math.max(low,Math.min(high,current));changed=listener;setGravity(Gravity.CENTER_VERTICAL);
-      Button minus=ui.button("−",false,()->setValue(value-1));minus.setContentDescription("Decrease");
+      Button minus=ui.button("−",false,()->setValue(value-step));minus.setContentDescription("Decrease");
       label=ui.text(String.valueOf(value),17,FG,true);label.setGravity(Gravity.CENTER);label.setContentDescription("Current value: "+value);
-      Button plus=ui.button("+",false,()->setValue(value+1));plus.setContentDescription("Increase");
+      Button plus=ui.button("+",false,()->setValue(value+step));plus.setContentDescription("Increase");
       addView(minus,new LayoutParams(ui.dp(48),ui.dp(48)));addView(label,new LayoutParams(0,ui.dp(48),1));addView(plus,new LayoutParams(ui.dp(48),ui.dp(48)));
     }
     void setValue(int next){int n=Math.max(min,Math.min(max,next));if(n==value)return;value=n;label.setText(String.valueOf(value));label.setContentDescription("Current value: "+value);changed.accept(value);}

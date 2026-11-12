@@ -19,6 +19,7 @@ final class PhoneEngine implements AutoCloseable {
   private BufferedWriter input;
   private final BlockingQueue<String> output = new LinkedBlockingQueue<>();
   private volatile boolean cancelled;
+  private boolean searching;
 
   private synchronized void send(String s) throws IOException {
     if (input != null) {
@@ -51,7 +52,7 @@ final class PhoneEngine implements AutoCloseable {
     File executable = new File(c.getApplicationInfo().nativeLibraryDir, "libstockfish.so");
     if (!executable.isFile())
       throw new IOException("No phone engine for this CPU. Use Computer companion.");
-    output.clear();
+    output.clear();searching=false;
     process =
         new ProcessBuilder(executable.getAbsolutePath())
             .directory(c.getFilesDir())
@@ -80,14 +81,20 @@ final class PhoneEngine implements AutoCloseable {
   Result search(
       Context c, ChessPosition board, PhoneSettings settings, boolean evaluation, Update update)
       throws Exception {
+    return search(c,board,settings,evaluation,update,"stockfish");
+  }
+
+  Result search(Context c,ChessPosition board,PhoneSettings settings,boolean evaluation,Update update,String engineId) throws Exception {
     cancelled = false;
     start(c);
+    if(searching){send("stop");until("bestmove ",5000);searching=false;}
     output.clear();
     int count = evaluation ? 1 : settings.moves();
     send("setoption name Threads value " + settings.threads());
     send("setoption name Hash value 32");
     send("setoption name MultiPV value " + count);
-    send("setoption name UCI_LimitStrength value false");
+    send("setoption name UCI_LimitStrength value "+(engineId.equals("flounder")?"true":"false"));
+    if(engineId.equals("flounder"))send("setoption name UCI_Elo value "+Math.max(1320,Math.min(3190,settings.rating())));
     send("setoption name Skill Level value " + (evaluation ? 20 : settings.skill()));
     send("isready");
     until("readyok", 5000);
@@ -99,7 +106,7 @@ final class PhoneEngine implements AutoCloseable {
         mode.equals("Depth")
             ? " depth " + depth
             : mode.equals("Time") ? " movetime " + ms : " movetime " + ms + " depth " + depth;
-    send("go" + limit);
+    searching=true;send("go" + limit);
     Map<Integer, Line> lines = new TreeMap<>();
     long end = System.currentTimeMillis() + (mode.equals("Depth") ? 120000 : ms + 15000), last = 0;
     List<String> legal = board.legal();
@@ -107,7 +114,7 @@ final class PhoneEngine implements AutoCloseable {
     while (true) {
       String s = next(end);
       if (s.startsWith("bestmove ")) {
-        best = s.split(" ")[1];
+        searching=false;best = s.split(" ")[1];
         break;
       }
       if (!s.startsWith("info ")

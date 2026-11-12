@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "id": "maia3-5m",
+      "bytes": 20999239,
+      "sha256": "5ab6b5e30e921b44bd922f7b062d59fda422569ff1eef3763a82dfc9843838e5",
+      "url": "https://github.com/Nick-PY0/BoardLens/releases/download/phone-models-v1/maia3-5m.onnx"
+    },
+    {
+      "id": "maia3-23m",
+      "bytes": 91040914,
+      "sha256": "c13f47d1db9b1cddff2305b83c4d57bb7ea492e907680cc80f5ebc5cfd0c039f",
+      "url": "https://github.com/Nick-PY0/BoardLens/releases/download/phone-models-v1/maia3-23m.onnx"
+    },
+    {
+      "id": "maia3-79m",
+      "bytes": 311743723,
+      "sha256": "1243c7be0b115f698f157eafc2375d4b5a45806ac2169be9622129d8ac80dfcf",
+      "url": "https://github.com/Nick-PY0/BoardLens/releases/download/phone-models-v1/maia3-79m.onnx"
+    },
+    {
+      "id": "maia2",
+      "bytes": 84927752,
+      "sha256": "71d96d7c61486f6b03eaef8018ac88cb4d0989470ccbde0bae1a18f3204ab5db",
+      "url": "https://github.com/Nick-PY0/BoardLens/releases/download/phone-models-v1/maia2.onnx"
+    }
+  ]
+}

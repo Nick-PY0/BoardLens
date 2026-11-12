@@ -26,6 +26,10 @@ final class EngineFiles {
   }
 
   static synchronized void download(Context context, Progress progress) throws Exception {
+    download(context,()->false,progress);
+  }
+
+  static synchronized void download(Context context,java.util.function.BooleanSupplier cancelled,Progress progress) throws Exception {
     if (ready(context)) return;
     File partial = new File(context.getFilesDir(), NET + ".part");
     HttpURLConnection c =
@@ -43,6 +47,7 @@ final class EngineFiles {
       byte[] buf = new byte[65536];
       int n;
       while ((n = in.read(buf)) != -1) {
+        if(cancelled.getAsBoolean())throw new java.io.InterruptedIOException("Download cancelled");
         received += n;
         if (received > SIZE) throw new IOException("Unexpected model size");
         digest.update(buf, 0, n);

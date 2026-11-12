@@ -28,6 +28,7 @@ final class ArrowOverlay extends View {
   }
 
   void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows){
+    if(!android.provider.Settings.canDrawOverlays(getContext())){clear();remove();return;}
     projection=geometry;double[] bounds=geometry.bounds();
     board=new Rect((int)bounds[0],(int)bounds[1],(int)Math.ceil(bounds[2]),(int)Math.ceil(bounds[3]));
     bottom = whiteBottom;
@@ -54,7 +55,7 @@ final class ArrowOverlay extends View {
               PixelFormat.TRANSLUCENT);
       p.gravity = Gravity.TOP | Gravity.LEFT;
       p.alpha = .65f;
-      p.layoutInDisplayCutoutMode =
+      if(android.os.Build.VERSION.SDK_INT>=28)p.layoutInDisplayCutoutMode =
           android.os.Build.VERSION.SDK_INT >= 30
               ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
               : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -77,8 +78,7 @@ final class ArrowOverlay extends View {
 
   void remove() {
     if (attached) {
-      wm.removeView(this);
-      attached = false;
+      try{wm.removeView(this);}catch(IllegalArgumentException ignored){}finally{attached=false;}
     }
   }
 

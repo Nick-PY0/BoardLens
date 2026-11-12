@@ -2,471 +2,75 @@ package app.boardlens.companion;
 
 import android.app.*;
 import android.content.*;
-import android.graphics.drawable.GradientDrawable;
 import android.media.projection.*;
 import android.net.Uri;
 import android.os.*;
 import android.provider.Settings;
 import android.view.*;
 import android.widget.*;
+import java.util.*;
 
-/** Standalone section, intentionally independent of the computer's WebView/settings. */
+/** The phone-analysis section of the companion; every recommendation runs on-device. */
 public class PhoneScreenActivity extends Activity {
-  private PhoneSettings settings;
-  private PhoneDashboard dashboard;
-  private TextView modelNote;
-  private final java.util.Map<String, View> engineControls = new java.util.HashMap<>();
-  private TextView status, moves, eval;
-  private ImageView preview;
-  private ProgressBar bar;
-  private LinearLayout content;
-  private final int bg = MobileUi.BG, fg = MobileUi.FG, accent = MobileUi.ACCENT;
-  private boolean building, settingsPage;
-
-  int dp(int n) {
-    return Math.round(n * getResources().getDisplayMetrics().density);
-  }
-
-  TextView text(String s, int size) {
-    TextView t = new TextView(this);
-    t.setText(s);
-    t.setTextColor(fg);
-    t.setTextSize(size);
-    t.setPadding(0, dp(6), 0, dp(6));
-    return t;
-  }
-
-  GradientDrawable shape(int color) {
-    GradientDrawable d = new GradientDrawable();
-    d.setColor(color);
-    d.setCornerRadius(dp(12));
-    return d;
-  }
-
-  Button button(String title, Runnable action) {
-    Button b = new Button(this);
-    b.setText(title);
-    b.setAllCaps(false);
-    b.setTextColor(fg);
-    b.setBackground(shape(MobileUi.SURFACE));
-    b.setStateListAnimator(null);
-    b.setOnClickListener(v -> action.run());
-    LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, dp(48));
-    p.topMargin = dp(8);
-    content.addView(b, p);
-    return b;
-  }
-
-  @Override
-  public void onCreate(Bundle state) {
-    super.onCreate(state);
-    if (Build.VERSION.SDK_INT >= 33)
-      getOnBackInvokedDispatcher()
-          .registerOnBackInvokedCallback(
-              android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT, this::goBack);
-    settings = new PhoneSettings(this);
-    getWindow().setStatusBarColor(bg);
-    getWindow().setNavigationBarColor(bg);
-    show();
-  }
-
-  private void show() {
-    settingsPage=false;building=true;
-    dashboard=new PhoneDashboard(this,new PhoneDashboard.Actions(){
-      public void start(){PhoneScreenActivity.this.start();}
-      public void stop(){stopService(new Intent(PhoneScreenActivity.this,ScreenService.class));}
-      public void hide(){moveTaskToBack(true);}
-      public void scan(){if(ScreenService.running)startService(new Intent(PhoneScreenActivity.this,ScreenService.class).setAction("REFRESH"));else PhoneScreenActivity.this.start();}
-      public void settings(){engineSettings();}
-      public void help(){showHelp();}
-      public void back(){finish();}
-      public boolean option(String key,boolean fallback){return settings.p.getBoolean(key,fallback);}
-      public void option(String key,boolean value,boolean unused){settings.p.edit().putBoolean(key,value).apply();}
-    });
-    status=dashboard.status;moves=dashboard.moves;eval=dashboard.eval;bar=dashboard.bar;preview=dashboard.preview;
-    inset(dashboard.root);setContentView(dashboard.root);building=false;refresh();
-  }
-
-  private void showHelp(){
-    new AlertDialog.Builder(this).setTitle("Phone screen analysis")
-      .setMessage("Press Start and allow screen sharing. Choose the entire screen to follow boards across apps. Allow Display over other apps for arrows. Then press Home or Open another app. The ongoing notification means analysis is still running; use its Stop action to end it.\n\nAndroid can end capture when you lock your phone, revoke permission or force-stop the app. Protected screens cannot be captured. BoardLens never starts capture without your permission.\n\nKeep the whole board visible. Unsupported themes, 3D angles or hidden pieces may not read. Computer mode sends only the recognized position to your paired computer, not screenshots.\n\nShow moves while thinking displays the first useful result before calculation finishes. Predict replies adds possible opponent and follow-up moves; it recalculates when the actual move differs. A ply is one move by one side. Maia 2/3 use one model pass per position, not search depth. Reply time budget limits extra passes; a running pass may finish after it. Tiny bots use their own coded search and a bot clock budget.\n\nAll settings save automatically. Phone-screen settings are separate from computer companion settings.")
-      .setPositiveButton("Got it",null).show();
-  }
-
-  private void inset(View root) {
-    if (Build.VERSION.SDK_INT >= 30) {
-      getWindow().setDecorFitsSystemWindows(false);
-      root.setOnApplyWindowInsetsListener(
-          (v, insets) -> {
-            android.graphics.Insets safe =
-                insets.getInsets(
-                    WindowInsets.Type.systemBars()
-                        | WindowInsets.Type.displayCutout()
-                        | WindowInsets.Type.ime());
-            v.setPadding(safe.left, safe.top, safe.right, safe.bottom);
-            return WindowInsets.CONSUMED;
-          });
-      root.requestApplyInsets();
-    } else root.setFitsSystemWindows(true);
-  }
-
-  private void toggle(String title, String key, boolean fallback) {
-    Button b = button("", () -> {});
-    Runnable paint =
-        () -> {
-          boolean on = settings.p.getBoolean(key, fallback);
-          b.setText(title + "   " + (on ? "On" : "Off"));
-          b.setTextColor(on ? bg : fg);
-          b.setBackground(shape(on ? accent : MobileUi.SURFACE));
-        };
-    b.setOnClickListener(
-        v -> {
-          settings.p.edit().putBoolean(key, !settings.p.getBoolean(key, fallback)).apply();
-          paint.run();
-        });
-    paint.run();
-  }
-
-  private void select(String title, String key, String[] values, String current) {
-    TextView label=text(title,14);content.addView(label);
-    Spinner s = new Spinner(this);
-    ArrayAdapter<String> a =
-        new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, values);
-    s.setAdapter(a);
-    engineControls.put(key, s);s.setTag(label);
-    for (int i = 0; i < values.length; i++) if (values[i].equals(current)) s.setSelection(i);
-    content.addView(s, new LinearLayout.LayoutParams(-1, dp(48)));
-    s.setOnItemSelectedListener(
-        new AdapterView.OnItemSelectedListener() {
-          public void onNothingSelected(AdapterView<?> p) {}
-
-          public void onItemSelected(AdapterView<?> p, View v, int at, long id) {
-            settings.p.edit().putString(key, values[at]).apply();
-            refreshLimits();
-          }
-        });
-  }
-
-  private void number(String title, String key, int min, int max, int current) {
-    TextView label=text(title,14);content.addView(label);
-    MobileUi.Stepper n=new MobileUi.Stepper(new MobileUi(this),min,max,current,value->settings.p.edit().putInt(key,value).apply());
-    engineControls.put(key,n);n.setTag(label);content.addView(n,new LinearLayout.LayoutParams(-1,dp(48)));
-  }
-
-  private void decimal(String title,String key,float value,float min,float max){
-    content.addView(text(title,14));EditText field=new EditText(this);field.setSingleLine();field.setTextColor(fg);field.setInputType(8194);field.setText(String.valueOf(value));content.addView(field,new LinearLayout.LayoutParams(-1,dp(48)));
-    field.addTextChangedListener(new android.text.TextWatcher(){
-      public void beforeTextChanged(CharSequence s,int a,int count,int after){}
-      public void onTextChanged(CharSequence s,int start,int before,int count){try{float n=Float.parseFloat(s.toString());if(Float.isFinite(n)&&n>=min&&n<=max){settings.p.edit().putFloat(key,n).apply();field.setError(null);}else field.setError(min+" to "+max);}catch(Exception e){field.setError("Enter seconds");}}
-      public void afterTextChanged(android.text.Editable s){}
-    });
-  }
-
-  private void engineSettings() {
-    settingsPage = true;
-    engineControls.clear();
-    ScrollView scroll = new ScrollView(this);
-    scroll.setBackgroundColor(bg);
-    content = new LinearLayout(this);
-    content.setPadding(dp(20), dp(12), dp(20), dp(24));
-    content.setOrientation(1);
-    scroll.addView(content);
-    button("‹ Phone screen",this::show);
-    content.addView(text("Engines & settings", 24));
-    content.addView(text("Recommendations and evaluation are independent.",14));
-    button(
-        EngineFiles.ready(this) ? "Stockfish model installed" : "Download Stockfish model · 99 MB",
-        () -> {
-          if (EngineFiles.ready(this)) {
-            Toast.makeText(this, "Stockfish is ready", Toast.LENGTH_SHORT).show();
-            return;
-          }
-          ProgressDialog progress = new ProgressDialog(this);
-          progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-          progress.setMax(100);
-          progress.setTitle("Stockfish evaluation data");
-          progress.setMessage("Verified download from official-stockfish/networks");
-          progress.setCancelable(false);
-          progress.show();
-          new Thread(
-                  () -> {
-                    try {
-                      EngineFiles.download(
-                          this,
-                          (got, total) ->
-                              runOnUiThread(() -> progress.setProgress((int) (got * 100 / total))));
-                      runOnUiThread(
-                          () -> {
-                            progress.dismiss();
-                            Toast.makeText(this, "Stockfish is ready", Toast.LENGTH_LONG).show();
-                          });
-                    } catch (Exception e) {
-                      runOnUiThread(
-                          () -> {
-                            progress.dismiss();
-                            new AlertDialog.Builder(this)
-                                .setMessage("Download failed: " + e.getMessage())
-                                .setPositiveButton("OK", null)
-                                .show();
-                          });
-                    }
-                  },
-                  "Stockfish-model")
-              .start();
-        });
-    select("Run engines", "backend", new String[] {"On phone", "Computer"}, settings.backend());
-    PhoneRemote remote = new PhoneRemote(this);
-    if (remote.linked()) {
-      TextView connection = text("Loading computer engines…", 14);
-      content.addView(connection);
-      LinearLayout engineOptions = new LinearLayout(this);
-      engineOptions.setOrientation(1);
-      content.addView(engineOptions);
-      new Thread(
-              () -> {
-                try {
-                  org.json.JSONArray catalog =
-                      remote.api("api/state", null).getJSONArray("phone_engines");
-                  runOnUiThread(
-                      () -> {
-                        connection.setText("Computer engines (for phone-screen positions)");
-                        try {
-                          engineSelect(engineOptions, "Recommend moves", "engine", catalog, false);
-                          engineSelect(
-                              engineOptions, "Evaluation engine", "evaluator", catalog, true);
-                        } catch (Exception e) {
-                          connection.setText(e.getMessage());
-                        }
-                      });
-                } catch (Exception e) {
-                  runOnUiThread(
-                      () -> connection.setText("Computer unavailable · keep it running on Wi-Fi"));
-                }
-              },
-              "Phone-engine-catalog")
-          .start();
-    } else
-      button(
-          "Pair computer for Maia and Tiny bots",
-          () -> startActivity(new Intent(this, MainActivity.class).putExtra("companion", true)));
-    number("Maia / Flounder target rating", "rating", 600, 2600, settings.p.getInt("rating", 1500));
-    select("Search limit", "mode", new String[] {"Time", "Depth", "Time + depth"}, settings.mode());
-    TextView timeLabel=text("Think time (seconds)",14);content.addView(timeLabel);
-    EditText seconds = new EditText(this);
-    engineControls.put("seconds", seconds);seconds.setTag(timeLabel);
-    seconds.setTextColor(fg);
-    seconds.setInputType(8194);
-    seconds.setSingleLine();
-    seconds.setText(String.valueOf(settings.seconds()));
-    content.addView(seconds);
-    seconds.addTextChangedListener(
-        new android.text.TextWatcher() {
-          public void beforeTextChanged(CharSequence s, int a, int c, int f) {}
-
-          public void onTextChanged(CharSequence s, int a, int before, int count) {
-            try {
-              float value = Float.parseFloat(s.toString());
-              if (Float.isFinite(value) && value >= .05 && value <= 30)
-                settings.p.edit().putFloat("seconds", value).apply();
-              else seconds.setError("0.05 to 30 seconds");
-            } catch (Exception ignored) {
-              seconds.setError("Enter seconds");
-            }
-          }
-
-          public void afterTextChanged(android.text.Editable s) {}
-        });
-    number("Search depth", "depth", 1, 30, settings.depth());
-    modelNote=text("",13);content.addView(modelNote);
-    toggle("Show moves while thinking","early",true);
-    toggle("Predict replies","predict",true);
-    number("Prediction length · plies","prediction_plies",1,12,settings.predictionPlies());
-    decimal("Reply time budget (seconds)","prediction_seconds",settings.predictionSeconds(),.1f,60f);
-    toggle("Steady arrows","steady",true);
-    number("Recommended moves", "moves", 1, 5, settings.moves());
-    number(
-        "CPU threads",
-        "threads",
-        1,
-        Math.max(1, Math.min(8, Runtime.getRuntime().availableProcessors())),
-        settings.threads());
-    number("Stockfish skill", "skill", 0, 20, settings.skill());
-    select(
-        "Board orientation",
-        "orientation",
-        new String[] {"Auto", "White at bottom", "Black at bottom"},
-        settings.orientation());
-    select(
-        "Side to move on first scan",
-        "turn",
-        new String[] {"Auto", "White", "Black"},
-        settings.turn());
-    content.addView(text("Evaluation runs separately from recommendations.", 14));
-    content.addView(text("Settings save automatically.", 14));
-    button("← Phone screen", this::show);
-    inset(scroll);
-    setContentView(scroll);refreshLimits();
-  }
-
-  private void start() {
-    if (Build.VERSION.SDK_INT >= 33
-        && checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
-            != android.content.pm.PackageManager.PERMISSION_GRANTED
-        && !settings.p.getBoolean("notificationAsked", false)) {
-      settings.p.edit().putBoolean("notificationAsked", true).apply();
-      requestPermissions(new String[] {android.Manifest.permission.POST_NOTIFICATIONS}, 9);
-      return;
-    }
-    if (Build.VERSION.SDK_INT < 29) {
-      new AlertDialog.Builder(this)
-          .setMessage(
-              "On-phone engines need Android 10 or later. Computer companion still works on this"
-                  + " device.")
-          .setPositiveButton("OK", null)
-          .show();
-      return;
-    }
-    if (settings.backend().equals("On phone") && !EngineFiles.ready(this)) {
-      engineSettings();
-      return;
-    }
-    if (!Settings.canDrawOverlays(this) && settings.arrows()) {
-      new AlertDialog.Builder(this)
-          .setTitle("Allow move arrows")
-          .setMessage(
-              "Enable Display over other apps for BoardLens, then return and press Start. This"
-                  + " draws passive arrows over a chessboard.")
-          .setNegativeButton(
-              "No arrows",
-              (d, w) -> {
-                settings.p.edit().putBoolean("arrows", false).apply();
-                requestCapture();
-              })
-          .setPositiveButton(
-              "Open settings",
-              (d, w) ->
-                  startActivity(
-                      new Intent(
-                          Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                          Uri.parse("package:" + getPackageName()))))
-          .show();
-      return;
-    }
-    requestCapture();
-  }
-
-  private void requestCapture() {
-    if (ScreenService.running) {
-      moveTaskToBack(true);
-      return;
-    }
-    MediaProjectionManager m = getSystemService(MediaProjectionManager.class);
-    Intent i =
-        Build.VERSION.SDK_INT >= 34
-            ? m.createScreenCaptureIntent(MediaProjectionConfig.createConfigForDefaultDisplay())
-            : m.createScreenCaptureIntent();
-    startActivityForResult(i, 42);
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int request, String[] permissions, int[] results) {
-    super.onRequestPermissionsResult(request, permissions, results);
-    if (request == 9) start();
-  }
-
-  @Override
-  protected void onActivityResult(int request, int result, Intent data) {
-    super.onActivityResult(request, result, data);
-    if (request == 42 && result == RESULT_OK && data != null) {
-      startForegroundService(new Intent(this, ScreenService.class).putExtra("consent", data));
-      moveTaskToBack(true);
-    }
-  }
-
-  private void refresh() {
-    if(isFinishing()||settingsPage||dashboard==null)return;
-    dashboard.render(ScreenService.running,ScreenService.status,ScreenService.suggestion,ScreenService.evaluation,ScreenService.whiteShare,ScreenService.preview);
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-    ScreenService.setPhoneVisible(true);
-    ScreenService.listener = this::refresh;
-    if (status != null) refresh();
-  }
-
-  @Override
-  protected void onPause() {
-    ScreenService.setPhoneVisible(false);
-    ScreenService.listener = null;
-    super.onPause();
-  }
-
-  private void engineSelect(
-      LinearLayout host, String label, String key, org.json.JSONArray catalog, boolean evaluator)
-      throws Exception {
-    java.util.List<String> labels = new java.util.ArrayList<>(), ids = new java.util.ArrayList<>();
-    for (int i = 0; i < catalog.length(); i++) {
-      org.json.JSONObject item = catalog.getJSONObject(i);
-      if (evaluator && item.getString("kind").equals("tiny")) continue;
-      ids.add(item.getString("id"));
-      labels.add(
-          item.getString("label") + (item.optBoolean("available") ? "" : " · install on computer"));
-    }
-    host.addView(text(label, 14));
-    Spinner picker = new Spinner(this);
-    picker.setAdapter(
-        new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, labels));
-    int selected = ids.indexOf(settings.p.getString(key, "stockfish"));
-    picker.setSelection(Math.max(0, selected));
-    host.addView(picker, new LinearLayout.LayoutParams(-1, dp(48)));
-    picker.setOnItemSelectedListener(
-        new AdapterView.OnItemSelectedListener() {
-          public void onNothingSelected(AdapterView<?> p) {}
-
-          public void onItemSelected(AdapterView<?> p, View v, int at, long id) {
-            settings.p.edit().putString(key, ids.get(at)).apply();
-            refreshLimits();
-          }
-        });
-  }
-
-  private void refreshLimits() {
-    boolean computer = settings.backend().equals("Computer");
-    String engine = computer ? settings.engine() : "stockfish";
-    boolean human = engine.startsWith("maia"), tiny = engine.startsWith("tiny");
-    if(modelNote!=null)modelNote.setText(human?"Maia 2/3: one pass per position. Adjust prediction length and reply budget below.":tiny?"This bot sets its own depth. Think time is its clock budget.":"Time + depth stops at whichever limit comes first.");
-    enable("mode", !human && !tiny);
-    enable("seconds", !human && (tiny || !settings.mode().equals("Depth")));
-    enable("depth", !human && !tiny && !settings.mode().equals("Time"));
-    enable("threads", !human && !tiny);
-    enable("skill", engine.equals("stockfish"));
-    enable("rating", human || engine.equals("flounder"));
-    enable("moves", !tiny);
-    if (tiny && engineControls.get("moves") instanceof MobileUi.Stepper) {
-      ((MobileUi.Stepper) engineControls.get("moves")).setValue(1);
-      settings.p.edit().putInt("moves", 1).apply();
-    }
-  }
-
-  private void enable(String key, boolean value) {
-    View v = engineControls.get(key);
-    if (v != null) {
-      v.setEnabled(value);
-      v.setAlpha(value ? 1f : .4f);
-      v.setVisibility(value?View.VISIBLE:View.GONE);
-      Object label=v.getTag();if(label instanceof TextView)((TextView)label).setVisibility(value?View.VISIBLE:View.GONE);
-    }
-  }
-
-  private void goBack() {
-    if (settingsPage) show();
-    else finish();
-  }
-
-  @Override
-  public void onBackPressed() {
-    goBack();
-  }
+ private PhoneSettings settings;private MobileUi ui;private PhoneDashboard dashboard;
+ private LinearLayout content;private boolean settingsPage,pendingOverlay;
+ private final Map<String,View> controls=new HashMap<>();private TextView modelNote;
+ @Override public void onCreate(Bundle saved){super.onCreate(saved);settings=new PhoneSettings(this);ui=new MobileUi(this);pendingOverlay=saved!=null&&saved.getBoolean("overlay");getWindow().setStatusBarColor(MobileUi.BG);getWindow().setNavigationBarColor(MobileUi.BG);if(Build.VERSION.SDK_INT>=33)getOnBackInvokedDispatcher().registerOnBackInvokedCallback(android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,this::goBack);show();}
+ private void show(){settingsPage=false;dashboard=new PhoneDashboard(this,new PhoneDashboard.Actions(){
+  public void start(){PhoneScreenActivity.this.start();}public void stop(){stopService(new Intent(PhoneScreenActivity.this,ScreenService.class));}public void hide(){moveTaskToBack(true);}
+  public void scan(){if(ScreenService.running)startService(new Intent(PhoneScreenActivity.this,ScreenService.class).setAction("REFRESH"));else PhoneScreenActivity.this.start();}
+  public void settings(){engineSettings();}public void help(){showHelp();}public void back(){finish();}
+  public boolean option(String key,boolean fallback){return settings.p.getBoolean(key,fallback);}public void option(String key,boolean value,boolean unused){settings.p.edit().putBoolean(key,value).apply();}
+ });MobileUi.inset(this,dashboard.root);setContentView(dashboard.root);refresh();}
+ private void showHelp(){
+  String[] sections={"Start & background scanning","Engines & downloads","Thinking & predictions","Arrows & your color","Permissions & troubleshooting"};
+  String[] help={
+   "Press Start, approve sharing your entire screen, then press Home or Open another app. BoardLens keeps scanning while its foreground-service notification is present, even when its interface is closed. Stop in the app or notification ends the session. Keep all 64 squares visible. Reading pauses on BoardLens’s own screens to avoid reading its preview.",
+   "All phone-screen engines run on this device. Stockfish and Flounder share the Stockfish data file. Maia 2 and Maia 3 5M/23M/79M are optional data-model downloads. Original Tiny bots are built into the complete APK. Competition ratings are reference results, not guaranteed phone ratings. The Computer companion section remains available for controlling desktop boards, but is not needed for phone analysis. Downloads are checksum-verified and keep working offline. Recommendation and evaluation engines are independent. Maia evaluation is a human expected score, not Stockfish centipawns or a win probability.",
+   "Stockfish accepts time, depth, or whichever limit is reached first. Flounder uses Stockfish with an Elo limit. Tiny bots control their own depth; think time supplies their clock budget. Maia predicts in one neural pass, so it has no native search-depth control. Maia 2 uses rating buckets from below 1100 to 2000 and above; Maia 3 accepts a wider target rating. Show moves while thinking shows early results. Predict replies extends the chosen engine’s line. Three plies means your move, an opponent reply, then your response. Reply budget limits additional model passes; a running pass may finish after the budget.",
+   "Screen arrows pass taps through to the chess app. Only my color uses the side at the bottom of the recognized board. Steady arrows reduces changes during thinking. Lock move keeps the first displayed suggestion for the position while evaluation continues. A board change, settings change or Scan now releases the lock. Tiny bots provide one recommendation per search. Other engines support multiple alternatives. Predictions describe a possible continuation, not a promise that the opponent will choose it.",
+   "Android asks for screen-sharing approval for each new capture session. Display over other apps is needed only for arrows and stays allowed until revoked. No Accessibility service is used. Android may stop sharing when you lock the device, revoke access or force-stop the app. Protected screens cannot be read. Scan now discards the current target and starts a fresh search. Unusual themes, hidden pieces and unsupported 3D camera angles can remain unreadable. Settings save automatically."
+  };
+  new AlertDialog.Builder(this).setTitle("Phone analysis help").setItems(sections,(d,which)->new AlertDialog.Builder(this).setTitle(sections[which]).setMessage(help[which]).setPositiveButton("Got it",null).show()).setNegativeButton("Close",null).show();
+ }
+ private void group(LinearLayout root,String title){ui.gap(root,14);content=ui.card();content.addView(ui.text(title,18,MobileUi.FG,true));ui.gap(content,12);root.addView(content);}
+ private void choice(String title,String key,String[] labels,int selected,java.util.function.IntConsumer save){View row=ui.choice(title,labels,selected,index->{save.accept(index);refreshLimits();});controls.put(key,row);content.addView(row);ui.gap(content,10);}
+ private void engine(String title,String key,boolean evaluation){List<EngineCatalog.Entry> list=new ArrayList<>();for(var entry:EngineCatalog.ALL)if(!evaluation||!entry.tiny())list.add(entry);String current=evaluation?settings.evaluator():settings.engine();String[] names=new String[list.size()];int selected=0;for(int i=0;i<list.size();i++){var e=list.get(i);names[i]=e.name()+(EngineCatalog.ready(this,e.id())?"":" · download");if(e.id().equals(current)||current.equals("maia3")&&e.id().equals("maia3-5m"))selected=i;}
+  choice(title,key,names,selected,i->settings.p.edit().putString(key,list.get(i).id()).apply());
+ }
+ private void number(String title,String key,int min,int max,int value){LinearLayout row=ui.column();row.addView(ui.text(title,14,MobileUi.MUTED,false));ui.gap(row,6);row.addView(new MobileUi.Stepper(ui,min,max,value,key.equals("rating")?50:1,n->settings.p.edit().putInt(key,n).apply()),new LinearLayout.LayoutParams(-1,ui.dp(48)));controls.put(key,row);content.addView(row);ui.gap(content,12);}
+ private void seconds(String title,String key,float value,float low,float high){LinearLayout row=ui.column();row.addView(ui.text(title,14,MobileUi.MUTED,false));EditText field=new EditText(this);field.setSingleLine();field.setTextColor(MobileUi.FG);field.setInputType(8194);field.setText(String.valueOf(value));field.setPadding(ui.dp(12),0,ui.dp(12),0);field.setBackground(ui.shape(MobileUi.BORDER,12));LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-1,ui.dp(48));p.topMargin=ui.dp(6);row.addView(field,p);controls.put(key,row);content.addView(row);ui.gap(content,12);
+  field.addTextChangedListener(new android.text.TextWatcher(){public void beforeTextChanged(CharSequence s,int a,int b,int c){}public void afterTextChanged(android.text.Editable s){}public void onTextChanged(CharSequence s,int a,int b,int c){try{float n=Float.parseFloat(s.toString());if(!Float.isFinite(n)||n<low||n>high)throw new Exception();settings.p.edit().putFloat(key,n).apply();field.setError(null);}catch(Exception e){field.setError(low+" to "+high+" seconds");}}});
+ }
+ private void toggle(String title,String detail,String key,boolean fallback){content.addView(ui.toggle(title,detail,settings.p.getBoolean(key,fallback),value->{settings.p.edit().putBoolean(key,value).apply();refreshLimits();}));}
+ private void engineSettings(){settingsPage=true;controls.clear();ScrollView scroll=new ScrollView(this);scroll.setBackgroundColor(MobileUi.BG);LinearLayout root=ui.column();root.setPadding(ui.dp(20),ui.dp(12),ui.dp(20),ui.dp(24));scroll.addView(root);root.addView(ui.button("‹ Phone screen",false,this::show),new LinearLayout.LayoutParams(-1,ui.dp(48)));ui.gap(root,16);root.addView(ui.text("Phone settings",26,MobileUi.FG,true));
+  group(root,"Engines");engine("Recommend moves","engine",false);engine("Evaluation bar","evaluator",true);content.addView(ui.button("Models & downloads",false,()->startActivity(new Intent(this,ModelsActivity.class))),new LinearLayout.LayoutParams(-1,ui.dp(48)));ui.gap(content,8);modelNote=ui.text("",13,MobileUi.MUTED,false);content.addView(modelNote);
+  group(root,"Thinking");String[] modes={"Time","Depth","Time + depth"};choice("Stop at","mode",modes,Arrays.asList(modes).indexOf(settings.mode()),i->settings.p.edit().putString("mode",modes[i]).apply());seconds("Think time","seconds",settings.seconds(),.05f,30f);number("Search depth","depth",1,30,settings.depth());number("Target rating","rating",600,2600,settings.rating());number("Stockfish skill","skill",0,20,settings.skill());number("CPU threads","threads",1,Math.max(1,Math.min(8,Runtime.getRuntime().availableProcessors())),settings.threads());
+  group(root,"Suggestions");number("Recommended moves","moves",1,5,settings.moves());toggle("Show moves while thinking","Show the first result early","early",true);toggle("Predict replies","Opponent move, then your response","predict",true);number("Prediction length · plies","prediction_plies",1,12,settings.predictionPlies());seconds("Reply time budget","prediction_seconds",settings.predictionSeconds(),.1f,60f);toggle("Steady arrows","Reduce changes during thinking","steady",true);toggle("Lock move","Keep the first suggestion for this position","lock_move",false);
+  group(root,"Board & arrows");toggle("Screen arrows","Draw over the chess app","arrows",true);toggle("Only my color","Use the side at the bottom","onlyMine",false);String[] orientation={"Auto","White at bottom","Black at bottom"},turn={"Auto","White","Black"};choice("Orientation","orientation",orientation,Arrays.asList(orientation).indexOf(settings.orientation()),i->settings.p.edit().putString("orientation",orientation[i]).apply());choice("Side to move","turn",turn,Arrays.asList(turn).indexOf(settings.turn()),i->settings.p.edit().putString("turn",turn[i]).apply());
+  ui.gap(root,16);root.addView(ui.text("Saved automatically",13,MobileUi.MUTED,false));ui.gap(root,8);root.addView(ui.button("Help",false,this::showHelp),new LinearLayout.LayoutParams(-1,ui.dp(48)));MobileUi.inset(this,scroll);setContentView(scroll);refreshLimits();
+ }
+ private void refreshLimits(){EngineCatalog.Entry e=EngineCatalog.get(settings.engine());boolean search=!e.maia()&&!e.tiny();visible("mode",search);visible("depth",search&&!settings.mode().equals("Time"));visible("seconds",!e.maia()&&(e.tiny()||!settings.mode().equals("Depth")));visible("rating",e.maia()||e.id().equals("flounder"));visible("skill",e.id().equals("stockfish"));visible("threads",!e.tiny());visible("moves",!e.tiny());visible("prediction_plies",settings.predict());visible("prediction_seconds",settings.predict());if(modelNote!=null)modelNote.setText(e.maia()?"One neural pass per position. Prediction length controls later moves.":e.tiny()?"Original bot · one move per search · its depth is automatic.":"Recommendations and evaluation run separately on this phone.");}
+ private void visible(String key,boolean show){View view=controls.get(key);if(view!=null)view.setVisibility(show?View.VISIBLE:View.GONE);}
+ private void start(){
+  if(ScreenService.running){moveTaskToBack(true);return;}
+  if(Build.VERSION.SDK_INT<29){new AlertDialog.Builder(this).setMessage("Phone screen analysis requires Android 10 or later. Computer companion still works here.").setPositiveButton("OK",null).show();return;}
+  if(!EngineCatalog.ready(this,settings.engine())){Toast.makeText(this,"Install "+EngineCatalog.get(settings.engine()).name()+" first",Toast.LENGTH_LONG).show();startActivity(new Intent(this,ModelsActivity.class));return;}
+  if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED&&!settings.p.getBoolean("notificationAsked",false)){settings.p.edit().putBoolean("notificationAsked",true).apply();requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS},9);return;}
+  if(settings.arrows()&&!Settings.canDrawOverlays(this)){
+   new AlertDialog.Builder(this).setTitle("Allow screen arrows").setMessage("Enable Display over other apps for BoardLens. Arrows let taps pass through to the chessboard.").setNegativeButton("Without arrows",(d,w)->{settings.p.edit().putBoolean("arrows",false).apply();requestCapture();}).setPositiveButton("Open settings",(d,w)->{pendingOverlay=true;startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,Uri.parse("package:"+getPackageName())));}).show();return;
+  }requestCapture();
+ }
+ private void requestCapture(){MediaProjectionManager manager=getSystemService(MediaProjectionManager.class);Intent consent=Build.VERSION.SDK_INT>=34?manager.createScreenCaptureIntent(MediaProjectionConfig.createConfigForDefaultDisplay()):manager.createScreenCaptureIntent();startActivityForResult(consent,42);}
+ @Override public void onRequestPermissionsResult(int request,String[] names,int[] results){super.onRequestPermissionsResult(request,names,results);if(request==9)start();}
+ @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);if(request==42&&result==RESULT_OK&&data!=null){startForegroundService(new Intent(this,ScreenService.class).putExtra("consent",data));moveTaskToBack(true);}else if(request==42)Toast.makeText(this,"Screen sharing was not started",Toast.LENGTH_SHORT).show();}
+ private void refresh(){if(!isFinishing()&&!settingsPage&&dashboard!=null){dashboard.engine.setText(EngineCatalog.get(settings.engine()).name()+" · on this phone");dashboard.render(ScreenService.running,ScreenService.status,ScreenService.suggestion,ScreenService.evaluation,ScreenService.whiteShare,ScreenService.preview);}}
+ @Override protected void onStart(){super.onStart();PhoneUiVisibility.start(this);}
+ @Override protected void onStop(){PhoneUiVisibility.stop(this);super.onStop();}
+ @Override protected void onResume(){super.onResume();ScreenService.listener=this::refresh;if(pendingOverlay){pendingOverlay=false;if(Settings.canDrawOverlays(this))requestCapture();}if(settingsPage)engineSettings();else refresh();}
+ @Override protected void onPause(){ScreenService.listener=null;super.onPause();}
+ @Override protected void onSaveInstanceState(Bundle out){out.putBoolean("overlay",pendingOverlay);super.onSaveInstanceState(out);}
+ private void goBack(){if(settingsPage)show();else finish();}
+ @Override @android.annotation.SuppressLint("GestureBackNavigation")
+  public void onBackPressed(){goBack();}
 }

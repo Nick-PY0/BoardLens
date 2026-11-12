@@ -318,6 +318,7 @@ public class MainActivity extends Activity {
   }
 
   @Override
+  @android.annotation.SuppressLint("GestureBackNavigation")
   public void onBackPressed() {
     goBack();
   }
@@ -325,12 +326,10 @@ public class MainActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-    ScreenService.setPhoneVisible(true);
   }
 
   @Override
   protected void onPause() {
-    ScreenService.setPhoneVisible(false);
     super.onPause();
   }
 
@@ -339,4 +338,7 @@ public class MainActivity extends Activity {
     if (web != null) web.destroy();
     super.onDestroy();
   }
+  @Override protected void onStart(){super.onStart();PhoneUiVisibility.start(this);}
+  @Override protected void onStop(){PhoneUiVisibility.stop(this);super.onStop();}
+
 }

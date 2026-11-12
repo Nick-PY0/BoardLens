@@ -49,12 +49,13 @@ public final class ScreenService extends Service {
   private HandlerThread captureThread;
   private Handler capture;
   private MediaProjection projection;
+  private volatile boolean terminating;
   private VirtualDisplay display;
   private ImageReader images;
   private BoardReader reader;
+  private Bitmap cachedFrame;
   private ArrowOverlay overlay;
   private PhoneSettings settings;
-  private PhoneRemote remote;
   private Rect target;
   private BoardGeometry targetGeometry;
   private ChessPosition position;
@@ -62,13 +63,13 @@ public final class ScreenService extends Service {
   private String pending = "", lastSettings = "", lastTurn = "Auto";
   private int stable = 0, failures = 0;
   private long lastScan = 0;
-  private volatile long generation = 0;
+  private final java.util.concurrent.atomic.AtomicLong generation = new java.util.concurrent.atomic.AtomicLong();
   private boolean cleanFrame = false;
   private int[] baseline;
   private volatile List<String> lastArrows = Collections.emptyList();
-  private final PhoneEngine moves = new PhoneEngine(), evaluator = new PhoneEngine();
-  private final ExecutorService moveWorker = Executors.newSingleThreadExecutor(),
-      evalWorker = Executors.newSingleThreadExecutor();
+  private final LocalEngines moves = new LocalEngines(), evaluator = new LocalEngines();
+  private final LatestWorkQueue moveWorker = new LatestWorkQueue("BoardLens-moves"),
+      evalWorker = new LatestWorkQueue("BoardLens-evaluation");
 
   @Override
   public IBinder onBind(Intent i) {
@@ -82,7 +83,7 @@ public final class ScreenService extends Service {
       return START_NOT_STICKY;
     }
     if ("REFRESH".equals(intent.getAction())) {
-      generation++;
+      generation.incrementAndGet();
       moves.cancel();
       evaluator.cancel();
       lastArrows = Collections.emptyList();
@@ -105,7 +106,6 @@ public final class ScreenService extends Service {
     try {
       active = this;
       settings = new PhoneSettings(this);
-      remote = new PhoneRemote(this);
       NotificationManager nm = getSystemService(NotificationManager.class);
       nm.createNotificationChannel(
           new NotificationChannel(
@@ -129,7 +129,7 @@ public final class ScreenService extends Service {
               .setOngoing(true)
               .addAction(new Notification.Action.Builder(null, "Stop", stopAction).build())
               .build();
-      startForeground(7, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
+      if(Build.VERSION.SDK_INT>=29)startForeground(7, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);else startForeground(7,n);
       captureThread = new HandlerThread("BoardLens-pixels");
       captureThread.start();
       capture = new Handler(captureThread.getLooper());
@@ -141,7 +141,7 @@ public final class ScreenService extends Service {
           new MediaProjection.Callback() {
             @Override
             public void onStop() {
-              main.post(() -> stopSelf());
+              if(!terminating)main.post(() -> {status="Screen sharing ended · tap Start to resume";stopSelf();});
             }
 
             @Override
@@ -194,10 +194,11 @@ public final class ScreenService extends Service {
     display.resize(w, h, getResources().getDisplayMetrics().densityDpi);
     display.setSurface(images.getSurface());
     old.close();
+    if(cachedFrame!=null){cachedFrame.recycle();cachedFrame=null;}
     target = null;targetGeometry=null;
     baseline = null;
     position = null;
-    generation++;
+    generation.incrementAndGet();
     moves.cancel();
     evaluator.cancel();
     main.post(() -> overlay.clear());
@@ -210,7 +211,7 @@ public final class ScreenService extends Service {
   }
 
   private String settingsKey() {
-    return settings.p.getAll().toString();
+    return new java.util.TreeMap<>(settings.p.getAll()).toString();
   }
 
   private int[] fingerprint(Bitmap b, Rect r) {
@@ -239,29 +240,42 @@ public final class ScreenService extends Service {
     return changed > Math.max(6, total * .0005);
   }
 
+  private void restoreArrows(){
+    if(settings.arrows()&&!lastArrows.isEmpty()&&!overlay.hasArrows()){
+      Rect rect=new Rect(target);boolean orientation=bottom;BoardGeometry geometry=targetGeometry;
+      main.post(()->{if(running&&!phoneVisible)overlay.show(geometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):geometry,orientation,lastArrows);});
+    }
+  }
+
   private void tick() {
     if (!running) return;
     Bitmap frame = null;
+    String key=settingsKey();
     try {
-      if (phoneVisible) return;
       try (Image image = images.acquireLatestImage()) {
-        if (image == null) return;
-        Image.Plane plane = image.getPlanes()[0];
-        int w = image.getWidth(),
-            h = image.getHeight(),
-            stride = plane.getRowStride() / plane.getPixelStride();
-        Bitmap padded = Bitmap.createBitmap(stride, h, Bitmap.Config.ARGB_8888);
-        padded.copyPixelsFromBuffer(plane.getBuffer());
-        frame = Bitmap.createBitmap(padded, 0, 0, w, h);
-        if (frame != padded) padded.recycle();
+        if(phoneVisible)return;
+        if(image==null){
+          if(cachedFrame==null)return;
+          if(target!=null&&baseline!=null&&key.equals(lastSettings)){restoreArrows();return;}
+          frame=cachedFrame;
+        }else{
+          frames++;
+          Image.Plane plane=image.getPlanes()[0];
+          if(target!=null&&baseline!=null&&key.equals(lastSettings)){
+            int[] sampled=FrameFingerprint.read(plane.getBuffer(),image.getWidth(),image.getHeight(),plane.getRowStride(),plane.getPixelStride(),target.left,target.top,target.right,target.bottom,overlay::covers);
+            if(sampled!=null&&!different(baseline,sampled)){restoreArrows();return;}
+          }
+          int w=image.getWidth(),h=image.getHeight(),stride=plane.getRowStride()/plane.getPixelStride();
+          Bitmap padded=Bitmap.createBitmap(stride,h,Bitmap.Config.ARGB_8888);padded.copyPixelsFromBuffer(plane.getBuffer());
+          frame=Bitmap.createBitmap(padded,0,0,w,h);if(frame!=padded)padded.recycle();
+          if(cachedFrame!=null)cachedFrame.recycle();cachedFrame=frame;
+        }
       }
-      frames++;
-      String key = settingsKey();
       if (!key.equals(lastSettings)) {
         lastSettings = key;
         if (!settings.turn().equals(lastTurn) && !settings.turn().equals("Auto")) position = null;
         lastTurn = settings.turn();
-        generation++;
+        generation.incrementAndGet();
         moves.cancel();
         evaluator.cancel();
         baseline = null;
@@ -273,14 +287,7 @@ public final class ScreenService extends Service {
         baseline = null;
       }
       if (target != null && baseline != null && !different(baseline, fingerprint(frame, target))) {
-        if (settings.arrows() && !lastArrows.isEmpty() && !overlay.hasArrows()) {
-          Rect rect = new Rect(target);
-          boolean orientation = bottom;
-          main.post(
-              () -> {
-                if (running && !phoneVisible) overlay.show(targetGeometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):targetGeometry, orientation, lastArrows);
-              });
-        }
+        restoreArrows();
         return;
       }
       // Remove our own pixels only after a real board change; never blink unchanged arrows.
@@ -290,7 +297,7 @@ public final class ScreenService extends Service {
         return;
       }
       cleanFrame = false;
-      if (target == null && SystemClock.elapsedRealtime() - lastScan < 600) return;
+      if (target == null && SystemClock.elapsedRealtime() - lastScan < 250) return;
       lastScan = SystemClock.elapsedRealtime();
       reads++;
       BoardReader.Read read = reader.read(frame, target, settings.orientation());
@@ -339,6 +346,7 @@ public final class ScreenService extends Service {
       changed();
       if (changedPosition || !key.equals(lastAnalyzedSettings)) {
         lastAnalyzedSettings = key;
+        pinned=null;displayedFen="";displayedMove="";
         lastArrows = Collections.emptyList();
         analyze(position, new Rect(target), bottom);
       } else if (settings.arrows() && !lastArrows.isEmpty()) {
@@ -350,7 +358,7 @@ public final class ScreenService extends Service {
       status = "Read paused: " + error.getMessage();
       changed();
     } finally {
-      if (frame != null) frame.recycle();
+      if (frame != null&&frame!=cachedFrame) frame.recycle();
       if (running && capture != null) capture.postDelayed(this::tick, 75);
     }
   }
@@ -358,68 +366,30 @@ public final class ScreenService extends Service {
   private String lastAnalyzedSettings = "";
 
   private void analyze(ChessPosition board, Rect rect, boolean whiteBottom) {
-    long token = ++generation;
+    long token = generation.incrementAndGet();
     moves.cancel();
     evaluator.cancel();
     suggestion = "Thinking…";
-    evaluation = "Updating Stockfish evaluation…";
+    evaluation = "Updating "+EngineCatalog.get(settings.evaluator()).name()+" evaluation…";
     changed();
-    if (settings.backend().equals("Computer")) {
-      moveWorker.submit(
-          () -> {
-            try {
-              PhoneEngine.Result finalResult =
-                  remote.analyze(
-                      board,
-                      settings,
-                      () -> token == generation && running,
-                      r -> { if (settings.early()) publishMoves(r, board, rect, whiteBottom, token, false); },
-                      value -> {
-                        try {
-                          if (token != generation) return;
-                          org.json.JSONObject lead = value.optJSONObject("evaluation");
-                          if (lead == null) lead = value.getJSONArray("lines").getJSONObject(0);
-                          evaluation = value.getString("engine") + " · " + lead.getString("score");
-                          Integer cp = lead.isNull("cp") ? null : lead.getInt("cp"),
-                              mate = lead.isNull("mate") ? null : lead.getInt("mate");
-                          whiteShare =
-                              mate != null
-                                  ? (mate > 0 ? 1 : 0)
-                                  : cp != null ? (float) (1 / (1 + Math.exp(-cp / 250.))) : .5f;
-                          changed();
-                        } catch (Exception ignored) {
-                        }
-                      });
-              if (finalResult != null)
-                publishMoves(finalResult, board, rect, whiteBottom, token, true);
-            } catch (Exception error) {
-              if (token == generation) {
-                suggestion = "Computer: " + error.getMessage();
-                changed();
-              }
-            }
-          });
-      return;
+    if (board.legal().isEmpty()) {
+      boolean check=board.inCheck(board.white);suggestion=check?"Checkmate":"Draw · no legal moves";
+      evaluation=check?(board.white?"Black wins by checkmate":"White wins by checkmate"):"Stalemate";
+      whiteShare=check?(board.white?0:1):.5f;lastArrows=Collections.emptyList();main.post(()->overlay.clear());changed();return;
     }
-    if (!EngineFiles.ready(this)) {
-      suggestion = "Download the phone engine in On this phone → Engines";
-      changed();
-      return;
+    if (!EngineCatalog.ready(this,settings.engine())) {
+      suggestion="Download "+EngineCatalog.get(settings.engine()).name()+" in Models";changed();return;
     }
     moveWorker.submit(
         () -> {
           try {
-            PhoneEngine.Result result =
-                moves.search(
-                    this,
-                    board,
-                    settings,
-                    false,
-                    r -> { if (settings.early()) publishMoves(r, board, rect, whiteBottom, token, false); });
+            if(token!=generation.get()||!running)return;
+            PhoneEngine.Result result = moves.recommend(this,board,settings,()->token==generation.get()&&running,
+                r -> { if(settings.early())publishMoves(r,board,rect,whiteBottom,token,false); });
             publishMoves(result, board, rect, whiteBottom, token, true);
           } catch (CancellationException ignored) {
           } catch (Exception error) {
-            if (token == generation) {
+            if (token == generation.get()) {
               suggestion = "Engine: " + error.getMessage();
               changed();
             }
@@ -428,24 +398,15 @@ public final class ScreenService extends Service {
     evalWorker.submit(
         () -> {
           try {
-            PhoneEngine.Result result = evaluator.search(this, board, settings, true, null);
-            if (token != generation || result.lines().isEmpty()) return;
-            PhoneEngine.Line lead = result.lines().get(0);
-            evaluation =
-                "Stockfish · "
-                    + (lead.mate() != null
-                        ? "Mate " + lead.mate()
-                        : lead.cp() != null
-                            ? String.format(Locale.ROOT, "%+.2f", lead.cp() / 100.)
-                            : "—");
-            whiteShare =
-                lead.mate() != null
-                    ? (lead.mate() > 0 ? 1 : 0)
-                    : lead.cp() != null ? (float) (1 / (1 + Math.exp(-lead.cp() / 250.))) : .5f;
+            if(token!=generation.get()||!running)return;
+            if(!EngineCatalog.ready(this,settings.evaluator())){evaluation="Download "+EngineCatalog.get(settings.evaluator()).name()+" for evaluation";changed();return;}
+            LocalEngines.Evaluated result=evaluator.evaluate(this,board,settings);
+            if(token!=generation.get()||!running)return;
+            evaluation=result.text();whiteShare=result.whiteShare();
             changed();
           } catch (CancellationException ignored) {
           } catch (Exception error) {
-            if (token == generation) {
+            if (token == generation.get()) {
               evaluation = "Evaluation: " + error.getMessage();
               changed();
             }
@@ -454,6 +415,7 @@ public final class ScreenService extends Service {
   }
 
   private String displayedFen = "", displayedMove = "";
+  private PhoneEngine.Result pinned;
 
   private void publishMoves(
       PhoneEngine.Result result,
@@ -462,7 +424,11 @@ public final class ScreenService extends Service {
       boolean whiteBottom,
       long token,
       boolean finished) {
-    if (token != generation || result.lines().isEmpty() || !running) return;
+    if (token != generation.get() || result.lines().isEmpty() || !running) return;
+    if(settings.lockMove()){
+      if(pinned!=null&&pinned.fen().equals(result.fen()))result=pinned;
+      else pinned=result;
+    }else pinned=null;
     final BoardGeometry arrowGeometry=targetGeometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):targetGeometry;
     PhoneEngine.Line first = result.lines().get(0);
     if (settings.steady()
@@ -475,7 +441,13 @@ public final class ScreenService extends Service {
     List<String> arrows = new ArrayList<>();
     int rank = 0;
     for (PhoneEngine.Line line : result.lines()) {
-      if (settings.onlyMine() && board.white != whiteBottom) continue;
+      if (settings.onlyMine() && board.white != whiteBottom) {
+        if(rank==0&&settings.predict()&&line.pv().size()>1){
+          ChessPosition next=board.play(line.move());String reply=line.pv().get(1);
+          if(next.legal().contains(reply)){text.append("After ").append(board.simple(line.move())).append(":\n").append(next.simple(reply)).append(" · predicted");arrows.add(reply);rank++;}
+        }
+        continue;
+      }
       text.append(++rank).append(". ").append(board.simple(line.move())).append('\n');
       arrows.add(line.move());
       if (rank == 1 && settings.predict() && settings.predictionPlies()>1 && line.pv().size() > 1) {
@@ -499,8 +471,8 @@ public final class ScreenService extends Service {
     changed();
     main.post(
         () -> {
-          if (token == generation && running) {
-            if (settings.arrows()) overlay.show(arrowGeometry, whiteBottom, arrows);
+          if (token == generation.get() && running) {
+            if (settings.arrows()&&!phoneVisible) overlay.show(arrowGeometry, whiteBottom, arrows);
             else overlay.clear();
           }
         });
@@ -508,22 +480,23 @@ public final class ScreenService extends Service {
 
   @Override
   public void onDestroy() {
+    terminating=true;
     active = null;
     running = false;
-    generation++;
-    moves.close();
-    evaluator.close();
-    moveWorker.shutdownNow();
-    evalWorker.shutdownNow();
+    generation.incrementAndGet();
+    moves.cancel();
+    evaluator.cancel();
+    moveWorker.close(moves::close);
+    evalWorker.close(evaluator::close);
     main.removeCallbacksAndMessages(null);
     if (overlay != null) overlay.remove();
-    if (remote != null) new Thread(remote::cancel, "Stop-phone-compute").start();
     if (capture != null) {
       capture.removeCallbacksAndMessages(null);
       capture.post(
           () -> {
             if (display != null) display.release();
             if (images != null) images.close();
+            if(cachedFrame!=null){cachedFrame.recycle();cachedFrame=null;}
             if (projection != null) projection.stop();
             if (reader != null)
               try {
@@ -533,7 +506,7 @@ public final class ScreenService extends Service {
             if (captureThread != null) captureThread.quitSafely();
           });
     }
-    if (!status.startsWith("Stopped:")) status = "Stopped";
+    if (!status.startsWith("Stopped:")&&!status.startsWith("Screen sharing ended")) status = "Stopped";
     changed();
     stopForeground(STOP_FOREGROUND_REMOVE);
     super.onDestroy();

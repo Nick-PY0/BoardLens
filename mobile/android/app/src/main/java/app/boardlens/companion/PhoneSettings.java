@@ -8,8 +8,10 @@ final class PhoneSettings {
   final SharedPreferences p;
 
   PhoneSettings(Context c) {
-    p = c.getSharedPreferences("phone-screen", 0);
+    this(c,"phone-screen");
   }
+
+  PhoneSettings(Context c,String name){p=c.getSharedPreferences(name,0);}
 
   float seconds() {
     return p.getFloat("seconds", .5f);
@@ -39,6 +41,8 @@ final class PhoneSettings {
     return p.getBoolean("steady", true);
   }
 
+  boolean lockMove(){ return p.getBoolean("lock_move",false); }
+
   boolean predict() {
     return p.getBoolean("predict", true);
   }
@@ -65,9 +69,9 @@ final class PhoneSettings {
     return p.getString("mode", "Time + depth");
   }
 
-  String backend() {
-    return p.getString("backend", "On phone");
-  }
+  int rating() { return p.getInt("rating",1500); }
+
+  String backend() { return "On phone"; }
 
   String engine() {
     return p.getString("engine", "stockfish");

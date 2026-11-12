@@ -11,6 +11,6 @@ cd src
 host=linux-x86_64
 [ "$(uname -s)" != Darwin ] || host=darwin-x86_64
 compiler="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$host/bin/aarch64-linux-android29-clang++"
-make -j4 all ARCH=armv8 COMP=ndk CXX="$compiler" EXTRACXXFLAGS=-DNNUE_EMBEDDING_OFF EXE=libstockfish.so
+make -j4 all ARCH=armv8 COMP=ndk CXX="$compiler" EXTRACXXFLAGS=-DNNUE_EMBEDDING_OFF EXTRALDFLAGS="-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384" EXE=libstockfish.so
 mkdir -p ../../../app/src/main/jniLibs/arm64-v8a
 cp libstockfish.so ../../../app/src/main/jniLibs/arm64-v8a/

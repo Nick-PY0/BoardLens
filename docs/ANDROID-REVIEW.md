@@ -1,6 +1,6 @@
 # BoardLens Android review packet
 
-Status: APK withheld after Google Play Protect blocked the replacement public APK on November 11, 2026. No installation was forced and no protection was disabled. The alert only stated "Harmful app blocked" and "This app may be harmful"; the trigger has not been established. This is not a claim that the warning is a false positive.
+Historical candidate status: APK withheld after Google Play Protect blocked the replacement public APK on November 11, 2026. No installation was forced and no protection was disabled. The alert only stated "Harmful app blocked" and "This app may be harmful"; the trigger has not been established. This is not a claim that the warning is a false positive.
 
 - Package: app.boardlens.companion
 - Version: 1.5.0, code 7
@@ -22,4 +22,4 @@ https://support.google.com/googleplay/android-developer/answer/2992033?hl=en
 
 No appeal has been submitted. Any message to Google needs the owner's authorization and review of this packet. Do not change identities/signatures or disable protections to evade the block.
 
-The blocked candidate corresponds to source commit 1b3760c. Later source-only fixes are available on main; they have not been cleared for APK distribution.
+The blocked candidate corresponds to source commit 1b3760c. Android 1.7.0 is a later, separately signed build with local Maia and original Tiny engines. It preserves this package identity and release certificate. Host/model tests and the complete APK build pass; the exact new APK has not been installed or tested on the physical A35, and no successful Play Protect review or clearance is claimed. The owner will perform normal installation and device testing. See mobile/TEST-REPORT.txt.

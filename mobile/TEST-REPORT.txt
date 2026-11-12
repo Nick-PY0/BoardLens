@@ -1,30 +1,33 @@
-BOARDLENS 2.15 / ANDROID 1.6 — NOVEMBER 11, 2026
+BOARDLENS ANDROID 1.7.0 / CODE 9 — NOVEMBER 11, 2026
 
-193 desktop automated tests passed on macOS with real Stockfish 19.
-Android source compilation and 10 JVM tests (rules and projected geometry) pass.
-The shared companion UI rendered at 384 CSS pixels without horizontal overflow
-in an isolated Android component harness. Header and navigation clear system
-bars. This harness has no capture, overlay, engine or network permission.
-The native phone dashboard uses the same style and reusable view components.
+All four optional Maia models match the official PyTorch legal top move in
+39 position/rating cases each: 156 parity checks. Cases cover Black orientation,
+castling, en passant, promotion and seeded random positions. Exact sources,
+checkpoint hashes, converted hashes and license texts are included.
 
-Maia 2, Maia 3 5M/23M/79M and Boychesser returned legal five-ply continuations
-with the new controls. CopyCat passed at a 0.6s clock budget; an initial 0.15s
-budget failed under heavy host load. A budget is a limit, not a guarantee.
+All 12 original Tiny bots passed 72 legal/terminal-position host checks.
+Cancellation stopped a running search in about 42 ms on the Mac test host.
+The complete .NET Android build packages the JNI bridge and original C# bots.
+Gradle-only builds are components and omit that runtime.
 
-The new recognition coverage JSON records exact synthetic theme and Android
-fixture results, including failed or uncertain styles. These are component
-tests, not a claim that every live board, theme or 3D pose works. The physical
-A35 was not modified/tested. Updated full-app background capture was not
-verified through the new APK in these component tests.
+23 Android JVM/Robolectric tests pass and cover chess rules, projected board geometry,
+recognized-position validity, Maia input encoding against upstream fixtures,
+padded RGBA sampling, latest-only queues, cleanup ordering, UCI cancellation/result isolation,
+independent Android release discovery, native dashboard controls and a narrow
+360-pixel layout. Release lint passes with no errors. The native component
+preview was visually inspected; it does not run capture or overlay services.
 
-The Mac app's embedded launcher keeps capture attributed to BoardLens.
-User-approved screen access restored actual live board detection in 2.14.
-The permission page gates first launch and returns if required access is lost.
-The app is installed in Applications; Downloads points to the installed app.
-Automatic updates preserve settings and optional engine data.
+Stockfish was rebuilt with 16 KB ELF load alignment. The signed release keeps
+the existing package identity/certificate. Models are optional data downloads,
+SHA-256 checked; no inference server/computer is used by phone-screen engines.
 
-Earlier full development-app live capture tests are historical evidence only.
-Play Protect blocked the 1.5.0/code7 release candidate, which remains retained
-for review. No successful release upgrade or physical-device result is inferred.
+The existing synthetic automatic discovery sweep was 160/186 exact, 26 rejected,
+zero accepted wrong. This does not establish all themes or 3D camera angles.
+No claim is made that hidden/occluded/protected boards can be read.
 
-Final synthetic Android discovery sweep: 160/186 exact, 26 rejected, zero accepted wrong. No universal theme/3D claim.
+This exact APK has NOT been installed or live-tested on the physical A35.
+The owner chose to perform phone installation/testing. Host checks do not prove
+Android JNI execution, screen sharing, overlay touch pass-through or background
+longevity. Models → Test installed engines provides a device execution check.
+Normal Android installation/security checks remain enabled. Earlier 1.5/code7
+was blocked by Play Protect; this version has no observed review/clearance.

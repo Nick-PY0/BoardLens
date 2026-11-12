@@ -22,3 +22,6 @@ tools/recognition/*.pt
 tools/recognition/*.onnx
 tools/recognition/catalog.json
 tools/recognition/downloads.json
+
+**/bin/
+**/obj/

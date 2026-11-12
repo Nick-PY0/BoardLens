@@ -23,16 +23,16 @@ No paid AI subscription is required. Normal recognition and engine analysis run 
 
 These new previews render shared production views in an isolated Android component harness. No capture or overlay service runs in that harness.
 
-**Phone analysis** uses the companion’s visual style and appears in its menu. It reads a supported visible board in another Android app, analyzes locally with native Stockfish 19, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
+**Phone analysis** uses the companion’s visual style and appears in its menu. It reads a supported visible board in another Android app, analyzes locally with Stockfish 19, Maia 2, all three Maia 3 sizes, or the twelve original Tiny bots, and draws passive arrows that let taps reach the board. It has its own Start, Stop, Scan now, engine limits, candidates, orientation and saved settings. Local analysis needs Android 10+ and an arm64 CPU; its verified 99 MB Stockfish data file downloads only when requested.
 
-**Computer companion** keeps the existing Wi-Fi desktop dashboard. Pair once to optionally use the computer's installed engines for phone-screen positions too. Maia-2, all Maia-3 sizes, Flounder, Tiny bots and custom UCI providers stay computer-backed. Only the recognized FEN is sent; phone screenshots stay on the phone. Choosing a phone engine never changes the desktop engine or game.
+**Computer companion** keeps the existing Wi-Fi desktop dashboard as a separate section. Phone screen analysis needs no computer or pairing. Maia models are optional, checksum-verified downloads; the twelve original C# Tiny bots are built into the complete APK. Phone settings never change the desktop engine or game. Models → Test installed engines checks actual execution on your device.
 
 The evaluation provider is independent of the move provider: use Stockfish to score the bar while Maia recommends moves. One-move providers can publish their first move, then predict the opponent's reply and your next move. Non-streaming models must finish their first inference before an early result exists. Predictions are possible continuations, not guaranteed play.
 
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
 
-> **Android APK withheld:** Play Protect blocked the replacement 1.5.0 release candidate after scanning it. Installation was stopped and the APK removed. The phone-scanning feature is available in source and development tests; it is not cleared for normal Android installation. The browser companion remains available. [Review status →](docs/ANDROID-REVIEW.md)
+> **Android 1.7:** [Download the phone-only APK](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.7.0). Host/model checks and the full APK build pass; this exact APK still needs physical A35 installation and live capture/overlay testing. Keep normal Android security checks enabled. [Test status →](mobile/TEST-REPORT.txt)
 
 ## Download & start
 
@@ -114,7 +114,7 @@ Different engines expose different capabilities. Maia predicts human moves; Tiny
 
 Desktop automatically checks and downloads checksum-verified stable updates, then applies them at the next launch with rollback and preserved user data. Switch this off under **Board → App**. Android automatically checks releases and opens GitHub for installation through Android; it has no custom APK installer or install-packages permission. [Update and release details →](docs/UPDATES.md)
 
-The first public release is **v1.0.0**. The new desktop is **2.15.2**, with Android **1.6.0** in development. See the latest release for the exact downloadable build and installation-test status.
+The first public release is **v1.0.0**. The new desktop is **2.15.2**, with Android **1.7.0** available separately. See the latest release for the exact downloadable build and installation-test status.
 
 ## What is verified
 
