@@ -27,3 +27,7 @@ Downloads are optional and selected manually. Tiny Bot ratings are tournament re
 Stockfish styles rerank close candidates where supported; these are GUI selection styles. The evaluation bar uses the strongest searched score even when the strength-limited recommendation differs. Maia scores describe human-game outcome estimates. Large Maia models download separate runtimes. Comparison can run two or three providers.
 
 Attributions and pinned upstream references are in `desktop/THIRD-PARTY.txt`.
+
+## Android 1.7 local engines
+
+Phone screen analysis needs no computer. Stockfish, Maia 2, all Maia 3 sizes, Flounder strength mode and the twelve original Tiny bots run on the phone. Tiny bots are built in; neural-model data downloads are optional. Computer companion remains a separate desktop dashboard. [Phone setup, model sizes, controls and device-test limits →](../mobile/android/PHONE-SCREEN.md)

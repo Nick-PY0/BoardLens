@@ -36,14 +36,14 @@ Phone capture is explicit, user-started MediaProjection with an ongoing Stop not
 
 ## Download & start
 
-Get the files from [Releases](https://github.com/Nick-PY0/BoardLens/releases/latest).
+Get [desktop downloads](https://github.com/Nick-PY0/BoardLens/releases/latest) or [Android 1.7](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.7.0).
 
 | Device | Download | Start |
 | --- | --- | --- |
 | Mac (Apple Silicon) | `BoardLens-Mac-AppleSilicon.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Mac (Intel) | `BoardLens-Mac-Intel.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Windows 10/11 (64-bit) | `BoardLens-Windows-x64.zip` | Extract the entire folder, then open **BoardLens.exe**. Keep Resources beside it. |
-| Android | Phone browser for now; APK temporarily withheld | Open the desktop companion address on the same Wi-Fi. |
+| Android | [BoardLens Android APK](https://github.com/Nick-PY0/BoardLens/releases/download/android-v1.7.0/BoardLens-Companion-Android.apk) | Phone screen → Settings → Models & downloads, then Start. Computer companion is optional. |
 | iPhone / iPad | Phone browser, or unsigned iOS source ZIP | Open the desktop companion address. Native source needs Xcode and your signing setup. |
 
 The desktop app includes a private Python runtime, recognition models and Stockfish 19. No Terminal or Python installation is required. The first launch prepares its files in your user profile; later launches reuse them. Settings and optional engines remain in the normal BoardLens app-data folder, including when upgrading from the source version. Optional engines download only when selected. The Mac apps are ad-hoc signed, not notarized; Windows is unsigned. [Desktop installation and build details →](docs/DESKTOP-APPS.md)
