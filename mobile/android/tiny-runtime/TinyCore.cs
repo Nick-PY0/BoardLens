@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Text.Json;
 
 namespace BoardLens.Mobile;
+// Mobile cache size, per bot/color. Original desktop tables used 128–384 MiB.
+public static class TinyMemory { public const int HashEntries=1<<18; }
 public static class TinyBudget {
  static long generation;
  [ThreadStatic] static long token;
@@ -10,9 +12,12 @@ public static class TinyBudget {
  public static long Token()=>Interlocked.Read(ref generation);
  public static void Begin(int milliseconds,long captured) { token=captured;deadline=Stopwatch.GetTimestamp()+(long)((milliseconds+200)/1000.0*Stopwatch.Frequency); }
  public static void Cancel() => Interlocked.Increment(ref generation);
+ public static void CheckCancelled() {
+  if(token!=Interlocked.Read(ref generation))throw new OperationCanceledException("Analysis cancelled");
+ }
  public static void Check() {
   if(deadline==0)return;
-  if(token!=Interlocked.Read(ref generation))throw new OperationCanceledException("Analysis cancelled");
+  CheckCancelled();
   if(Stopwatch.GetTimestamp()>deadline)throw new TimeoutException("Bot exceeded the thinking budget. Increase its think time.");
  }
  public static void End()=>deadline=0;
@@ -34,11 +39,14 @@ public static class TinyCore {
    TinyBudget.Begin(milliseconds,requested);
    try {
     TinyBudget.Check();var chosen=bot.Think(board,new ChessChallenge.API.Timer(milliseconds*10,milliseconds*10,milliseconds*10,0));
-    TinyBudget.Check();if(!legal.Any(m=>m.RawValue==chosen.RawValue))throw new InvalidOperationException("The selected bot did not return a legal move");
+    // Some bots catch a clock timeout and return the best completed iteration.
+    // Preserve that legal result; cancellation must still discard stale work.
+    TinyBudget.CheckCancelled();if(!legal.Any(m=>m.RawValue==chosen.RawValue))throw new InvalidOperationException("The selected bot did not return a legal move");
     string move=chosen.StartSquare.Name+chosen.TargetSquare.Name+(chosen.IsPromotion?chosen.PromotionPieceType switch{PieceType.Queen=>"q",PieceType.Rook=>"r",PieceType.Bishop=>"b",_=>"n"}:"");
     return JsonSerializer.Serialize(new{move,elapsed_ms=watch.ElapsedMilliseconds,engine="tiny"+id});
    } finally { TinyBudget.End(); }
   }
  }
  public static void Cancel()=>TinyBudget.Cancel();
+ public static void Release(){Cancel();lock(instances){instances.Clear();selected=-1;GC.Collect();}}
 }

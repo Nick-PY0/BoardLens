@@ -20,10 +20,10 @@ public final class ModelDownloads extends Service {
   for(String id:ids)if(!queue.contains(id)&&!current.equals(id))queue.add(id);
   if(worker!=null)return START_NOT_STICKY;
   getSystemService(NotificationManager.class).createNotificationChannel(new NotificationChannel("models","Engine downloads",NotificationManager.IMPORTANCE_LOW));
-  cancelled.set(false);running=true;notifyProgress("Preparing engine downloads");
+  cancelled.set(false);running=true;try{notifyProgress("Preparing engine downloads");}catch(RuntimeException denied){running=false;message="Android could not start this download · open Models to retry";changed();stopSelf();return START_NOT_STICKY;}
   worker=new Thread(()->{
    try{String id;while(!cancelled.get()&&(id=queue.poll())!=null){current=id;String label=EngineCatalog.get(id).name();message="Downloading "+label;progress=0;changed();
-    EngineFiles.Progress update=(got,total)->{int next=(int)(got*100/Math.max(1,total));if(next!=progress){progress=next;message="Downloading "+label+" · "+next+"%";changed();main.post(()->notifyProgress(message));}};
+    EngineFiles.Progress update=(got,total)->{int next=(int)(got*100/Math.max(1,total));if(next!=progress){progress=next;message="Downloading "+label+" · "+next+"%";changed();main.post(()->{try{notifyProgress(message);}catch(RuntimeException denied){cancelled.set(true);message="Download paused by Android · retry in Models";changed();}});}};
     if(id.equals("stockfish"))EngineFiles.download(this,cancelled::get,update);else PhoneModels.download(this,id,cancelled::get,update);
     message=label+" is ready";changed();
    }if(cancelled.get())message="Download cancelled";else message="Selected models are ready";

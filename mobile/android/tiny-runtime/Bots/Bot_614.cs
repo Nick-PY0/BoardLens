@@ -13,14 +13,14 @@ public class Bot_614 : IChessBot
 
     Move searchBestMove, rootBestMove;
 
-    // this tuple is 24 bytes, so the transposition table is precisely 192MiB (~201 MB)
+    // Mobile adaptation: bounded table, 6 MiB per color instead of 192 MiB.
     readonly (
         ulong, // hash
         ushort, // moveRaw
         int, // score
         int, // depth
         int // bound BOUND_EXACT=[1, 2147483647), BOUND_LOWER=2147483647, BOUND_UPPER=0
-    )[] transpositionTable = new (ulong, ushort, int, int, int)[0x800000];
+    )[] transpositionTable = new (ulong, ushort, int, int, int)[BoardLens.Mobile.TinyMemory.HashEntries];
 
     // piece-to history tables, per-color
     readonly int[,,] history = new int[2, 7, 64];
@@ -81,7 +81,7 @@ public class Bot_614 : IChessBot
         if (timer.MillisecondsElapsedThisTurn >= maxSearchTime && searchingDepth > 1)
             throw new Exception();
 
-        ref var tt = ref transpositionTable[board.ZobristKey & 0x7FFFFF];
+        ref var tt = ref transpositionTable[board.ZobristKey & (ulong)(transpositionTable.Length-1)];
         var (ttHash, ttMoveRaw, score, ttDepth, ttBound) = tt;
 
         bool

@@ -5,6 +5,7 @@ namespace BoardLens.Mobile;
 [Preserve(AllMembers=true)]
 public class TinyRuntime:Java.Lang.Object {
  [Export] public TinyRuntime(){}
- [Export("search")] public string Search(int id,string fen,int milliseconds) { try { return TinyCore.Search(id,fen,milliseconds); } catch(Exception error) { return System.Text.Json.JsonSerializer.Serialize(new { error=error.Message, cancelled=error is OperationCanceledException }); } }
+ [Export("search")] public string Search(int id,string fen,int milliseconds) { try { return TinyCore.Search(id,fen,milliseconds); } catch(Exception error) { return System.Text.Json.JsonSerializer.Serialize(new { error=error.GetBaseException().Message, cancelled=error is OperationCanceledException }); } }
  [Export("cancel")] public void Cancel()=>TinyCore.Cancel();
+ [Export("release")] public void Release()=>TinyCore.Release();
 }

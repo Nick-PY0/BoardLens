@@ -4,7 +4,7 @@ using System;
 
 public class Bot_529 : IChessBot
 {
-    readonly (ulong, Move, int, int, byte)[] tt = new (ulong, Move, int, int, byte)[1048576];
+    readonly (ulong, Move, int, int, byte)[] tt = new (ulong, Move, int, int, byte)[BoardLens.Mobile.TinyMemory.HashEntries];
 
     public Move Think(Board board, Timer timer)
     {
@@ -28,7 +28,7 @@ public class Bot_529 : IChessBot
 
             bool qs = depth <= 0;
             ulong key = board.ZobristKey;
-            var (ttKey, ttMove, ttDepth, score, ttFlag) = tt[key % 1048576];
+            var (ttKey, ttMove, ttDepth, score, ttFlag) = tt[key % (ulong)tt.Length];
             int bestScore = -30000, moveIdx = 0;
 
             // Check for draw by repetition
@@ -126,7 +126,7 @@ public class Bot_529 : IChessBot
                 }
             }
 
-            tt[key % 1048576] = (key, ttMove, depth, bestScore, ttFlag);
+            tt[key % (ulong)tt.Length] = (key, ttMove, depth, bestScore, ttFlag);
 
             return bestScore;
         }

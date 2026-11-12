@@ -51,7 +51,7 @@ using static System.Math;
 public class Bot_628 : IChessBot
 {
 
-    private (ulong, Move, short, byte, sbyte)[] tt = new (ulong, Move, short, byte, sbyte)[0x80_0000];
+    private (ulong, Move, short, byte, sbyte)[] tt = new (ulong, Move, short, byte, sbyte)[BoardLens.Mobile.TinyMemory.HashEntries];
 
     private Move bestRootMove;
 
@@ -95,7 +95,7 @@ public class Bot_628 : IChessBot
         {
             if (board.IsRepeatedPosition())
                 return 0;
-            ulong ttIndex = board.ZobristKey & 0x7f_ffff;
+            ulong ttIndex = board.ZobristKey & (ulong)(tt.Length-1);
             var (ttKey, bestMove, ttScore, ttFlag, ttDepth) = tt[ttIndex];
 
             bool isNotPvNode = alpha + 1 >= beta,

@@ -20,6 +20,7 @@ final class MaiaLocal implements AutoCloseable {
   @Override protected boolean removeEldestEntry(Map.Entry<Key,Ranked> entry){return size()>64;}
  };
  private long inferenceCount,cacheHits;
+ private final Object runLock=new Object();
  private volatile OrtSession.RunOptions active;
  private volatile boolean cancelled;
  void prepare(Context c,String id,int requestedThreads)throws Exception{
@@ -50,9 +51,9 @@ final class MaiaLocal implements AutoCloseable {
   float[] data=MaiaEncoding.board(board,two);
   try(OnnxTensor input=OnnxTensor.createTensor(env,FloatBuffer.wrap(data),two?new long[]{1,18,8,8}:new long[]{1,64,97});
       OnnxTensor self=OnnxTensor.createTensor(env,LongBuffer.wrap(new long[]{elo}),new long[]{1});
-      OnnxTensor opponent=OnnxTensor.createTensor(env,LongBuffer.wrap(new long[]{elo}),new long[]{1});
-      OrtSession.RunOptions options=new OrtSession.RunOptions()){
-   active=options;if(cancelled)options.setTerminate(true);
+      OnnxTensor opponent=OnnxTensor.createTensor(env,LongBuffer.wrap(new long[]{elo}),new long[]{1})){
+   OrtSession.RunOptions options=beginRun();
+   try{
    Map<String,OnnxTensor> inputs=new HashMap<>();inputs.put("board",input);inputs.put("self_rating",self);inputs.put("opponent_rating",opponent);
    inferenceCount++;
    try(OrtSession.Result output=session.run(inputs,options)){
@@ -66,7 +67,8 @@ final class MaiaLocal implements AutoCloseable {
     if(cancelled)throw new CancellationException();
     Ranked ranking=new Ranked(List.copyOf(legal),expected);cache.put(key,ranking);
     return result(board,id,count,ranking);
-   }finally{active=null;}
+   }
+   }finally{endRun(options);}
   }
  }
  private Prediction result(ChessPosition board,String id,int count,Ranked ranked){
@@ -74,6 +76,14 @@ final class MaiaLocal implements AutoCloseable {
   for(String move:ranked.moves().subList(0,Math.min(count,ranked.moves().size())))lines.add(new PhoneEngine.Line(move,null,null,1,Collections.singletonList(move)));
   return new Prediction(new PhoneEngine.Result(board.fen(),EngineCatalog.get(id).name(),lines),ranked.whiteExpected());
  }
- void cancel(){cancelled=true;OrtSession.RunOptions options=active;if(options!=null)try{options.setTerminate(true);}catch(OrtException ignored){}}
+ private OrtSession.RunOptions beginRun()throws OrtException{
+  synchronized(runLock){OrtSession.RunOptions options=new OrtSession.RunOptions();active=options;if(cancelled)options.setTerminate(true);return options;}
+ }
+ private void endRun(OrtSession.RunOptions options){
+  // Cancellation and disposal share ownership of the native RunOptions handle.
+  // A cancel request must never keep a pointer after inference closes it.
+  synchronized(runLock){if(active==options)active=null;options.close();}
+ }
+ void cancel(){cancelled=true;synchronized(runLock){if(active!=null)try{active.setTerminate(true);}catch(OrtException ignored){}}}
  public void close(){cancel();try{if(session!=null)session.close();}catch(OrtException ignored){}session=null;cache.clear();}
 }

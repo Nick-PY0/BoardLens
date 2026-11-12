@@ -13,16 +13,26 @@ final class LocalEngines implements AutoCloseable {
  LocalEngines(){this(System::nanoTime);}
  LocalEngines(java.util.function.LongSupplier clock){this.clock=clock;}
  private volatile boolean cancelled;
+ private String backend="";
+ private void selectBackend(EngineCatalog.Entry selected){
+  String next=selected.maia()?"maia":selected.tiny()?"tiny":"uci";
+  if(next.equals(backend))return;
+  if(!next.equals("maia"))maia.close();
+  if(!next.equals("tiny"))tiny.close();
+  if(!next.equals("uci"))stockfish.close();
+  backend=next;
+ }
  void prepare(Context c,PhoneSettings settings,boolean eval)throws Exception{
   if(eval&&!settings.evaluationEnabled())return;
   String id=eval?settings.evaluator():settings.engine();EngineCatalog.Entry engine=EngineCatalog.get(id);
+  selectBackend(engine);
   if(!EngineCatalog.ready(c,id))return;
   if(engine.maia())maia.prepare(c,engine.id(),settings.threads());
   else if(!engine.tiny())stockfish.prepare(c,engine.id(),settings,eval);
  }
 
  private PhoneEngine.Result one(Context c,ChessPosition board,PhoneSettings settings,String id,boolean eval,PhoneEngine.Update update)throws Exception{
-  if(cancelled)throw new CancellationException();EngineCatalog.Entry engine=EngineCatalog.get(id);
+  if(cancelled)throw new CancellationException();EngineCatalog.Entry engine=EngineCatalog.get(id);selectBackend(engine);
   if(engine.maia())return maia.search(c,board,engine.id(),settings.rating(),eval?1:settings.moves(),settings.threads()).result();
   if(engine.tiny())return tiny.search(board,engine.id(),Math.max(50,Math.round(settings.seconds()*1000)));
   return stockfish.search(c,board,settings,eval,update,engine.id());
@@ -60,6 +70,7 @@ final class LocalEngines implements AutoCloseable {
  Evaluated evaluate(Context c,ChessPosition board,PhoneSettings settings,java.util.function.Consumer<Evaluated> update)throws Exception{
   if(!settings.evaluationEnabled()){close();return new Evaluated("Evaluation off",.5f,"Off");}
   cancelled=false;String id=EngineCatalog.get(settings.evaluator()).id();EngineCatalog.Entry engine=EngineCatalog.get(id);
+  selectBackend(engine);
   if(engine.maia()){
    MaiaLocal.Prediction prediction=maia.search(c,board,id,settings.rating(),1,settings.threads());String value=String.format(Locale.ROOT,"%.2f",prediction.whiteExpected());
    Evaluated result=new Evaluated(engine.name()+" · human expected score "+value,prediction.whiteExpected(),value+" exp.");if(update!=null)update.accept(result);return result;
@@ -68,5 +79,5 @@ final class LocalEngines implements AutoCloseable {
   if(result.lines().isEmpty())return new Evaluated("No evaluation",.5f,"…");return score(engine.name(),result.lines().get(0));
  }
  void cancel(){cancelled=true;stockfish.cancel();maia.cancel();tiny.cancel();}
- public void close(){cancel();stockfish.close();maia.close();tiny.close();}
+ public void close(){cancel();stockfish.close();maia.close();tiny.close();backend="";}
 }

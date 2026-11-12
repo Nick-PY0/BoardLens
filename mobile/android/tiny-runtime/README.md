@@ -20,4 +20,6 @@ The full unsigned package is `bin/Release/net10.0-android/android-arm64/app.boar
 dotnet run --project Host/Host.csproj -c Release
 ```
 
-The host check covers all 12 bots across 72 legal/terminal-position cases and cancellation. It does not establish Android JNI or physical-device performance. The app's Models → Test installed engines runs actual device inference without requiring screen-sharing access. Android 10+/ARM64 is required for local screen analysis.
+Mobile caches in six large-cache bots are capped at 262,144 entries. Boychesser uses about 6 MiB per color instead of 192 MiB. TinyHugeBot’s original MIT payload is rebuilt into a normally referenced assembly with valid metadata and four bounded table operands. The reproducible adaptation is in `Vendor/TinyHuge`; there is no runtime packed-DLL decoder or AssemblyResolve hook. Smaller caches can affect strength; published competition ratings are reference results. Unused backends are released when changing engine families.
+
+The host check covers all 12 bots across 72 legal/terminal-position cases, 36 short-budget cases matching the reported screen position, cancellation and a managed-memory ceiling. It does not establish Android JNI or physical-device performance. The app's Models → Test installed engines runs actual device inference without requiring screen-sharing access. Android 10+/ARM64 is required for local screen analysis.

@@ -4,7 +4,7 @@ namespace auto_Bot_266;
 /* Explained */                          using ChessChallenge.API;
 /* Bot       */                       using static System.Math;public
                                     class MyBot:IChessBot{static E[]tr=
-                                   new E[16777216];float bc=121,b;bool o
+                                   new E[BoardLens.Mobile.TinyMemory.HashEntries];float bc=121,b;bool o
                                   ;Timer t;Board bo;float eg(bool wh){int
                                  s=0;foreach(var pl in bo.GetAllPieceLists
                                 ())if(pl.IsWhitePieceList==wh)s+=(0x0942200
@@ -24,7 +24,7 @@ namespace auto_Bot_266;
                       return(0,default,bo.IsInStalemate()||bo.IsInsufficientMaterial()
                      );if(dL==0){++dL;if(bo.IsInCheck()&&cL>0)--cL;else if(!co&&cL==4)
                      return SE(0x08,cL,true,a,b);else return(EB(),default,true);}ulong
-                     k=bo.ZobristKey;E ta=tr[k%16_7_7_7_2_16];int bS=-32150,s;Move be=
+                     k=bo.ZobristKey;E ta=tr[k%(ulong)tr.Length];int bS=-32150,s;Move be=
                       default;if(ta.K==k&&Abs(ta.D)>=dL){bo.MakeMove(ta.M);bool tD=bo.
                       IsDraw();bo.UndoMove(ta.M);if(tD)ta=default;else{a=Max(a,bS=ta.
                        S);be=ta.M;if(b<a||ta.D>=0)return(ta.S,ta.M,true);}}if(co&&(s
@@ -40,7 +40,7 @@ namespace auto_Bot_266;
               dL>=3&&++lv>=4&&!m.IsCapture){s=-SE(dL-2,cL,co,-b,-a).Item1;if(o)break;if(s<bS)
             continue;}(s,_,cU)=SE(dL-01,cL,co,-b,-a);if(o)break;s=-s+(Abs(s)>=30000?Sign(s):0);
           if(s<=bS)continue;bS=s;be =m;a=Max(a,s);cT=cU;if(ax=b<a){ km.Add(m);break;}}finally{bo.
-        UndoMove(m);}}if(!o&&!co&&cT&&bS!=0)tr[k%16777216]=new E{K=k,D=(short)(ax?-dL:dL),S=(short)
+        UndoMove(m);}}if(!o&&!co&&cT&&bS!=0)tr[k%(ulong)tr.Length]=new E{K=k,D=(short)(ax?-dL:dL),S=(short)
        bS,M=be};return(bS,be,cT);}public Move Think(Board c,Timer ti){bo=c;t=ti;b=Min(0.0333333333f,
       2.0f/--bc)*ti.MillisecondsRemaining;o=false;km.Clear();Move M=default,m;int d=0;while(++d<=15&&
      !o)if((m=SE(d,4,false,-32200,32200).Item2)!=default)M=m;return M==default?c.GetLegalMoves()[0]:M;

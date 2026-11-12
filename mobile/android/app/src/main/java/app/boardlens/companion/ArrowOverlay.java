@@ -2,6 +2,7 @@ package app.boardlens.companion;
 
 import android.content.Context;
 import android.graphics.*;
+import android.animation.ValueAnimator;
 import android.view.*;
 import java.util.*;
 
@@ -17,6 +18,8 @@ final class ArrowOverlay extends View {
   private boolean evaluationVisible;private String score="…",evaluationPosition="Auto";private float whiteShare=.5f;private volatile RectF evaluationBounds;
   private final Paint pen = new Paint(3);
   private final int[] colors = {0xffffd16c, 0xff51d9da, 0xffb0a4ff};
+  private ValueAnimator evaluationAnimation;
+  private float evaluationTarget=.5f;
 
   ArrowOverlay(Context c) {
     super(c);
@@ -30,7 +33,16 @@ final class ArrowOverlay extends View {
 
   void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows){show(geometry,whiteBottom,arrows,false,"…",.5f,"Auto");}
   void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows,boolean showEvaluation,String label,float share,String placement){
-    evaluationVisible=showEvaluation;score=label;whiteShare=Math.max(0,Math.min(1,share));evaluationPosition=placement;
+    evaluationVisible=showEvaluation;score=label;evaluationPosition=placement;
+    float target=Math.max(0,Math.min(1,share));
+    if(target!=evaluationTarget){
+      if(evaluationAnimation!=null)evaluationAnimation.cancel();
+      evaluationTarget=target;
+      if(showEvaluation&&ValueAnimator.areAnimatorsEnabled()){
+        evaluationAnimation=ValueAnimator.ofFloat(whiteShare,target);evaluationAnimation.setDuration(200);
+        evaluationAnimation.addUpdateListener(a->{whiteShare=(float)a.getAnimatedValue();invalidate();});evaluationAnimation.start();
+      }else whiteShare=target;
+    }
 
     if(!android.provider.Settings.canDrawOverlays(getContext())){clear();remove();return;}
     projection=geometry;double[] bounds=geometry.bounds();
@@ -64,8 +76,10 @@ final class ArrowOverlay extends View {
               ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
               : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
       p.setTitle("BoardLens move arrows");
-      wm.addView(this, p);
-      attached = true;
+      try{wm.addView(this, p);attached = true;}
+      catch(SecurityException|WindowManager.BadTokenException denied){
+        clear();ScreenService.diagnostic="Overlay permission unavailable · enable Display over other apps";return;
+      }
     }
     invalidate();
   }
@@ -84,6 +98,7 @@ final class ArrowOverlay extends View {
   }
 
   void remove() {
+    if(evaluationAnimation!=null)evaluationAnimation.cancel();
     if (attached) {
       try{wm.removeView(this);}catch(IllegalArgumentException ignored){}finally{attached=false;}
     }

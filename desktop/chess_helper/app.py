@@ -747,9 +747,11 @@ class MainWindow(QMainWindow):
         self.seconds.setRange(.1, 300)
         self.seconds.setSingleStep(.5)
         self.seconds.setSuffix(" s")
-        controls.addRow("Think time", self.seconds)
+        self.seconds.setToolTip("Time budget per position. Tiny bots use their own clock strategy and may finish early. Maia is a single inference pass.")
+        controls.addRow("Time budget", self.seconds)
         self.depth = QSpinBox()
         self.depth.setRange(1, 60)
+        self.depth.setToolTip("Search depth cap for engines that support UCI depth. Tiny bots and Maia do not expose a depth setting.")
         controls.addRow("Search depth", self.depth)
         self.multipv = QSpinBox()
         self.multipv.setRange(1, 10)
@@ -1298,7 +1300,7 @@ class MainWindow(QMainWindow):
                f"{self.seconds.value():g} seconds or depth {self.depth.value()}, whichever comes first")
         if mode=="Adaptive":limit=f"adaptive search, up to {self.seconds.value():g}s and depth {self.depth.value()}"
         if engine_config.is_tiny(self):limit=f"{self.seconds.value():g}s bot clock budget (no depth control)"
-        self.limit_label.setText("Maia: one pass per position. Use prediction length and reply budget below." if engine_config.is_human(self) else "Active search limit: "+limit)
+        self.limit_label.setText("Maia: one prediction pass · no time/depth search. Reply budget applies below." if engine_config.is_human(self) else "Active search limit: "+limit)
         self.update_engine_summary()
 
     def set_always_top(self, enabled):
@@ -1516,7 +1518,7 @@ class MainWindow(QMainWindow):
         except Exception as exc:
             self.status(str(exc))
 
-    def invalidate(self, preserve_eval=False, release_move=False):
+    def invalidate(self, preserve_eval=True, release_move=False):
         if release_move or (self._pinned_result and self._pinned_result['fen']!=self.tracker.board.fen()):
             self._pinned_result=None
         retained=(self.result or self._pinned_result) if self._pinned_result and self.stick_to_move.isChecked() else None
@@ -1784,7 +1786,8 @@ class MainWindow(QMainWindow):
             return
         lead = result["lines"][0]
         evaluation=self.evaluations.score(self.tracker.board,result)
-        self.eval_bar.cp, self.eval_bar.mate = evaluation['cp'],evaluation['mate']
+        if evaluation['cp'] is not None or evaluation['mate'] is not None:
+            self.eval_bar.cp, self.eval_bar.mate = evaluation['cp'],evaluation['mate']
         self.eval_bar.update()
         self.eval_label.setText(f"{evaluation['provider']} · {evaluation['score']} · {evaluation['advantage']}")
         move_result=self.displayed_result(result)
@@ -2053,7 +2056,7 @@ class MainWindow(QMainWindow):
         self.engine_strength_form.setRowVisible(self.engine_skill,stockfish and self.strength_mode.currentText()=='Skill level')
         self.engine_strength_form.setRowVisible(self.engine_elo,stockfish and self.strength_mode.currentText()=='Elo rating')
         self.engine_strength_form.setRowVisible(self.human_elo,human or selected.kind=='flounder')
-        for field in (self.mode,self.seconds,self.depth,self.threads,self.hash_mb):self.engine_limit_form.setRowVisible(field,not human and (not tiny or field==self.seconds))
+        for field in (self.mode,self.seconds,self.depth,self.threads,self.hash_mb):self.engine_limit_form.setRowVisible(field,field in (self.seconds,self.depth) or not human and not tiny)
         
         self.engine_skill.setEnabled(stockfish and self.strength_mode.currentText()=='Skill level')
         self.engine_elo.setEnabled(stockfish and self.strength_mode.currentText()=='Elo rating')
@@ -2189,7 +2192,8 @@ class MainWindow(QMainWindow):
             if self.result:self.render_result(self.result)
             else:
                 score=self.evaluations.score(self.tracker.board)
-                self.eval_bar.cp,self.eval_bar.mate=score['cp'],score['mate'];self.eval_bar.update();self.eval_label.setText(score['provider']+' · '+score['score'])
+                if score['cp'] is not None or score['mate'] is not None:self.eval_bar.cp,self.eval_bar.mate=score['cp'],score['mate']
+                self.eval_bar.update();self.eval_label.setText(score['provider']+' · '+score['score'])
         for state in self.multi.states:
             if state.tracker and state.tracker.board.fen()==fen:self.multi.render(state)
 

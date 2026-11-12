@@ -6,9 +6,9 @@ import org.json.JSONObject;
 
 /** Calls the original statically compiled C# bots inside this Android process. */
 final class TinyLocal implements AutoCloseable {
- private Object bridge;private Method search,cancel;
- static boolean available(){try{Class.forName("app.boardlens.companion.TinyRuntime");return true;}catch(ClassNotFoundException absent){return false;}}
- private void init()throws Exception{if(bridge!=null)return;Class<?> type=Class.forName("app.boardlens.companion.TinyRuntime");bridge=type.getConstructor().newInstance();search=type.getMethod("search",int.class,String.class,int.class);cancel=type.getMethod("cancel");}
+ private Object bridge;private Method search,cancel,release;
+ static boolean available(){try{Class.forName("app.boardlens.companion.TinyRuntime",false,TinyLocal.class.getClassLoader());return true;}catch(ClassNotFoundException absent){return false;}}
+ private void init()throws Exception{if(bridge!=null)return;Class<?> type=Class.forName("app.boardlens.companion.TinyRuntime");bridge=type.getConstructor().newInstance();search=type.getMethod("search",int.class,String.class,int.class);cancel=type.getMethod("cancel");release=type.getMethod("release");}
  PhoneEngine.Result search(ChessPosition board,String engine,int milliseconds)throws Exception{
   init();String value;
   try{value=(String)search.invoke(bridge,Integer.parseInt(engine.substring(4)),board.fen(),milliseconds);}
@@ -18,5 +18,5 @@ final class TinyLocal implements AutoCloseable {
   return new PhoneEngine.Result(board.fen(),engine,java.util.Arrays.asList(new PhoneEngine.Line(move,null,null,0,java.util.Arrays.asList(move))));
  }
  void cancel(){try{if(bridge!=null)cancel.invoke(bridge);}catch(Exception ignored){}}
- public void close(){cancel();bridge=null;}
+ public void close(){cancel();try{if(bridge!=null)release.invoke(bridge);}catch(Exception ignored){}bridge=null;search=null;cancel=null;release=null;}
 }

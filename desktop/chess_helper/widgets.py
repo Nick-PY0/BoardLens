@@ -4,7 +4,7 @@ import math
 from pathlib import Path
 
 import chess
-from PySide6.QtCore import QPointF, QRect, QRectF, QSize, Qt, Signal
+from PySide6.QtCore import QPointF, QRect, QRectF, QSize, Qt, Signal, QVariantAnimation, QEasingCurve
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import QDialog, QLabel, QVBoxLayout, QWidget, QSizePolicy
 from PySide6.QtSvg import QSvgRenderer
@@ -94,10 +94,35 @@ class EvalBar(QWidget):
         self.mate = None
         self.white_bottom = True
         self.pending = False
+        self._fraction = .5
+        self._target = .5
+        self._animation = QVariantAnimation(self)
+        self._animation.setDuration(200)
+        self._animation.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self._animation.valueChanged.connect(self._animate)
         self.score_label=QLabel("—",self)
         self.score_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.score_label.setStyleSheet("background:#344a48;color:white;border-radius:5px;font-size:14px;font-weight:700;padding:0;")
         self.setToolTip("White's evaluation: + favors White; − favors Black. The bar shows a score, not a winning percentage.")
+
+    def _animate(self, value):
+        self._fraction = float(value)
+        super().update()
+
+    def update(self, *args):
+        # An unknown/pending score retains the last fill, never a flash to 50/50.
+        target = self._target
+        if self.cp is not None:
+            target = 1 / (1 + math.exp(-max(-1200, min(1200, self.cp)) / 220))
+        if self.mate is not None:
+            target = .99 if self.mate > 0 else .01
+        if target != self._target:
+            self._animation.stop()
+            self._target = target
+            self._animation.setStartValue(self._fraction)
+            self._animation.setEndValue(target)
+            self._animation.start()
+        super().update(*args)
 
     def score_text(self):
         if self.cp is None:return "—"
@@ -113,9 +138,7 @@ class EvalBar(QWidget):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         rect = QRectF(10, 1, max(1,self.width() - 20), max(1,self.height() - 2))
-        fraction = .5 if self.cp is None else 1 / (1 + math.exp(-max(-1200, min(1200, self.cp)) / 220))
-        if self.mate is not None:
-            fraction = .99 if self.mate > 0 else .01
+        fraction = self._fraction
         p.fillRect(rect, QColor("#17231e"))
         white_height = rect.height() * fraction
         white_rect = QRectF(rect.x(), rect.bottom() - white_height if self.white_bottom else rect.y(), rect.width(), white_height)

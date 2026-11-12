@@ -71,7 +71,7 @@ public class Bot_303 : IChessBot
     int[] pieceValues = { 0, 100, 300, 310, 500, 900, 10000 };
 
     // 15MB * 16 bytes = 240MB, below the 256MB limit, checked via Marshal.SizeOf<Transposition>()
-    Transposition[] transpositions = new Transposition[15_000_000];
+    Transposition[] transpositions = new Transposition[BoardLens.Mobile.TinyMemory.HashEntries];
 
     struct Transposition
     {
@@ -107,7 +107,7 @@ public class Bot_303 : IChessBot
 
             if (board.IsDraw()) return 0;
 
-            ref var transposition = ref transpositions[board.ZobristKey % 15_000_000];
+            ref var transposition = ref transpositions[board.ZobristKey % (ulong)transpositions.Length];
             if (!assignBestMove && transposition.depth >= depth && transposition.zobristKey == board.ZobristKey)
             {
                 // See https://web.archive.org/web/20071031100051/http://www.brucemo.com/compchess/programming/hashing.htm

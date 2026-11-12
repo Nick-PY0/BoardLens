@@ -27,6 +27,7 @@ public final class ScreenService extends Service {
       evaluation = "—";
   static volatile Bitmap preview;
   static volatile float whiteShare = .5f;
+  static volatile boolean hasEvaluationValue;
   private static volatile String evaluationBadge="…";
   static volatile Runnable listener;
   private static volatile ScreenService active;
@@ -79,7 +80,8 @@ public final class ScreenService extends Service {
       evalWorker = new LatestWorkQueue("BoardLens-evaluation");
 
   private void preferenceChanged(String key){
-    if("evaluation_enabled".equals(key)&&!settings.evaluationEnabled()){evaluator.cancel();evalWorker.submit(evaluator::close);evaluation="Evaluation off";evaluationBadge="Off";whiteShare=.5f;renderOverlay();changed();}
+    if("arrows".equals(key)||"screen_evaluation".equals(key)||"evaluation_position".equals(key)){renderOverlay();changed();return;}
+    if("evaluation_enabled".equals(key)&&!settings.evaluationEnabled()){evaluator.cancel();evalWorker.submit(evaluator::close);evaluation="Evaluation off";evaluationBadge="Off";renderOverlay();changed();}
     if(capture!=null){capture.removeCallbacks(settingsTask);capture.postDelayed(settingsTask,80);}
   }
   void modelReady(String key){
@@ -250,7 +252,9 @@ public final class ScreenService extends Service {
   }
 
   private String settingsKey() {
-    return new java.util.TreeMap<>(settings.p.getAll()).toString()+":"+modelRevision;
+    var values=new java.util.TreeMap<>(settings.p.getAll());
+    values.remove("arrows");values.remove("screen_evaluation");values.remove("evaluation_position");
+    return values.toString()+":"+modelRevision;
   }
 
   private int[] fingerprint(Bitmap b, Rect r) {
@@ -268,7 +272,7 @@ public final class ScreenService extends Service {
   private void renderOverlay(){
     Rect latest=target;Rect rect=latest==null?null:new Rect(latest);BoardGeometry geometry=targetGeometry;boolean orientation=bottom;long token=generation.get();
     if(rect==null)return;
-    main.post(()->{if(token!=generation.get())return;if(!running||phoneVisible){overlay.clear();return;}overlay.show(geometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):geometry,orientation,settings.arrows()?lastArrows:Collections.emptyList(),settings.screenEvaluation()&&settings.evaluationEnabled(),evaluationBadge,whiteShare,settings.evaluationPosition());});
+    main.post(()->{if(token!=generation.get())return;if(!running||phoneVisible){overlay.clear();return;}overlay.show(geometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):geometry,orientation,settings.arrows()?lastArrows:Collections.emptyList(),settings.screenEvaluation()&&settings.evaluationEnabled()&&hasEvaluationValue,evaluationBadge,whiteShare,settings.evaluationPosition());});
   }
   private void restoreArrows(){if((settings.arrows()&&!lastArrows.isEmpty()&&!overlay.hasArrows())||(settings.screenEvaluation()&&settings.evaluationEnabled()&&!overlay.hasEvaluation()))renderOverlay();}
   private void requestTick(){
@@ -396,16 +400,17 @@ public final class ScreenService extends Service {
 
   private void analyze(ChessPosition board, Rect rect, boolean whiteBottom) {
     long token = generation.incrementAndGet();
+    PhoneSettings jobSettings=settings.snapshot();
     moves.cancel();
     evaluator.cancel();
     suggestion = EngineCatalog.get(settings.engine()).maia()?"Starting "+EngineCatalog.get(settings.engine()).name()+"…":"Thinking…";
     evaluation = "Updating "+EngineCatalog.get(settings.evaluator()).name()+" evaluation…";
-    evaluationBadge="…";whiteShare=.5f;renderOverlay();
+    renderOverlay();
     changed();
     if (board.legal().isEmpty()) {
       boolean check=board.inCheck(board.white);suggestion=check?"Checkmate":"Draw · no legal moves";
       evaluation=check?(board.white?"Black wins by checkmate":"White wins by checkmate"):"Stalemate";
-      whiteShare=check?(board.white?0:1):.5f;evaluationBadge=check?"Mate":"Draw";lastArrows=Collections.emptyList();renderOverlay();changed();return;
+      hasEvaluationValue=true;whiteShare=check?(board.white?0:1):.5f;evaluationBadge=check?"Mate":"Draw";lastArrows=Collections.emptyList();renderOverlay();changed();return;
     }
     if (!EngineCatalog.ready(this,settings.engine())) {
       suggestion="Download "+EngineCatalog.get(settings.engine()).name()+" in Models";changed();
@@ -413,7 +418,7 @@ public final class ScreenService extends Service {
         () -> {
           try {
             if(token!=generation.get()||!running)return;
-            PhoneEngine.Result result = moves.recommend(this,board,settings,()->token==generation.get()&&running,
+            PhoneEngine.Result result = moves.recommend(this,board,jobSettings,()->token==generation.get()&&running,
                 (r,rootComplete) -> { if(rootComplete||settings.early())publishMoves(r,board,rect,whiteBottom,token,rootComplete); });
             publishMoves(result, board, rect, whiteBottom, token, true);
           } catch (CancellationException ignored) {
@@ -424,15 +429,15 @@ public final class ScreenService extends Service {
             }
           }
         });
-    if(!settings.evaluationEnabled()){evaluation="Evaluation off";evaluationBadge="Off";whiteShare=.5f;evalWorker.submit(evaluator::close);renderOverlay();changed();return;}
+    if(!settings.evaluationEnabled()){evaluation="Evaluation off";evaluationBadge="Off";evalWorker.submit(evaluator::close);renderOverlay();changed();return;}
     evalWorker.submit(
         () -> {
           try {
             if(token!=generation.get()||!running)return;
             if(!EngineCatalog.ready(this,settings.evaluator())){evaluation="Download "+EngineCatalog.get(settings.evaluator()).name()+" for evaluation";evaluationBadge="Data";renderOverlay();changed();return;}
-            LocalEngines.Evaluated result=evaluator.evaluate(this,board,settings,r->{if(token==generation.get()&&running&&settings.evaluationEnabled()){evaluation=r.text();whiteShare=r.whiteShare();evaluationBadge=r.badge();changed();renderOverlay();}});
+            LocalEngines.Evaluated result=evaluator.evaluate(this,board,jobSettings,r->{if(token==generation.get()&&running&&settings.evaluationEnabled()){hasEvaluationValue=true;evaluation=r.text();whiteShare=r.whiteShare();evaluationBadge=r.badge();changed();renderOverlay();}});
             if(token!=generation.get()||!running||!settings.evaluationEnabled())return;
-            evaluation=result.text();whiteShare=result.whiteShare();evaluationBadge=result.badge();renderOverlay();
+            hasEvaluationValue=true;evaluation=result.text();whiteShare=result.whiteShare();evaluationBadge=result.badge();renderOverlay();
             changed();
           } catch (CancellationException ignored) {
           } catch (Exception error) {

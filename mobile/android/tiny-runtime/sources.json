@@ -51,5 +51,25 @@
       "original_sha256": "8961dd5fe26591a265a9978ea500c9fce2eac9292ce886c77cb58119b5633c21"
     }
   ],
-  "adapter_changes": "303 GC attack disabled; shared API checks cancellation and a hard wall-clock deadline. Scripted openings in bots 278/253 are used only if legal, for positions joined without move history."
+  "adapter_changes": "303 GC attack disabled; shared API checks cancellation and a hard wall-clock deadline. Scripted openings in bots 278/253 are used only if legal, for positions joined without move history.",
+  "mobile_memory_adapter": {
+    "hash_entries": 262144,
+    "bots": [
+      266,
+      303,
+      529,
+      610,
+      614,
+      628
+    ],
+    "tinyhuge_original_payload_sha256": "2269e8215864e794a7f53826ef7eeed687a9a4163c0ca53dc8f86c84f26aa757",
+    "tinyhuge_ldc_i4_operand_file_offsets": [
+      4931,
+      7755,
+      8010,
+      8026
+    ],
+    "note": "Only table capacity and matching indexes are changed; original competition ratings are reference results, not guarantees for this mobile adaptation.",
+    "tinyhuge_packaging": "Normally referenced assembly; valid GUID metadata and System.Runtime/API identities restored. Reproduce with Vendor/TinyHuge/extract.py and Prepare.csproj."
+  }
 }

@@ -2,7 +2,7 @@
  <PropertyGroup>
   <TargetFramework>net10.0-android</TargetFramework><OutputType>Exe</OutputType>
   <ApplicationId>app.boardlens.companion</ApplicationId><ApplicationTitle>BoardLens</ApplicationTitle>
-  <ApplicationVersion>13</ApplicationVersion><ApplicationDisplayVersion>1.8.3</ApplicationDisplayVersion>
+  <ApplicationVersion>14</ApplicationVersion><ApplicationDisplayVersion>1.8.4</ApplicationDisplayVersion>
   <SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion><TargetPlatformVersion>36.0</TargetPlatformVersion>
   <RuntimeIdentifier>android-arm64</RuntimeIdentifier><ImplicitUsings>enable</ImplicitUsings><AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   <EnableDefaultCompileItems>false</EnableDefaultCompileItems><AndroidGenerateJavaClass>true</AndroidGenerateJavaClass>
@@ -10,7 +10,7 @@
   <RunAOTCompilation>false</RunAOTCompilation><AndroidLinkMode>None</AndroidLinkMode><EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   <JavacSourceVersion>17</JavacSourceVersion><JavacTargetVersion>17</JavacTargetVersion><AndroidUseDesignerAssembly>true</AndroidUseDesignerAssembly>
  </PropertyGroup>
- <ItemGroup>
+ <ItemGroup><Reference Include="BoardLens.TinyHuge"><HintPath>Vendor/TinyHuge/BoardLens.TinyHuge.dll</HintPath></Reference>
   <Compile Include="Core/**/*.cs"/><Compile Include="Bots/*.cs"/><Compile Include="TinyCore.cs"/><Compile Include="TinyRuntime.cs"/>
   <AndroidJavaSource Include="../app/src/main/java/**/*.java" Bind="false"/>
   <AndroidResource Include="../app/src/main/res/**/*"><Link>Resources/%(RecursiveDir)%(Filename)%(Extension)</Link></AndroidResource>

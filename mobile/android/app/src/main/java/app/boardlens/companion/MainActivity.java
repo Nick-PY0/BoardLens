@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
   @Override
   public void onCreate(Bundle state) {
     super.onCreate(state);
+    Diagnostics.install(this);
     if (Build.VERSION.SDK_INT >= 33)
       getOnBackInvokedDispatcher()
           .registerOnBackInvokedCallback(
@@ -335,6 +336,7 @@ public class MainActivity extends Activity {
 
   @Override
   public void onDestroy() {
+    if(updater!=null)updater.close();
     if (web != null) web.destroy();
     super.onDestroy();
   }

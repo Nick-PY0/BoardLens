@@ -10,10 +10,11 @@ import android.widget.*;
 final class PhoneDashboard {
   interface Actions {
     void start();void stop();void hide();void scan();void settings();void help();void back();
+    default String downloadLabel(){return "";}
     default String timeLabel(){return "Thinking time";}default void timeSettings(){settings();}
     boolean option(String key,boolean fallback);void option(String key,boolean value,boolean unused);
   }
-  final ScrollView root;final TextView status,moves,eval,engine;final ImageView preview;
+  final ScrollView root;final TextView status,moves,eval,engine;private final TextView downloads;final ImageView preview;
   final ProgressBar bar;private final Button start,hide,stop,timing;private final Actions actions;private final MobileUi ui;
   PhoneDashboard(Context c,Actions a){
     actions=a;ui=new MobileUi(c);root=new ScrollView(c);root.setBackgroundColor(MobileUi.BG);root.setFillViewport(true);
@@ -23,7 +24,7 @@ final class PhoneDashboard {
     TextView title=ui.text("Phone screen",22,MobileUi.FG,true);LinearLayout.LayoutParams tp=new LinearLayout.LayoutParams(0,-2,1);tp.leftMargin=ui.dp(12);header.addView(title,tp);
     Button settings=ui.button("Settings",false,a::settings);header.addView(settings,new LinearLayout.LayoutParams(-2,ui.dp(48)));col.addView(header);ui.gap(col,20);
     LinearLayout state=ui.card();TextView live=ui.text("LIVE ANALYSIS",11,MobileUi.ACCENT,true);live.setLetterSpacing(.12f);state.addView(live);ui.gap(state,10);engine=ui.text("",13,MobileUi.MUTED,false);state.addView(engine);ui.gap(state,10);
-    status=ui.text("Ready to start",14,MobileUi.MUTED,false);state.addView(status);ui.gap(state,16);
+    status=ui.text("Ready to start",14,MobileUi.MUTED,false);state.addView(status);downloads=ui.text("",13,MobileUi.ACCENT,false);downloads.setVisibility(View.GONE);state.addView(downloads);ui.gap(state,16);
     moves=ui.text("Open a chessboard",23,MobileUi.FG,true);state.addView(moves);ui.gap(state,10);
     eval=ui.text("Evaluation appears after a clean read",13,MobileUi.MUTED,false);state.addView(eval);ui.gap(state,12);
     bar=new ProgressBar(c,null,android.R.attr.progressBarStyleHorizontal);bar.setMax(1000);bar.setProgress(500);bar.setProgressTintList(android.content.res.ColorStateList.valueOf(MobileUi.ACCENT));bar.setProgressBackgroundTintList(android.content.res.ColorStateList.valueOf(MobileUi.BORDER));bar.setContentDescription("Evaluation from White's perspective");state.addView(bar,new LinearLayout.LayoutParams(-1,ui.dp(8)));
@@ -36,7 +37,7 @@ final class PhoneDashboard {
     col.addView(ui.text("After Start, leave this screen to read boards in other apps.",13,MobileUi.MUTED,false));
   }
   void render(boolean running,String state,String recommendation,String evaluation,float whiteShare,Bitmap board){
-    timing.setText(actions.timeLabel());status.setText(state);moves.setText(recommendation);eval.setText(evaluation);bar.setProgress(Math.round(whiteShare*1000));start.setText(running?"Analysis is running":"Start screen analysis");start.setEnabled(!running);start.setAlpha(running?.55f:1f);stop.setEnabled(running);hide.setEnabled(running);hide.setAlpha(running?1f:.45f);
+    downloads.setVisibility(actions.downloadLabel().isEmpty()?View.GONE:View.VISIBLE);downloads.setText(actions.downloadLabel());timing.setText(actions.timeLabel());status.setText(state);moves.setText(recommendation);eval.setText(evaluation);if(bar.getProgress()!=Math.round(whiteShare*1000))bar.setProgress(Math.round(whiteShare*1000),true);start.setText(running?"Analysis is running":"Start screen analysis");start.setEnabled(!running);start.setAlpha(running?.55f:1f);stop.setEnabled(running);hide.setEnabled(running);hide.setAlpha(running?1f:.45f);
     preview.setVisibility(board==null?View.GONE:View.VISIBLE);if(board!=null)preview.setImageBitmap(board);
   }
 }
