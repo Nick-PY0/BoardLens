@@ -6,13 +6,18 @@ import android.graphics.*;
 import java.nio.FloatBuffer;
 import java.util.*;
 
-/** Local pixels only. No images leave the phone. Supports flat, unobstructed 2D boards. */
+/** Local pixels only. No images leave the phone. Recognizes tested artwork locally; ambiguous or occluded positions are rejected. */
 final class BoardReader implements AutoCloseable {
-  record Read(Rect rect, String placement, boolean whiteBottom, float confidence) {}
+  record Read(Rect rect, String placement, boolean whiteBottom, float confidence, BoardGeometry geometry) {
+    Read(Rect r,String p,boolean b,float c){this(r,p,b,c,BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom));}
+  }
 
   String diagnostic = "";
   private final OrtEnvironment env = OrtEnvironment.getEnvironment();
   private final OrtSession session;
+  private final ContextPieces context;
+  private BoardGeometry tracked;
+  private boolean contextualTrack;
 
   BoardReader(Context c) throws Exception {
     try (var in = c.getAssets().open("models/chess-tiles-v2.onnx");
@@ -20,9 +25,11 @@ final class BoardReader implements AutoCloseable {
       options.setIntraOpNumThreads(1);
       session = env.createSession(Streams.read(in, 2000000), options);
     }
+    context=new ContextPieces(c);
   }
 
   Read read(Bitmap image, Rect previous, String orientation) throws Exception {
+    if(previous!=null&&tracked!=null&&contextualTrack){Read read=context.classify(image,tracked,orientation);if(read!=null)return read;}
     if (image.getWidth() == image.getHeight()) {
       Read whole =
           classify(image, new Rect(0, 0, image.getWidth(), image.getHeight()), orientation);
@@ -52,11 +59,20 @@ final class BoardReader implements AutoCloseable {
       Read result = classify(image, r, orientation);
       if (result != null) return result;
     }
-    return null;
+    for(Rect r:GradientBoards.detectProjected(image)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read result=context.classify(image,g,orientation);if(result!=null){tracked=g;contextualTrack=true;diagnostic="";return result;}}
+    for(BoardGeometry geometry:ProjectedBoards.detect(image)){Read result=context.classify(image,geometry,orientation);if(result!=null){tracked=geometry;contextualTrack=true;return result;}}
+    tracked=null;return null;
   }
 
-  Read classify(Bitmap image, Rect r, String orientation) throws Exception {
-    if (r.width() < 160 || r.height() != r.width()) return null;
+  Read classify(Bitmap image, Rect r, String orientation)throws Exception{
+    if(r.width()<160||r.height()!=r.width()||!new Rect(0,0,image.getWidth(),image.getHeight()).contains(r))return null;
+    BoardGeometry geometry=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);
+    Read flat=classifyFlat(image,r,orientation);
+    if(flat!=null&&context.verifyFlat(image,geometry,flat)){tracked=geometry;contextualTrack=false;diagnostic="";return flat;}
+    Read read=context.classify(image,geometry,orientation);if(read!=null){tracked=geometry;contextualTrack=true;diagnostic="";}return read;
+  }
+
+  private Read classifyFlat(Bitmap image, Rect r,String orientation)throws Exception{
     Bitmap crop = Bitmap.createBitmap(image, r.left, r.top, r.width(), r.height()),
         small = Bitmap.createScaledBitmap(crop, 256, 256, true);
     int[] pixels = new int[65536];
@@ -335,6 +351,6 @@ final class BoardReader implements AutoCloseable {
   }
 
   public void close() throws OrtException {
-    session.close();
+    session.close();context.close();
   }
 }

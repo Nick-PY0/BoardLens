@@ -364,14 +364,14 @@
     "id": "speed",
     "category": "Engines",
     "title": "Make suggestions arrive sooner",
-    "summary": "Screen refresh targets 75 ms independently of engine think time. Early suggestions can display intermediate results while the full search continues.",
+    "summary": "Screen refresh targets 75 ms independently of engine think time. Show moves while thinking can display intermediate results while the full search continues.",
     "questions": [
       "Why do the arrows take so long?",
       "Can it refresh faster without changing engine time?",
       "The board updates slowly"
     ],
     "steps": [
-      "Use Early suggestions to see an early result.",
+      "Use Show moves while thinking to see an early result.",
       "For a faster completed search, reduce Think time yourself or choose a shallower supported limit.",
       "Use fewer suggested moves and suitable threads per board to reduce work."
     ],
@@ -883,7 +883,7 @@
     "details": "The first recommendation is shown as soon as the provider returns it. Single-move models then analyze the next two positions with the same engine. These are predictions, not guaranteed play. Each extra search uses the selected search budget. Turning this off saves work. Non-streaming models must finish their first inference before there is a result.",
     "steps": [
       "Enable Predict opponent and my next move in Engine.",
-      "Enable Early suggestions to show the first result before the continuation finishes.",
+      "Enable Show moves while thinking to show the first result before the continuation finishes.",
       "Steady arrows keeps the display calm while calculation continues."
     ],
     "questions": [
@@ -919,6 +919,62 @@
     ],
     "controls": [
       "auto_updates"
+    ]
+  },
+  {
+    "id": "prediction-controls",
+    "category": "Engine",
+    "title": "Maia, Tiny bots and prediction controls",
+    "summary": "Maia 2 and Maia 3 predict one move per model pass. Prediction length controls how many moves BoardLens calculates in a line.",
+    "questions": [
+      "Can I change Maia depth or thinking time?",
+      "What does predict opponent and my next move mean?",
+      "What are early suggestions?",
+      "How do Tiny bot limits work?"
+    ],
+    "steps": [
+      "Choose your recommendation engine manually. The evaluation bar has a separate engine.",
+      "Enable Predict opponent and my next move. Prediction length 3 means your move, the predicted reply, then your response. Each ply is one move by one side.",
+      "Reply time budget limits additional predictions after the first move. BoardLens does not wait for the budget to expire. A Maia pass in progress may complete after it.",
+      "Show moves while thinking displays partial results as soon as available. Turn it off to show only the finished result. Steady arrows keeps arrows stable while the engine calculates."
+    ],
+    "details": "Stockfish and compatible search engines accept a depth and/or think time. Time + depth stops at whichever limit comes first. Adaptive varies work within both caps. Maia 2 and all Maia 3 sizes use single-pass human move prediction, so depth and longer think time do not improve their first move. Their target rating, prediction length and reply budget are useful controls. Tiny bots use their coded search/style and an adjustable bot clock budget; most do not expose native depth or alternative moves. Predicted replies are possibilities, not promises. A different real opponent move starts a fresh analysis.",
+    "controls": [
+      "prediction_plies",
+      "prediction_seconds",
+      "predict_continuations",
+      "early_suggestions"
+    ],
+    "aliases": [
+      "maia 2",
+      "maia 3",
+      "early suggestions",
+      "after analysis ending"
+    ]
+  },
+  {
+    "id": "manual-settings",
+    "category": "Engine",
+    "title": "Manual settings and presets",
+    "summary": "Manual means you are using the controls individually, rather than a saved preset. All settings save automatically.",
+    "questions": [
+      "What is Custom settings?",
+      "What is Manual?",
+      "Do my engine settings save?"
+    ],
+    "steps": [
+      "Choose an engine and adjust its supported controls.",
+      "Save preset stores that combination under a name.",
+      "Quick analysis and Deep analysis are ready-made Stockfish configurations."
+    ],
+    "details": "Analysis limit chooses when search finishes. Time uses seconds; Depth uses plies of search; Time + depth stops at the first limit. Adaptive searches within both caps. Manual itself does not start analysis; Suggest or Auto suggest does.",
+    "controls": [
+      "preset_combo",
+      "mode"
+    ],
+    "aliases": [
+      "custom settings",
+      "stop at"
     ]
   }
 ]

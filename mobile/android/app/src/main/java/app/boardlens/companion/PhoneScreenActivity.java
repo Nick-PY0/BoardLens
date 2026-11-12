@@ -13,12 +13,14 @@ import android.widget.*;
 /** Standalone section, intentionally independent of the computer's WebView/settings. */
 public class PhoneScreenActivity extends Activity {
   private PhoneSettings settings;
+  private PhoneDashboard dashboard;
+  private TextView modelNote;
   private final java.util.Map<String, View> engineControls = new java.util.HashMap<>();
   private TextView status, moves, eval;
   private ImageView preview;
   private ProgressBar bar;
   private LinearLayout content;
-  private final int bg = 0xff101e19, fg = 0xffe7f0e9, accent = 0xff91dfb4;
+  private final int bg = MobileUi.BG, fg = MobileUi.FG, accent = MobileUi.ACCENT;
   private boolean building, settingsPage;
 
   int dp(int n) {
@@ -46,7 +48,8 @@ public class PhoneScreenActivity extends Activity {
     b.setText(title);
     b.setAllCaps(false);
     b.setTextColor(fg);
-    b.setBackground(shape(0xff2c4c3b));
+    b.setBackground(shape(MobileUi.SURFACE));
+    b.setStateListAnimator(null);
     b.setOnClickListener(v -> action.run());
     LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, dp(48));
     p.topMargin = dp(8);
@@ -68,93 +71,26 @@ public class PhoneScreenActivity extends Activity {
   }
 
   private void show() {
-    settingsPage = false;
-    building = true;
-    ScrollView scroll = new ScrollView(this);
-    scroll.setFillViewport(true);
-    scroll.setBackgroundColor(bg);
-    content = new LinearLayout(this);
-    content.setOrientation(1);
-    content.setPadding(dp(20), dp(12), dp(20), dp(24));
-    scroll.addView(content);
-    content.addView(text("On this phone", 24));
-    content.addView(text("Read a board in another app.", 14));
-    LinearLayout actions = new LinearLayout(this);
-    Button start = new Button(this);
-    start.setAllCaps(false);
-    start.setText("Start");
-    start.setTextColor(bg);
-    start.setBackground(shape(accent));
-    start.setOnClickListener(v -> start());
-    Button stop = new Button(this);
-    stop.setAllCaps(false);
-    stop.setText("Stop");
-    stop.setOnClickListener(v -> stopService(new Intent(this, ScreenService.class)));
-    actions.addView(start, new LinearLayout.LayoutParams(0, dp(48), 1));
-    actions.addView(stop, new LinearLayout.LayoutParams(0, dp(48), 1));
-    content.addView(actions);
-    status = text("", 14);
-    content.addView(status);
-    moves = text("", 20);
-    content.addView(moves);
-    eval = text("", 15);
-    content.addView(eval);
-    bar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
-    bar.setMax(1000);
-    android.graphics.drawable.LayerDrawable balance =
-        new android.graphics.drawable.LayerDrawable(
-            new android.graphics.drawable.Drawable[] {
-              shape(0xff101713),
-              new android.graphics.drawable.ClipDrawable(
-                  shape(fg), Gravity.LEFT, android.graphics.drawable.ClipDrawable.HORIZONTAL)
-            });
-    balance.setId(0, android.R.id.background);
-    balance.setId(1, android.R.id.progress);
-    bar.setProgressDrawable(balance);
-    bar.setContentDescription("Evaluation from White's perspective");
-    content.addView(bar, new LinearLayout.LayoutParams(-1, dp(12)));
-    preview = new ImageView(this);
-    preview.setScaleType(ImageView.ScaleType.FIT_CENTER);
-    preview.setContentDescription("Last recognized board");
-    content.addView(preview, new LinearLayout.LayoutParams(-1, dp(240)));
-    button(
-        "Scan now",
-        () -> {
-          if (ScreenService.running)
-            startService(new Intent(this, ScreenService.class).setAction("REFRESH"));
-          else start();
-        });
-    toggle("Screen arrows", "arrows", true);
-    toggle("Only my color", "onlyMine", false);
-    toggle("Predict reply and my next move", "predict", true);
-    toggle("Steady arrows", "steady", true);
-    button("Engines & settings", this::engineSettings);
-    button(
-        "Help",
-        () ->
-            new AlertDialog.Builder(this)
-                .setTitle("Phone screen analysis")
-                .setMessage(
-                    "1. Download the phone engine in Engines & settings.\n"
-                        + "2. Press Start, allow screen capture, and open a 2D board in another"
-                        + " app.\n"
-                        + "3. Allow Display over other apps to see arrows. Arrows pass taps"
-                        + " through.\n\n"
-                        + "Recognition runs on this phone. On phone mode analyzes locally; Computer"
-                        + " mode sends only the recognized position to your paired computer. No"
-                        + " screenshots are saved or sent. Stop from this screen or the"
-                        + " notification. Android asks for screen permission each session.\n\n"
-                        + "Keep the complete board visible. 3D boards and unsupported piece styles"
-                        + " may not read. Auto turn follows legal changes; on a midgame first scan"
-                        + " choose White or Black in settings. Computer companion is a separate"
-                        + " section with the desktop's engines and settings.")
-                .setPositiveButton("Got it", null)
-                .show());
-    button("← Sections", this::finish);
-    inset(scroll);
-    setContentView(scroll);
-    building = false;
-    refresh();
+    settingsPage=false;building=true;
+    dashboard=new PhoneDashboard(this,new PhoneDashboard.Actions(){
+      public void start(){PhoneScreenActivity.this.start();}
+      public void stop(){stopService(new Intent(PhoneScreenActivity.this,ScreenService.class));}
+      public void hide(){moveTaskToBack(true);}
+      public void scan(){if(ScreenService.running)startService(new Intent(PhoneScreenActivity.this,ScreenService.class).setAction("REFRESH"));else PhoneScreenActivity.this.start();}
+      public void settings(){engineSettings();}
+      public void help(){showHelp();}
+      public void back(){finish();}
+      public boolean option(String key,boolean fallback){return settings.p.getBoolean(key,fallback);}
+      public void option(String key,boolean value,boolean unused){settings.p.edit().putBoolean(key,value).apply();}
+    });
+    status=dashboard.status;moves=dashboard.moves;eval=dashboard.eval;bar=dashboard.bar;preview=dashboard.preview;
+    inset(dashboard.root);setContentView(dashboard.root);building=false;refresh();
+  }
+
+  private void showHelp(){
+    new AlertDialog.Builder(this).setTitle("Phone screen analysis")
+      .setMessage("Press Start and allow screen sharing. Choose the entire screen to follow boards across apps. Allow Display over other apps for arrows. Then press Home or Open another app. The ongoing notification means analysis is still running; use its Stop action to end it.\n\nAndroid can end capture when you lock your phone, revoke permission or force-stop the app. Protected screens cannot be captured. BoardLens never starts capture without your permission.\n\nKeep the whole board visible. Unsupported themes, 3D angles or hidden pieces may not read. Computer mode sends only the recognized position to your paired computer, not screenshots.\n\nShow moves while thinking displays the first useful result before calculation finishes. Predict replies adds possible opponent and follow-up moves; it recalculates when the actual move differs. A ply is one move by one side. Maia 2/3 use one model pass per position, not search depth. Reply time budget limits extra passes; a running pass may finish after it. Tiny bots use their own coded search and a bot clock budget.\n\nAll settings save automatically. Phone-screen settings are separate from computer companion settings.")
+      .setPositiveButton("Got it",null).show();
   }
 
   private void inset(View root) {
@@ -181,7 +117,7 @@ public class PhoneScreenActivity extends Activity {
           boolean on = settings.p.getBoolean(key, fallback);
           b.setText(title + "   " + (on ? "On" : "Off"));
           b.setTextColor(on ? bg : fg);
-          b.setBackground(shape(on ? accent : 0xff2c4c3b));
+          b.setBackground(shape(on ? accent : MobileUi.SURFACE));
         };
     b.setOnClickListener(
         v -> {
@@ -192,12 +128,12 @@ public class PhoneScreenActivity extends Activity {
   }
 
   private void select(String title, String key, String[] values, String current) {
-    content.addView(text(title, 14));
+    TextView label=text(title,14);content.addView(label);
     Spinner s = new Spinner(this);
     ArrayAdapter<String> a =
         new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, values);
     s.setAdapter(a);
-    engineControls.put(key, s);
+    engineControls.put(key, s);s.setTag(label);
     for (int i = 0; i < values.length; i++) if (values[i].equals(current)) s.setSelection(i);
     content.addView(s, new LinearLayout.LayoutParams(-1, dp(48)));
     s.setOnItemSelectedListener(
@@ -212,15 +148,18 @@ public class PhoneScreenActivity extends Activity {
   }
 
   private void number(String title, String key, int min, int max, int current) {
-    content.addView(text(title, 14));
-    NumberPicker n = new NumberPicker(this);
-    engineControls.put(key, n);
-    n.setMinValue(min);
-    n.setMaxValue(max);
-    n.setValue(current);
-    n.setWrapSelectorWheel(false);
-    n.setOnValueChangedListener((v, old, value) -> settings.p.edit().putInt(key, value).apply());
-    content.addView(n, new LinearLayout.LayoutParams(-1, dp(120)));
+    TextView label=text(title,14);content.addView(label);
+    MobileUi.Stepper n=new MobileUi.Stepper(new MobileUi(this),min,max,current,value->settings.p.edit().putInt(key,value).apply());
+    engineControls.put(key,n);n.setTag(label);content.addView(n,new LinearLayout.LayoutParams(-1,dp(48)));
+  }
+
+  private void decimal(String title,String key,float value,float min,float max){
+    content.addView(text(title,14));EditText field=new EditText(this);field.setSingleLine();field.setTextColor(fg);field.setInputType(8194);field.setText(String.valueOf(value));content.addView(field,new LinearLayout.LayoutParams(-1,dp(48)));
+    field.addTextChangedListener(new android.text.TextWatcher(){
+      public void beforeTextChanged(CharSequence s,int a,int count,int after){}
+      public void onTextChanged(CharSequence s,int start,int before,int count){try{float n=Float.parseFloat(s.toString());if(Float.isFinite(n)&&n>=min&&n<=max){settings.p.edit().putFloat(key,n).apply();field.setError(null);}else field.setError(min+" to "+max);}catch(Exception e){field.setError("Enter seconds");}}
+      public void afterTextChanged(android.text.Editable s){}
+    });
   }
 
   private void engineSettings() {
@@ -232,12 +171,9 @@ public class PhoneScreenActivity extends Activity {
     content.setPadding(dp(20), dp(12), dp(20), dp(24));
     content.setOrientation(1);
     scroll.addView(content);
-    content.addView(text("Phone engines", 24));
-    content.addView(
-        text(
-            "Stockfish runs here. Computer companion offers your installed Maia models, Tiny bots"
-                + " and custom engines.",
-            14));
+    button("‹ Phone screen",this::show);
+    content.addView(text("Engines & settings", 24));
+    content.addView(text("Recommendations and evaluation are independent.",14));
     button(
         EngineFiles.ready(this) ? "Stockfish model installed" : "Download Stockfish model · 99 MB",
         () -> {
@@ -315,9 +251,9 @@ public class PhoneScreenActivity extends Activity {
           () -> startActivity(new Intent(this, MainActivity.class).putExtra("companion", true)));
     number("Maia / Flounder target rating", "rating", 600, 2600, settings.p.getInt("rating", 1500));
     select("Search limit", "mode", new String[] {"Time", "Depth", "Time + depth"}, settings.mode());
-    content.addView(text("Think time (seconds)", 14));
+    TextView timeLabel=text("Think time (seconds)",14);content.addView(timeLabel);
     EditText seconds = new EditText(this);
-    engineControls.put("seconds", seconds);
+    engineControls.put("seconds", seconds);seconds.setTag(timeLabel);
     seconds.setTextColor(fg);
     seconds.setInputType(8194);
     seconds.setSingleLine();
@@ -340,7 +276,13 @@ public class PhoneScreenActivity extends Activity {
 
           public void afterTextChanged(android.text.Editable s) {}
         });
-    number("Depth cap", "depth", 1, 30, settings.depth());
+    number("Search depth", "depth", 1, 30, settings.depth());
+    modelNote=text("",13);content.addView(modelNote);
+    toggle("Show moves while thinking","early",true);
+    toggle("Predict replies","predict",true);
+    number("Prediction length · plies","prediction_plies",1,12,settings.predictionPlies());
+    decimal("Reply time budget (seconds)","prediction_seconds",settings.predictionSeconds(),.1f,60f);
+    toggle("Steady arrows","steady",true);
     number("Recommended moves", "moves", 1, 5, settings.moves());
     number(
         "CPU threads",
@@ -363,7 +305,7 @@ public class PhoneScreenActivity extends Activity {
     content.addView(text("Settings save automatically.", 14));
     button("← Phone screen", this::show);
     inset(scroll);
-    setContentView(scroll);
+    setContentView(scroll);refreshLimits();
   }
 
   private void start() {
@@ -442,12 +384,8 @@ public class PhoneScreenActivity extends Activity {
   }
 
   private void refresh() {
-    if (isFinishing()) return;
-    status.setText(ScreenService.status);
-    moves.setText(ScreenService.suggestion);
-    eval.setText(ScreenService.evaluation);
-    bar.setProgress((int) (ScreenService.whiteShare * 1000));
-    if (ScreenService.preview != null) preview.setImageBitmap(ScreenService.preview);
+    if(isFinishing()||settingsPage||dashboard==null)return;
+    dashboard.render(ScreenService.running,ScreenService.status,ScreenService.suggestion,ScreenService.evaluation,ScreenService.whiteShare,ScreenService.preview);
   }
 
   @Override
@@ -498,6 +436,7 @@ public class PhoneScreenActivity extends Activity {
     boolean computer = settings.backend().equals("Computer");
     String engine = computer ? settings.engine() : "stockfish";
     boolean human = engine.startsWith("maia"), tiny = engine.startsWith("tiny");
+    if(modelNote!=null)modelNote.setText(human?"Maia 2/3: one pass per position. Adjust prediction length and reply budget below.":tiny?"This bot sets its own depth. Think time is its clock budget.":"Time + depth stops at whichever limit comes first.");
     enable("mode", !human && !tiny);
     enable("seconds", !human && (tiny || !settings.mode().equals("Depth")));
     enable("depth", !human && !tiny && !settings.mode().equals("Time"));
@@ -505,8 +444,8 @@ public class PhoneScreenActivity extends Activity {
     enable("skill", engine.equals("stockfish"));
     enable("rating", human || engine.equals("flounder"));
     enable("moves", !tiny);
-    if (tiny && engineControls.get("moves") instanceof NumberPicker) {
-      ((NumberPicker) engineControls.get("moves")).setValue(1);
+    if (tiny && engineControls.get("moves") instanceof MobileUi.Stepper) {
+      ((MobileUi.Stepper) engineControls.get("moves")).setValue(1);
       settings.p.edit().putInt("moves", 1).apply();
     }
   }
@@ -516,6 +455,8 @@ public class PhoneScreenActivity extends Activity {
     if (v != null) {
       v.setEnabled(value);
       v.setAlpha(value ? 1f : .4f);
+      v.setVisibility(value?View.VISIBLE:View.GONE);
+      Object label=v.getTag();if(label instanceof TextView)((TextView)label).setVisibility(value?View.VISIBLE:View.GONE);
     }
   }
 

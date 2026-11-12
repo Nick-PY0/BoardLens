@@ -4,3 +4,5 @@ rootProject.name = 'BoardLensCompanion'
 include ':app'
 
 include ':qa-target'
+
+include ':qa-components'

@@ -37,7 +37,12 @@ def launch():
     # Downloads only if no compatible UCI engine is already available.
     subprocess.run([str(python), str(ROOT / "tools" / "setup_engine.py")], check=True)
     print("Starting BoardLens...", flush=True)
-    if native:os.execv(str(python),[str(python),"-m","chess_helper"])
+    if native:
+        if os.environ.get('BOARDLENS_EMBEDDED_PYTHON'):
+            import runpy
+            runpy.run_module('chess_helper',run_name='__main__')
+            return 0
+        os.execv(str(python),[str(python),"-m","chess_helper"])
     return subprocess.call([str(python), "-m", "chess_helper"])
 
 

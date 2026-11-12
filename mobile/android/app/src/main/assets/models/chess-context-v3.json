@@ -1,0 +1,18 @@
+{
+  "model": "BoardLens ContextNet v3",
+  "sha256": "a621cbb7af81b315984f2fbe04bea4b0ddf46e3c9f110fd419275ba56220e58c",
+  "labels": ".KQRBNPkqrbnp",
+  "input": [
+    null,
+    6144
+  ],
+  "crop": [
+    -0.75,
+    -1.5,
+    0.75,
+    0.65
+  ],
+  "selected_epoch": 7,
+  "selection": "Highest held-out tile validation accuracy",
+  "scope": "Experimental piece-artwork classifier. Cropped synthetic tests do not prove live discovery, arbitrary 3D camera views or device performance."
+}

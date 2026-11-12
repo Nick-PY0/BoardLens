@@ -244,3 +244,5 @@ class SearchSettings:
     style: str = "Balanced"
     engine_id: str = "stockfish"
     predict_continuations: bool = True
+    prediction_plies: int = 3
+    prediction_seconds: float = 3.0

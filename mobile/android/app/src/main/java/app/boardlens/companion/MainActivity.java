@@ -24,9 +24,9 @@ public class MainActivity extends Activity {
   private EditText address, code;
   private String savedAddress;
   private ValueCallback<Uri[]> chooser;
-  private final int background = Color.rgb(16, 28, 23),
-      foreground = Color.rgb(229, 239, 232),
-      accent = Color.rgb(145, 223, 180);
+  private final int background = MobileUi.BG,
+      foreground = MobileUi.FG,
+      accent = MobileUi.ACCENT;
 
   private int dp(int value) {
     return Math.round(value * getResources().getDisplayMetrics().density);
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
   private GradientDrawable shape(int color) {
     GradientDrawable d = new GradientDrawable();
     d.setColor(color);
-    d.setCornerRadius(dp(12));
+    d.setCornerRadius(dp(14));
     return d;
   }
 
@@ -93,71 +93,19 @@ public class MainActivity extends Activity {
   }
 
   private void home() {
-    atHome = true;
-    if (web != null) {
-      web.destroy();
-      web = null;
-    }
-    ScrollView root = new ScrollView(this);
-    root.setBackgroundColor(background);
-    root.setFillViewport(true);
-    LinearLayout col = new LinearLayout(this);
-    col.setOrientation(1);
-    col.setPadding(dp(24), dp(20), dp(24), dp(24));
-    root.addView(col);
-    ImageView logo = new ImageView(this);
-    logo.setImageResource(R.drawable.boardlens_banner);
-    logo.setContentDescription("BoardLens");
-    logo.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    logo.setBackground(shape(Color.WHITE));
-    logo.setClipToOutline(true);
-    col.addView(logo, new LinearLayout.LayoutParams(dp(220), dp(48)));
-    col.addView(label("Choose your screen", 25));
-    col.addView(label("On this phone", 20));
-    col.addView(
-        label(
-            "Scan a board in another Android app. Local engine, live moves and screen arrows.",
-            15));
-    Button phone = new Button(this);
-    phone.setAllCaps(false);
-    phone.setText("Open phone screen");
-    phone.setTextColor(background);
-    phone.setBackground(shape(accent));
-    phone.setOnClickListener(v -> startActivity(new Intent(this, PhoneScreenActivity.class)));
-    col.addView(phone, new LinearLayout.LayoutParams(-1, dp(52)));
-    col.addView(label("Computer companion", 20));
-    col.addView(
-        label("See your computer’s boards and control its installed engines over Wi-Fi.", 15));
-    Button companion = new Button(this);
-    companion.setAllCaps(false);
-    companion.setText("Connect to computer");
-    companion.setOnClickListener(v -> connectScreen(null));
-    col.addView(companion, new LinearLayout.LayoutParams(-1, dp(52)));
-    Button auto = new Button(this);
-    auto.setAllCaps(false);
-    Runnable paint =
-        () ->
-            auto.setText(
-                "Automatic update checks: "
-                    + (getSharedPreferences("app-updates", 0).getBoolean("auto", true)
-                        ? "On"
-                        : "Off"));
-    paint.run();
-    auto.setOnClickListener(
-        v -> {
-          android.content.SharedPreferences p = getSharedPreferences("app-updates", 0);
-          p.edit().putBoolean("auto", !p.getBoolean("auto", true)).apply();
-          paint.run();
-        });
-    col.addView(auto, new LinearLayout.LayoutParams(-1, dp(48)));
-    Button updates = new Button(this);
-    updates.setAllCaps(false);
-    updates.setText("Check for updates");
-    updates.setOnClickListener(v -> updater.check());
-    col.addView(updates, new LinearLayout.LayoutParams(-1, dp(48)));
-    col.addView(label("Each section saves its own settings.", 14));
-    inset(root);
-    setContentView(root);
+    atHome=true;if(web!=null){web.destroy();web=null;}
+    MobileUi ui=new MobileUi(this);ScrollView root=new ScrollView(this);root.setBackgroundColor(background);root.setFillViewport(true);
+    LinearLayout col=ui.column();col.setPadding(dp(20),dp(16),dp(20),dp(24));root.addView(col);
+    LinearLayout header=new LinearLayout(this);header.setGravity(android.view.Gravity.CENTER_VERTICAL);
+    ImageView logo=new ImageView(this);logo.setImageResource(R.drawable.boardlens_square);logo.setContentDescription("BoardLens logo");header.addView(logo,new LinearLayout.LayoutParams(dp(40),dp(40)));
+    TextView title=ui.text("BoardLens",23,foreground,true);LinearLayout.LayoutParams tp=new LinearLayout.LayoutParams(-2,-2);tp.leftMargin=dp(12);header.addView(title,tp);col.addView(header);ui.gap(col,30);
+    col.addView(ui.text("Choose a screen",28,foreground,true));ui.gap(col,8);col.addView(ui.text("Your boards. Your analysis.",15,MobileUi.MUTED,false));ui.gap(col,24);
+    LinearLayout phone=ui.card();phone.addView(ui.text("On this phone",20,foreground,true));ui.gap(phone,8);phone.addView(ui.text("Live analysis and arrows over a board in another app.",14,MobileUi.MUTED,false));ui.gap(phone,20);
+    phone.addView(ui.button("Open phone screen",true,()->startActivity(new Intent(this,PhoneScreenActivity.class))),new LinearLayout.LayoutParams(-1,dp(50)));col.addView(phone);ui.gap(col,14);
+    LinearLayout computer=ui.card();computer.addView(ui.text("Computer companion",20,foreground,true));ui.gap(computer,8);computer.addView(ui.text("Your computer's boards and engines, over Wi-Fi.",14,MobileUi.MUTED,false));ui.gap(computer,20);computer.addView(ui.button("Connect to computer",false,()->connectScreen(null)),new LinearLayout.LayoutParams(-1,dp(50)));col.addView(computer);ui.gap(col,24);
+    boolean auto=getSharedPreferences("app-updates",0).getBoolean("auto",true);
+    col.addView(ui.toggle("Update checks","Check GitHub for a new release",auto,v->getSharedPreferences("app-updates",0).edit().putBoolean("auto",v).apply()));ui.gap(col,8);
+    col.addView(ui.button("Check for updates",false,()->updater.check()),new LinearLayout.LayoutParams(-1,dp(48)));ui.gap(col,14);col.addView(ui.text("Each section remembers its own settings.",13,MobileUi.MUTED,false));inset(root);setContentView(root);
   }
 
   private void connectScreen(String error) {
@@ -178,16 +126,9 @@ public class MainActivity extends Activity {
             Math.min(getResources().getDisplayMetrics().widthPixels, dp(608)),
             -2,
             android.view.Gravity.CENTER_HORIZONTAL));
-    ImageView brand = new ImageView(this);
-    brand.setImageResource(R.drawable.boardlens_banner);
-    brand.setContentDescription("BoardLens");
-    brand.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    brand.setBackground(shape(Color.WHITE));
-    brand.setClipToOutline(true);
-    column.addView(brand, new LinearLayout.LayoutParams(dp(264), dp(58)));
-    Button sections = new Button(this);
+    Button sections = new MobileUi(this).button("‹ Back",false,()->home());
     sections.setAllCaps(false);
-    sections.setText("← Sections");
+    sections.setText("‹ Back");
     sections.setOnClickListener(v -> home());
     column.addView(sections, new LinearLayout.LayoutParams(-1, dp(44)));
     column.addView(label("Computer companion", 21));
@@ -297,6 +238,11 @@ public class MainActivity extends Activity {
                         .putString("token", token)
                         .apply();
                 });
+          }
+
+          @android.webkit.JavascriptInterface
+          public void openPhoneScreen() {
+            runOnUiThread(()->startActivity(new Intent(MainActivity.this,PhoneScreenActivity.class)));
           }
 
           @android.webkit.JavascriptInterface

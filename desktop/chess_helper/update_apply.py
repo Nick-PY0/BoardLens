@@ -1,5 +1,5 @@
 """Standalone portable updater; preserves runtime, user files and rollback copies."""
-import argparse,json,os,shutil,stat,subprocess,tempfile,time,zipfile
+import argparse,json,os,shutil,stat,subprocess,sys,tempfile,time,zipfile
 from pathlib import Path,PurePosixPath
 
 
@@ -77,7 +77,11 @@ def main():
             else:raise RuntimeError('Close BoardLens before applying this update.')
         count=apply_archive(args.archive,root,args.backup);log.write_text(f'Updated {count} files. Previous files: {args.backup}\n')
     except Exception as error:log.write_text('Update failed; previous files retained: '+str(error)+'\n')
-    command=[args.python,str(root/'launch.py')] if os.environ.get('BOARDLENS_NATIVE_PYTHON') else [args.python,'-m','chess_helper']
+    launcher=os.environ.get('BOARDLENS_NATIVE_LAUNCHER')
+    if launcher and Path(launcher).exists():
+        command=['/usr/bin/open','-n',launcher] if sys.platform=='darwin' else [launcher]
+    else:
+        command=[args.python,str(root/'launch.py')] if os.environ.get('BOARDLENS_NATIVE_PYTHON') else [args.python,'-m','chess_helper']
     subprocess.Popen(command,cwd=root,start_new_session=True,**({'creationflags':subprocess.CREATE_NO_WINDOW} if os.name=='nt' else {}))
 
 

@@ -56,6 +56,7 @@ public final class ScreenService extends Service {
   private PhoneSettings settings;
   private PhoneRemote remote;
   private Rect target;
+  private BoardGeometry targetGeometry;
   private ChessPosition position;
   private boolean bottom = true;
   private String pending = "", lastSettings = "", lastTurn = "Auto";
@@ -91,7 +92,7 @@ public final class ScreenService extends Service {
       if (capture != null)
         capture.post(
             () -> {
-              target = null;
+              target = null;targetGeometry=null;
               baseline = null;
               position = null;
               pending = "";
@@ -165,7 +166,7 @@ public final class ScreenService extends Service {
               null,
               capture);
       running = true;
-      status = "Reading screen · open a 2D chessboard";
+      status = "Reading screen · open a supported chessboard";
       changed();
       capture.post(
           () -> {
@@ -193,7 +194,7 @@ public final class ScreenService extends Service {
     display.resize(w, h, getResources().getDisplayMetrics().densityDpi);
     display.setSurface(images.getSurface());
     old.close();
-    target = null;
+    target = null;targetGeometry=null;
     baseline = null;
     position = null;
     generation++;
@@ -268,7 +269,7 @@ public final class ScreenService extends Service {
         stable = 0;
       }
       if (target != null && !new Rect(0, 0, frame.getWidth(), frame.getHeight()).contains(target)) {
-        target = null;
+        target = null;targetGeometry=null;
         baseline = null;
       }
       if (target != null && baseline != null && !different(baseline, fingerprint(frame, target))) {
@@ -277,7 +278,7 @@ public final class ScreenService extends Service {
           boolean orientation = bottom;
           main.post(
               () -> {
-                if (running && !phoneVisible) overlay.show(rect, orientation, lastArrows);
+                if (running && !phoneVisible) overlay.show(targetGeometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):targetGeometry, orientation, lastArrows);
               });
         }
         return;
@@ -296,16 +297,16 @@ public final class ScreenService extends Service {
       diagnostic = reader.diagnostic;
       if (read == null) {
         if (++failures > 8) {
-          target = null;
+          target = null;targetGeometry=null;
           baseline = null;
-          status = "Looking for a complete 2D board";
+          status = "Looking for a complete supported board";
           main.post(() -> overlay.clear());
           changed();
         }
         return;
       }
       failures = 0;
-      target = read.rect();
+      target = read.rect();targetGeometry=read.geometry();
       bottom = read.whiteBottom();
       if (!read.placement().equals(pending)) {
         pending = read.placement();
@@ -343,7 +344,7 @@ public final class ScreenService extends Service {
       } else if (settings.arrows() && !lastArrows.isEmpty()) {
         Rect rect = new Rect(target);
         boolean orientation = bottom;
-        main.post(() -> overlay.show(rect, orientation, lastArrows));
+        main.post(() -> overlay.show(targetGeometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):targetGeometry, orientation, lastArrows));
       }
     } catch (Exception error) {
       status = "Read paused: " + error.getMessage();
@@ -372,7 +373,7 @@ public final class ScreenService extends Service {
                       board,
                       settings,
                       () -> token == generation && running,
-                      r -> publishMoves(r, board, rect, whiteBottom, token, false),
+                      r -> { if (settings.early()) publishMoves(r, board, rect, whiteBottom, token, false); },
                       value -> {
                         try {
                           if (token != generation) return;
@@ -414,7 +415,7 @@ public final class ScreenService extends Service {
                     board,
                     settings,
                     false,
-                    r -> publishMoves(r, board, rect, whiteBottom, token, false));
+                    r -> { if (settings.early()) publishMoves(r, board, rect, whiteBottom, token, false); });
             publishMoves(result, board, rect, whiteBottom, token, true);
           } catch (CancellationException ignored) {
           } catch (Exception error) {
@@ -462,6 +463,7 @@ public final class ScreenService extends Service {
       long token,
       boolean finished) {
     if (token != generation || result.lines().isEmpty() || !running) return;
+    final BoardGeometry arrowGeometry=targetGeometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):targetGeometry;
     PhoneEngine.Line first = result.lines().get(0);
     if (settings.steady()
         && !finished
@@ -476,14 +478,14 @@ public final class ScreenService extends Service {
       if (settings.onlyMine() && board.white != whiteBottom) continue;
       text.append(++rank).append(". ").append(board.simple(line.move())).append('\n');
       arrows.add(line.move());
-      if (rank == 1 && settings.predict() && line.pv().size() > 1) {
+      if (rank == 1 && settings.predict() && settings.predictionPlies()>1 && line.pv().size() > 1) {
         ChessPosition next = board.play(line.move());
         String reply = line.pv().get(1);
         if (next.legal().contains(reply)) {
           text.append("Reply: ").append(next.simple(reply)).append('\n');
           if (!settings.onlyMine()) arrows.add(reply);
           next = next.play(reply);
-          if (line.pv().size() > 2 && next.legal().contains(line.pv().get(2)))
+          if (settings.predictionPlies()>2 && line.pv().size() > 2 && next.legal().contains(line.pv().get(2)))
             text.append("Then: ").append(next.simple(line.pv().get(2))).append('\n');
         }
       }
@@ -498,7 +500,7 @@ public final class ScreenService extends Service {
     main.post(
         () -> {
           if (token == generation && running) {
-            if (settings.arrows()) overlay.show(rect, whiteBottom, arrows);
+            if (settings.arrows()) overlay.show(arrowGeometry, whiteBottom, arrows);
             else overlay.clear();
           }
         });

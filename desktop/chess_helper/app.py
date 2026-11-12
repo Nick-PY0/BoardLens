@@ -191,6 +191,9 @@ class MainWindow(QMainWindow):
         self.live_worker.provider=self.direct_reads
         self.analysis_presets=AnalysisPresets(self);self.target_lock=TargetLock()
         self._build_ui()
+        if sys.platform == 'darwin' and not os.environ.get('BOARDLENS_TEST_MODE'):
+            from .permissions import Permissions
+            self.permissions = Permissions(self)
         from .evaluation import Evaluations
         self.evaluations=Evaluations(self);self.evaluations.changed.connect(self.evaluation_changed)
         self.analysis_presets.refresh_presets()
@@ -222,7 +225,7 @@ class MainWindow(QMainWindow):
     def bind_autosave(self):
         self.autosave_timer=QTimer(self);self.autosave_timer.setSingleShot(True);self.autosave_timer.setInterval(500)
         self.autosave_timer.timeout.connect(lambda:self.save(quiet=True))
-        names=('seconds','depth','multipv','threads','hash_mb','arrow_count','engine_skill','engine_elo','human_elo','phone_port','source','monitor','mode','orientation','turn','engine_kind','playing_style','strength_mode','compare_a','compare_b','compare_c','overlay_enabled','arrow_labels','show_white','show_black','show_reply','rank_best','rank_second','rank_others','only_my_color','early_suggestions','global_keys','stick_to_move','steady_arrows','always_top','phone_auto','browser_reader_button','native_reader_button','dashed_reply','threats_enabled','threat_attacks','threat_mates','lock_target','eval_engine','eval_seconds','eval_depth','eval_human_elo','predict_continuations')
+        names=('seconds','depth','multipv','threads','hash_mb','arrow_count','engine_skill','engine_elo','human_elo','phone_port','source','monitor','mode','orientation','turn','engine_kind','playing_style','strength_mode','compare_a','compare_b','compare_c','overlay_enabled','arrow_labels','show_white','show_black','show_reply','rank_best','rank_second','rank_others','only_my_color','early_suggestions','global_keys','stick_to_move','steady_arrows','always_top','phone_auto','browser_reader_button','native_reader_button','dashed_reply','threats_enabled','threat_attacks','threat_mates','lock_target','eval_engine','eval_seconds','eval_depth','eval_human_elo','predict_continuations','prediction_plies','prediction_seconds')
         for name in names:
             field=getattr(self,name)
             signal=field.valueChanged if isinstance(field,(QSpinBox,QDoubleSpinBox)) else field.currentIndexChanged if isinstance(field,QComboBox) else field.toggled
@@ -319,6 +322,9 @@ class MainWindow(QMainWindow):
     def start_live(self, compact=False):
         if self.source.currentIndex() != 1:
             return
+        self.update_foreground()
+        if hasattr(self, 'permissions') and not self.permissions.ensure_capture():
+            return
         self._reviewing = False
         self._monitoring = True
         self.update_history_controls()
@@ -335,6 +341,8 @@ class MainWindow(QMainWindow):
         if self.closing or self._reviewing or (not self._monitoring and not force):
             return
         self.update_foreground()
+        if hasattr(self, 'permissions') and not self.permissions.ensure_capture():
+            return
         if self._scan_busy:
             if force:self._scan_again = True
             return
@@ -683,7 +691,10 @@ class MainWindow(QMainWindow):
         from .updater import auto_enabled,set_auto_enabled
         self.auto_updates=QCheckBox('Automatic updates');self.auto_updates.setChecked(auto_enabled());self.auto_updates.setToolTip('Check and download quietly; apply the verified update on next launch.')
         self.auto_updates.toggled.connect(set_auto_enabled);app_settings_layout.addWidget(self.auto_updates)
-        self._button('Check for updates',self.open_updates,app_settings_layout);src.addWidget(app_settings)
+        self._button('Check for updates',self.open_updates,app_settings_layout)
+        if sys.platform == 'darwin':
+            self._button('Permissions', lambda: self.permissions.open() if hasattr(self, 'permissions') else None, app_settings_layout)
+        src.addWidget(app_settings)
         src.addStretch()
         tabs.addTab(self._scroll(source), "Board")
         engine = QWidget()
@@ -693,7 +704,7 @@ class MainWindow(QMainWindow):
         self.engine_path.setPlaceholderText("Choose a Stockfish / UCI executable")
         self.engine_kind=QComboBox();self.engine_kind.addItems(engine_config.ENGINE_NAMES)
         eng.addWidget(QLabel("Analysis engine"));eng.addWidget(self.engine_kind)
-        self.preset_combo=QComboBox();self.preset_combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon);self.preset_combo.setMinimumContentsLength(10);self.preset_combo.addItem('Custom settings',None);self.preset_combo.currentIndexChanged.connect(self.preset_selected);eng.addWidget(self.preset_combo)
+        self.preset_combo=QComboBox();self.preset_combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon);self.preset_combo.setMinimumContentsLength(10);self.preset_combo.addItem('Manual',None);self.preset_combo.setToolTip('Manual uses the individual settings below. Quick and Deep are saved Stockfish configurations. Save preset remembers your chosen engine and controls.');self.preset_combo.currentIndexChanged.connect(self.preset_selected);eng.addWidget(self.preset_combo)
         preset_actions=QHBoxLayout();self._button('Save preset…',self.save_named_preset,preset_actions);self._button('Manage…',self.manage_presets,preset_actions);eng.addLayout(preset_actions)
         self._button("Engine library…",self.open_engine_library,eng)
         evaluation_box=QGroupBox('Evaluation bar');evaluation_form=QFormLayout(evaluation_box)
@@ -731,7 +742,7 @@ class MainWindow(QMainWindow):
         controls = QFormLayout();controls.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows);self.engine_limit_form=controls
         self.mode = QComboBox()
         self.mode.addItems(["Time", "Depth", "Time + depth", "Adaptive"])
-        controls.addRow("Stop at", self.mode)
+        controls.addRow("Analysis limit", self.mode)
         self.seconds = QDoubleSpinBox()
         self.seconds.setRange(.1, 300)
         self.seconds.setSingleStep(.5)
@@ -767,11 +778,18 @@ class MainWindow(QMainWindow):
         eng.addWidget(self.limit_label)
         self.seconds.valueChanged.connect(self.update_limit_label)
         self.depth.valueChanged.connect(self.update_limit_label)
-        self.early_suggestions = QCheckBox("Early suggestions")
+        self.early_suggestions = QCheckBox("Show moves while thinking")
         self.early_suggestions.setChecked(True)
         self.early_suggestions.toggled.connect(self.visual_settings_changed)
         eng.addWidget(self.early_suggestions)
-        self.predict_continuations=QCheckBox('Predict opponent and my next move');self.predict_continuations.setChecked(True);self.predict_continuations.toggled.connect(self.engine_settings_changed);eng.addWidget(self.predict_continuations)
+        self.predict_continuations=QCheckBox('Predict opponent and my next move');self.predict_continuations.setChecked(True);self.predict_continuations.toggled.connect(self.prediction_controls_changed);eng.addWidget(self.predict_continuations)
+        prediction_form=QFormLayout();prediction_form.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapLongRows)
+        self.prediction_plies=QSpinBox();self.prediction_plies.setRange(1,12);self.prediction_plies.setValue(3);self.prediction_plies.setSuffix(' plies')
+        self.prediction_plies.setToolTip('A ply is one move by one side. 3 = your move, opponent reply, your response. This applies to Maia 2, every Maia 3 model, and Tiny bots too.')
+        self.prediction_seconds=QDoubleSpinBox();self.prediction_seconds.setRange(.1,60);self.prediction_seconds.setValue(3);self.prediction_seconds.setSingleStep(.5);self.prediction_seconds.setSuffix(' s')
+        self.prediction_seconds.setToolTip('Budget for calculating extra replies after the first recommendation. No artificial wait. A Maia pass already running may finish after this budget.')
+        prediction_form.addRow('Prediction length',self.prediction_plies);prediction_form.addRow('Reply time budget',self.prediction_seconds);eng.addLayout(prediction_form)
+        for field in (self.prediction_plies,self.prediction_seconds):field.valueChanged.connect(self.engine_settings_changed)
         refresh_note=QLabel("Screen refresh: 75 ms target.")
         refresh_note.setWordWrap(True)
         self.engine_refresh_note=refresh_note
@@ -1034,6 +1052,8 @@ class MainWindow(QMainWindow):
 
     def status(self, message):
         if not self.closing:
+            if getattr(getattr(self, 'permissions', None), 'blocked', False) and not self.practice:
+                message = self.permissions.reason + ' permission required · screen reading is paused'
             self.status_label.setText(message)
 
     def native_access_changed(self,enabled):
@@ -1216,10 +1236,10 @@ class MainWindow(QMainWindow):
                 if region.size>=80:
                     self.target_lock.target=saved_target;self.region=region;self._scan_route=saved_target['route'];self.lock_target.blockSignals(True);self.lock_target.setChecked(True);self.lock_target.blockSignals(False);self.target_status.setText('Locked target · waiting for a read')
             except (TypeError,ValueError):pass
-        for name,default in (('eval_seconds',.3),('eval_depth',18),('eval_human_elo',1500)):getattr(self,name).setValue(self.settings.get(name,default))
+        for name,default in (('eval_seconds',.3),('eval_depth',18),('eval_human_elo',1500),('prediction_plies',3),('prediction_seconds',3.)):getattr(self,name).setValue(self.settings.get(name,default))
         self.eval_engine.setCurrentIndex(max(0,self.eval_engine.findData(self.settings.get('eval_engine_id',0))))
         self.predict_continuations.setChecked(bool(self.settings.get('predict_continuations',True)))
-        self.engine_configuration_changed();self.evaluation_settings_changed()
+        self.engine_configuration_changed();self.evaluation_settings_changed();self.prediction_controls_changed()
         self.preset_combo.blockSignals(True);self.preset_combo.setCurrentIndex(max(0,self.preset_combo.findData(self.settings.get('active_preset'))));self.preset_combo.blockSignals(False)
         self.source_controls()
         if not os.environ.get('BOARDLENS_TEST_MODE'):
@@ -1251,7 +1271,7 @@ class MainWindow(QMainWindow):
             ("overlay_enabled","arrow_labels","show_white","show_black","show_reply","rank_best","rank_second","rank_others","only_my_color","early_suggestions","global_keys","stick_to_move","steady_arrows")})
         values.update({name:getattr(self,name).currentIndex() for name in ('engine_kind','playing_style','strength_mode','compare_a','compare_b','compare_c')})
         values.update({name:getattr(self,name).value() for name in ('engine_skill','engine_elo','human_elo')})
-        values.update(eval_engine_id=self.eval_engine.currentData(),eval_seconds=self.eval_seconds.value(),eval_depth=self.eval_depth.value(),eval_human_elo=self.eval_human_elo.value(),predict_continuations=self.predict_continuations.isChecked())
+        values.update(eval_engine_id=self.eval_engine.currentData(),eval_seconds=self.eval_seconds.value(),eval_depth=self.eval_depth.value(),eval_human_elo=self.eval_human_elo.value(),predict_continuations=self.predict_continuations.isChecked(),prediction_plies=self.prediction_plies.value(),prediction_seconds=self.prediction_seconds.value())
         values.update(custom_engine=self.custom_engine.text(),dashed_reply=self.dashed_reply.isChecked())
         values.update(arrow_count=self.arrow_count.value(),threats_enabled=self.threats_enabled.isChecked(),threat_attacks=self.threat_attacks.isChecked(),threat_mates=self.threat_mates.isChecked(),target_lock=self.target_lock.target,active_preset=self.preset_combo.currentData())
         try:
@@ -1261,6 +1281,10 @@ class MainWindow(QMainWindow):
             if not quiet:self.status("Preferences saved.")
         except OSError as exc:
             self.status(f"Could not save preferences: {exc}")
+
+    def prediction_controls_changed(self,*_):
+        for field in (self.prediction_plies,self.prediction_seconds):field.setEnabled(self.predict_continuations.isChecked())
+        self.engine_settings_changed()
 
     def mode_changed(self, *_):
         self.seconds.setEnabled((engine_config.is_tiny(self) or self.mode.currentText() != "Depth") and not engine_config.is_human(self))
@@ -1274,7 +1298,7 @@ class MainWindow(QMainWindow):
                f"{self.seconds.value():g} seconds or depth {self.depth.value()}, whichever comes first")
         if mode=="Adaptive":limit=f"adaptive search, up to {self.seconds.value():g}s and depth {self.depth.value()}"
         if engine_config.is_tiny(self):limit=f"{self.seconds.value():g}s bot clock budget (no depth control)"
-        self.limit_label.setText("Maia: one human-move prediction; time/depth are not search limits." if engine_config.is_human(self) else "Active search limit: "+limit)
+        self.limit_label.setText("Maia: one pass per position. Use prediction length and reply budget below." if engine_config.is_human(self) else "Active search limit: "+limit)
         self.update_engine_summary()
 
     def set_always_top(self, enabled):
@@ -1681,7 +1705,7 @@ class MainWindow(QMainWindow):
                               engine_config.entry(self).identity if engine_config.is_tiny(self) else engine_config.entry(self).kind,
                               self.strength_mode.currentText() if self.engine_kind.currentIndex()==0 else "Full strength",
                               self.engine_skill.value(),self.engine_elo.value(),self.human_elo.value(),
-                              self.playing_style.currentText() if self.playing_style.isEnabled() else 'Balanced',engine_config.entry(self).identity,self.predict_continuations.isChecked())
+                              self.playing_style.currentText() if self.playing_style.isEnabled() else 'Balanced',engine_config.entry(self).identity,self.predict_continuations.isChecked(),self.prediction_plies.value(),self.prediction_seconds.value())
 
     def suggest(self, checked=False, from_poll=False):
         try:
@@ -1972,6 +1996,8 @@ class MainWindow(QMainWindow):
             self.status(str(exc))
 
     def stop(self, checked=False):
+        if getattr(getattr(self, 'permissions', None), 'blocked', False):
+            self.permissions.resume = False
         self._monitoring = False
         if hasattr(self,'evaluations'):self.evaluations.invalidate()
         if hasattr(self,"comparison"):self.comparison.cancel()
@@ -2267,6 +2293,7 @@ class MainWindow(QMainWindow):
             self.local_shortcuts.append(shortcut)
 
     def closeEvent(self, event):
+        if hasattr(self, 'permissions'): self.permissions.close()
         self.stop()
         self.save()
         self.closing = True

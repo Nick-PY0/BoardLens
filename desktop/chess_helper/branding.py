@@ -1,5 +1,6 @@
 """Shared brand artwork and a compact banner that keeps its proportions."""
 from pathlib import Path
+import sys
 
 from PySide6.QtCore import QRectF
 from PySide6.QtGui import QIcon, QPainter, QPainterPath, QPixmap
@@ -9,7 +10,8 @@ ASSETS = Path(__file__).parent / 'assets/ui'
 
 
 def app_icon():
-    return QIcon(str(ASSETS / 'boardlens-icon.png'))
+    mac = ASSETS / 'boardlens-icon-mac.png'
+    return QIcon(str(mac if sys.platform == 'darwin' and mac.exists() else ASSETS / 'boardlens-icon-rounded.png'))
 
 
 class BrandBanner(QWidget):

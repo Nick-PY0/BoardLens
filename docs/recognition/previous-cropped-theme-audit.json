@@ -1,0 +1,2794 @@
+{
+  "model": "chess-tiles-v2",
+  "elapsed": 6.98,
+  "source": "reference assets; rendered tests, not physical-device validation",
+  "styles": [
+    {
+      "style": "lichess-2d/cburnett",
+      "name": "cburnett",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9169,
+          "mean_confidence": 0.9504,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9166,
+          "mean_confidence": 0.9501,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/merida",
+      "name": "merida",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        },
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/alpha",
+      "name": "alpha",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9319,
+          "mean_confidence": 0.956,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.943,
+          "mean_confidence": 0.956,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/pirouetti",
+      "name": "pirouetti",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9182,
+          "mean_confidence": 0.9619,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9228,
+          "mean_confidence": 0.9618,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/chessnut",
+      "name": "chessnut",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9384,
+          "mean_confidence": 0.9547,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.938,
+          "mean_confidence": 0.9539,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/chess7",
+      "name": "chess7",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9332,
+          "mean_confidence": 0.9563,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9321,
+          "mean_confidence": 0.9557,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/reillycraig",
+      "name": "reillycraig",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9397,
+          "mean_confidence": 0.954,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9376,
+          "mean_confidence": 0.9541,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/companion",
+      "name": "companion",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9256,
+          "mean_confidence": 0.9553,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9274,
+          "mean_confidence": 0.9546,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/riohacha",
+      "name": "riohacha",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9289,
+          "mean_confidence": 0.9564,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9307,
+          "mean_confidence": 0.9573,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/kosal",
+      "name": "kosal",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9281,
+          "mean_confidence": 0.9533,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9255,
+          "mean_confidence": 0.9537,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/leipzig",
+      "name": "leipzig",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8718,
+          "mean_confidence": 0.9535,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9119,
+          "mean_confidence": 0.954,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/fantasy",
+      "name": "fantasy",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9204,
+          "mean_confidence": 0.9586,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9173,
+          "mean_confidence": 0.959,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/spatial",
+      "name": "spatial",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        },
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/celtic",
+      "name": "celtic",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9333,
+          "mean_confidence": 0.9555,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9308,
+          "mean_confidence": 0.9555,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/california",
+      "name": "california",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9174,
+          "mean_confidence": 0.9534,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9255,
+          "mean_confidence": 0.9538,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/caliente",
+      "name": "caliente",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9086,
+          "mean_confidence": 0.9575,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.923,
+          "mean_confidence": 0.9578,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/pixel",
+      "name": "pixel",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9154,
+          "mean_confidence": 0.955,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9138,
+          "mean_confidence": 0.9551,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/firi",
+      "name": "firi",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.4847,
+          "mean_confidence": 0.905,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.4564,
+          "mean_confidence": 0.9073,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/rhosgfx",
+      "name": "rhosgfx",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9198,
+          "mean_confidence": 0.9578,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9584,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/maestro",
+      "name": "maestro",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9178,
+          "mean_confidence": 0.9553,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9173,
+          "mean_confidence": 0.9544,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/fresca",
+      "name": "fresca",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9243,
+          "mean_confidence": 0.9561,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9301,
+          "mean_confidence": 0.9563,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/cardinal",
+      "name": "cardinal",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9441,
+          "mean_confidence": 0.959,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9588,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/gioco",
+      "name": "gioco",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        },
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/tatiana",
+      "name": "tatiana",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        },
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/staunty",
+      "name": "staunty",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9477,
+          "mean_confidence": 0.957,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9445,
+          "mean_confidence": 0.957,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/cooke",
+      "name": "cooke",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9263,
+          "mean_confidence": 0.962,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9629,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/monarchy",
+      "name": "monarchy",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 63,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.5576,
+          "mean_confidence": 0.932,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqqbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 63,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.4902,
+          "mean_confidence": 0.9296,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.qqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/papercut",
+      "name": "papercut",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9408,
+          "mean_confidence": 0.963,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9637,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/minimal-warmth",
+      "name": "minimal-warmth",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 63,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.6297,
+          "mean_confidence": 0.9309,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqqbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 63,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.6487,
+          "mean_confidence": 0.9311,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.qqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/governor",
+      "name": "governor",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        },
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/dubrovny",
+      "name": "dubrovny",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9441,
+          "mean_confidence": 0.9601,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9465,
+          "mean_confidence": 0.9601,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/shahi-ivory-brown",
+      "name": "shahi-ivory-brown",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9202,
+          "mean_confidence": 0.9595,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9472,
+          "mean_confidence": 0.9599,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/icpieces",
+      "name": "icpieces",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9233,
+          "mean_confidence": 0.9592,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9236,
+          "mean_confidence": 0.959,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/mpchess",
+      "name": "mpchess",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        },
+        {
+          "board": "board-lichess/brown",
+          "error": "SVG has an invalid size"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/kiwen-suwi",
+      "name": "kiwen-suwi",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9299,
+          "mean_confidence": 0.9585,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.943,
+          "mean_confidence": 0.9578,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/totoy",
+      "name": "totoy",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9322,
+          "mean_confidence": 0.9581,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9293,
+          "mean_confidence": 0.9574,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/horsey",
+      "name": "horsey",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.948,
+          "mean_confidence": 0.9625,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9631,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/anarcandy",
+      "name": "anarcandy",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9405,
+          "mean_confidence": 0.958,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9376,
+          "mean_confidence": 0.9576,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/xkcd",
+      "name": "xkcd",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8718,
+          "mean_confidence": 0.9565,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.84,
+          "mean_confidence": 0.9574,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/shapes",
+      "name": "shapes",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9286,
+          "mean_confidence": 0.9645,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9367,
+          "mean_confidence": 0.9638,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/letter",
+      "name": "letter",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9201,
+          "mean_confidence": 0.9637,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9354,
+          "mean_confidence": 0.9629,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-2d/disguised",
+      "name": "disguised",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.3134,
+          "mean_confidence": 0.6515,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "kkkkkkkkkkkkkkkk................................KKKKKKKKKKKKKKKK"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.3037,
+          "mean_confidence": 0.6469,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "K..KKKKKKKK.KKKK..K........K.K.....k.k.......k..kkk.kkkkkk.kkk.k"
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Basic",
+      "name": "Basic",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.3415,
+          "mean_confidence": 0.8352,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "........QqQqQqQq................................................"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2946,
+          "mean_confidence": 0.7978,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "...................................Q..............q...q....q.q.."
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Wood",
+      "name": "Wood",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2307,
+          "mean_confidence": 0.8492,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "........Qq.q.q.q................................................"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.241,
+          "mean_confidence": 0.8438,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "..................................................q...q......q.."
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Metal",
+      "name": "Metal",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1652,
+          "mean_confidence": 0.7848,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "Qq..Q.qKQQQQQQQQ................................................"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 31,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1265,
+          "mean_confidence": 0.7431,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "...................................Q.Q.......q..RQKBR.KQKq.QQq.K"
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/RedVBlue",
+      "name": "RedVBlue",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 33,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1987,
+          "mean_confidence": 0.7011,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": ".kk.kkk.kkkkkkkk................................pQKQKQ.p........"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.239,
+          "mean_confidence": 0.7398,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "........QKQ.QKQK...........K.......k.........k..k.k.kkkk.k.q.k.."
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/ModernJade",
+      "name": "ModernJade",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 33,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.221,
+          "mean_confidence": 0.7506,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rR.Rr..Rkkkkkkkk................................................"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2125,
+          "mean_confidence": 0.7009,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": ".......R.K...K.K...................k.............kk.kkk.R..rR..r"
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/ModernWood",
+      "name": "ModernWood",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2422,
+          "mean_confidence": 0.7594,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": ".kq..qk.kkkkkkkk................................k......k........"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2795,
+          "mean_confidence": 0.7453,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "........kk..kkkk...........k.......k.........k..kkk.kkkk.k...q.."
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Glass",
+      "name": "Glass",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 35,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1913,
+          "mean_confidence": 0.6583,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "kqqqkkqRkkkkkkkk................................kNKKkKnKRrkqrkrk"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1917,
+          "mean_confidence": 0.6548,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "k..rrkrRKkN.kkkk..r........k.......k.........k..knkbnkkKRk.kqk.k"
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Trimmed",
+      "name": "Trimmed",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.3325,
+          "mean_confidence": 0.7756,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "....q...kkkkkkkk................................................"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 31,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2348,
+          "mean_confidence": 0.714,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "........QQ..QQQQ...................k............kKkpkKk....q...k"
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Experimental",
+      "name": "Experimental",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2008,
+          "mean_confidence": 0.6897,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "kkk..Qkqbkbkbkbk................................Q.K.KK.BKkK.QKKK"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1622,
+          "mean_confidence": 0.6938,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "Q..QqKKKQQ..QQQQ..K........Q.Q.....b.........k..b.k..bkbQk...q.q"
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/Staunton",
+      "name": "Staunton",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 33,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1915,
+          "mean_confidence": 0.7125,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": ".b.bbn..bbbbbbbb...................................B....BbBNNbBB"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2104,
+          "mean_confidence": 0.6732,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "B..NNB.B.Q...Q.Q...................b.b............b...b..b.nbn.."
+        }
+      ]
+    },
+    {
+      "style": "lichess-3d/CubesAndPi",
+      "name": "CubesAndPi",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.3321,
+          "mean_confidence": 0.7746,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "........kkkkkkkk................................K.KK.K.K........"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.3382,
+          "mean_confidence": 0.7932,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "........Kk..KkKk...................k............kkk.kkkk........"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/ejgfv",
+      "name": "Neo",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.948,
+          "mean_confidence": 0.959,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9589,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/8qetl",
+      "name": "Neo Angle",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.6368,
+          "mean_confidence": 0.9447,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.6024,
+          "mean_confidence": 0.9444,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/game_room",
+      "name": "Game Room",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9456,
+          "mean_confidence": 0.9575,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9443,
+          "mean_confidence": 0.9573,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/wood",
+      "name": "Wood",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9124,
+          "mean_confidence": 0.9556,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9135,
+          "mean_confidence": 0.9546,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/glass",
+      "name": "Glass",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9305,
+          "mean_confidence": 0.9577,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9223,
+          "mean_confidence": 0.9571,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/gothic",
+      "name": "Gothic",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8824,
+          "mean_confidence": 0.9529,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9151,
+          "mean_confidence": 0.9549,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/classic",
+      "name": "Classic",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9455,
+          "mean_confidence": 0.9572,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9434,
+          "mean_confidence": 0.9568,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/metal",
+      "name": "Metal",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8916,
+          "mean_confidence": 0.9579,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.905,
+          "mean_confidence": 0.9579,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/bases",
+      "name": "Bases",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.948,
+          "mean_confidence": 0.9578,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9577,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/neo_wood",
+      "name": "Neo-Wood",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9371,
+          "mean_confidence": 0.9563,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9378,
+          "mean_confidence": 0.9559,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/icy_sea",
+      "name": "Icy Sea",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9458,
+          "mean_confidence": 0.9564,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9417,
+          "mean_confidence": 0.9562,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/club",
+      "name": "Club",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9287,
+          "mean_confidence": 0.9598,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9329,
+          "mean_confidence": 0.9605,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/ocean",
+      "name": "Ocean",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9357,
+          "mean_confidence": 0.9567,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9454,
+          "mean_confidence": 0.9558,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/newspaper",
+      "name": "Newspaper",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.939,
+          "mean_confidence": 0.9625,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9398,
+          "mean_confidence": 0.9627,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/space",
+      "name": "Space",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9373,
+          "mean_confidence": 0.9578,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9325,
+          "mean_confidence": 0.9575,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/cases",
+      "name": "Cases",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8957,
+          "mean_confidence": 0.9548,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9065,
+          "mean_confidence": 0.9545,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/condal",
+      "name": "Condal",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 59,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2421,
+          "mean_confidence": 0.8903,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnnQknnrpppppppp................................PPPPPPPPRNNQKQNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 59,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2466,
+          "mean_confidence": 0.8907,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQNNRPPP.PPPP..N........P.Q.....p.n.......n..ppp.pppprn.kQn.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/3d_chesskid",
+      "name": "3D - ChessKid",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 35,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2083,
+          "mean_confidence": 0.7308,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "kqkk.k.rkkkkkkkk................................KK.KK..KRQKNQKQR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 36,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2845,
+          "mean_confidence": 0.7176,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..QNKQRKK..KKKK..Q................k............kkk..kkkr..kk..k"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/8_bit",
+      "name": "8-Bit",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.5185,
+          "mean_confidence": 0.943,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.4149,
+          "mean_confidence": 0.9323,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/marble",
+      "name": "Marble",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.948,
+          "mean_confidence": 0.9583,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9457,
+          "mean_confidence": 0.9578,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/book",
+      "name": "Book",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9316,
+          "mean_confidence": 0.9564,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9326,
+          "mean_confidence": 0.9565,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/alpha",
+      "name": "Alpha",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9287,
+          "mean_confidence": 0.9539,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9281,
+          "mean_confidence": 0.9535,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/bubblegum",
+      "name": "Bubblegum",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9207,
+          "mean_confidence": 0.9559,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9307,
+          "mean_confidence": 0.9563,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/dash",
+      "name": "Dash",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9193,
+          "mean_confidence": 0.9597,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9188,
+          "mean_confidence": 0.9597,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/graffiti",
+      "name": "Graffiti",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9328,
+          "mean_confidence": 0.9562,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9277,
+          "mean_confidence": 0.9558,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/light",
+      "name": "Light",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9289,
+          "mean_confidence": 0.9544,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9267,
+          "mean_confidence": 0.9548,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/lolz",
+      "name": "Lolz",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9361,
+          "mean_confidence": 0.9578,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9299,
+          "mean_confidence": 0.958,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/luca",
+      "name": "Luca",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9444,
+          "mean_confidence": 0.9596,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9594,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/maya",
+      "name": "Maya",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9381,
+          "mean_confidence": 0.9561,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9396,
+          "mean_confidence": 0.9566,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/modern",
+      "name": "Modern",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9448,
+          "mean_confidence": 0.9563,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9459,
+          "mean_confidence": 0.9557,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/nature",
+      "name": "Nature",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8878,
+          "mean_confidence": 0.9547,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9083,
+          "mean_confidence": 0.9551,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/neon",
+      "name": "Neon",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9403,
+          "mean_confidence": 0.9593,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9327,
+          "mean_confidence": 0.958,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/sky",
+      "name": "Sky",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 63,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.5651,
+          "mean_confidence": 0.9319,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrPppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 63,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.5272,
+          "mean_confidence": 0.9305,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppPrn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/tigers",
+      "name": "Tigers",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.948,
+          "mean_confidence": 0.9607,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9475,
+          "mean_confidence": 0.9606,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/tournament",
+      "name": "Tournament",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8914,
+          "mean_confidence": 0.9599,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.8911,
+          "mean_confidence": 0.9604,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/vintage",
+      "name": "Vintage",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9096,
+          "mean_confidence": 0.9558,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 64,
+          "exact": true,
+          "accepted": true,
+          "confident_wrong": false,
+          "minimum_confidence": 0.9136,
+          "mean_confidence": 0.9559,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/3d_wood",
+      "name": "Real 3D",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1732,
+          "mean_confidence": 0.6763,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": ".KK.kKK.QKQKQKQK................................QQQQQQQQQKQ.KQQK"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 33,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1703,
+          "mean_confidence": 0.6699,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "...K.QK.QQQ.QQQQ..K........Q.Q.....Q.K.......K..KKQ.QQQQKK.KKK.K"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/3d_staunton",
+      "name": "3D - Staunton",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 33,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1675,
+          "mean_confidence": 0.7168,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "kkkkkkkkkkkkkkkk.................................QQQ.QQQ..Q..QQq"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 34,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1891,
+          "mean_confidence": 0.7462,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "q..K.Q..QQQ.QQQQ...........Q.Q.....k.k.......k..kkk.kkkkkk.kkk.k"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/3d_plastic",
+      "name": "3D - Plastic",
+      "projection": "3d-sprite",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 33,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1768,
+          "mean_confidence": 0.7034,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "kKKKKKKKQQQQQQQQ................................QQQQQQQQQKQ.KQQK"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 32,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.1834,
+          "mean_confidence": 0.689,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "...KKQK.QQQ.QQQQ..K........Q.Q.....Q.K.......K..QQQPQQQQKK.KKK.k"
+        }
+      ]
+    },
+    {
+      "style": "chesscom/ca09k",
+      "name": "Band Class",
+      "projection": "flat",
+      "cases": [
+        {
+          "board": "board-lichess/brown",
+          "flipped": false,
+          "correct_tiles": 56,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2431,
+          "mean_confidence": 0.8802,
+          "expected": "rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR",
+          "predicted": "rnbqkbnrpppppppp................................pPpPpPpPNnBQKbNr"
+        },
+        {
+          "board": "board-lichess/brown",
+          "flipped": true,
+          "correct_tiles": 55,
+          "exact": false,
+          "accepted": false,
+          "confident_wrong": false,
+          "minimum_confidence": 0.2147,
+          "mean_confidence": 0.8858,
+          "expected": "R..KQBNRPPP.PPPP..N........P.B.....p.b.......n..ppp.pppprn.kqb.r",
+          "predicted": "r..KQBnNPpP.PpPp..n........p.b.....p.b.......n..ppp.pppprn.kqb.r"
+        }
+      ]
+    }
+  ]
+}

@@ -43,6 +43,12 @@ final class PhoneSettings {
     return p.getBoolean("predict", true);
   }
 
+  int predictionPlies() { return p.getInt("prediction_plies", 3); }
+
+  float predictionSeconds() { return p.getFloat("prediction_seconds", 3f); }
+
+  boolean early() { return p.getBoolean("early", true); }
+
   boolean onlyMine() {
     return p.getBoolean("onlyMine", false);
   }

@@ -58,7 +58,7 @@ def main():
    for p in sorted(payload.rglob('*')):
     if p.is_file():z.write(p,p.relative_to(payload).as_posix())
  digest=sha(archive);meta=dict(metadata,payload_sha256=digest)
- icon=SOURCE/'chess_helper/assets/ui/boardlens-icon.png'
+ icon=SOURCE/'chess_helper/assets/ui/boardlens-icon-mac.png' if sys.platform=='darwin' else SOURCE/'chess_helper/assets/ui/boardlens-icon-rounded.png'
  if sys.platform=='darwin':
   app=Path(tempfile.mkdtemp(prefix='boardlens-native-'))/'BoardLens.app'
   if app.exists():shutil.rmtree(app)
@@ -71,7 +71,7 @@ def main():
   import plistlib
   info={'CFBundleName':'BoardLens','CFBundleDisplayName':'BoardLens','CFBundleIdentifier':'app.boardlens.desktop','CFBundleExecutable':'BoardLens','CFBundlePackageType':'APPL','CFBundleShortVersionString':version,'CFBundleVersion':version,'CFBundleIconFile':'BoardLens.icns','LSMinimumSystemVersion':'14.0','NSHighResolutionCapable':True,'NSPrincipalClass':'NSApplication','NSAppleEventsUsageDescription':'BoardLens reads supported local chess positions when you enable that connection.'}
   with (app/'Contents/Info.plist').open('wb') as f:plistlib.dump(info,f)
-  run(['/usr/bin/clang','-arch',platform.machine(),'-mmacosx-version-min=14.0','-fobjc-arc','-framework','Cocoa','-Wno-deprecated-declarations',SOURCE/'packaging/native/Launcher.m','-o',binary/'BoardLens'])
+  run(['/usr/bin/clang','-arch',platform.machine(),'-mmacosx-version-min=14.0','-fobjc-arc','-I'+str(runtime/'include/python3.12'),'-framework','Cocoa','-Wno-deprecated-declarations',SOURCE/'packaging/native/Launcher.m','-o',binary/'BoardLens'])
   for name in ('com.apple.FinderInfo','com.apple.ResourceFork'):
    subprocess.run(['/usr/bin/xattr','-dr',name,str(app)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
   run(['/usr/bin/codesign','--force','--sign','-',app])

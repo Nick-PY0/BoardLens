@@ -6,6 +6,12 @@ from PySide6.QtCore import QTimer
 
 def begin(app,window,path):
     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);started=time.monotonic();report={'version':__import__('chess_helper').__version__,'python':sys.executable,'application':app.applicationName(),'icon_loaded':not app.windowIcon().isNull(),'tty':bool(sys.stdout and sys.stdout.isatty())}
+    if sys.platform=='darwin':
+        from Foundation import NSBundle
+        import Quartz
+        report['mac_bundle']=NSBundle.mainBundle().bundleIdentifier()
+        report['mac_host']=NSBundle.mainBundle().executablePath()
+        report['screen_access']=bool(Quartz.CGPreflightScreenCaptureAccess())
     if os.name=='nt':
         import ctypes
         report['console_window']=int(ctypes.windll.kernel32.GetConsoleWindow() or 0)

@@ -38,7 +38,7 @@ class PhoneServer:
                     with owner.lock:state=owner.snapshot
                     if path=='/api/phone-position':state={'phone_analysis':state.get('phone_analysis',{})}
                     return self.send_json(200,state)
-                logos={'/branding/banner.png':'boardlens-banner.png','/branding/icon.png':'boardlens-icon.png'}
+                logos={'/branding/banner.png':'boardlens-banner.png','/branding/icon.png':'boardlens-icon-rounded.png'}
                 if path in logos:
                     target=Path(__file__).parent/'assets/ui'/logos[path]
                     return self.send_bytes(200,target.read_bytes(),'image/png')

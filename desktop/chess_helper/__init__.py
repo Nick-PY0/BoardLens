@@ -1,2 +1,2 @@
 """BoardLens — local screen chess analysis."""
-__version__ = "2.13.0"
+__version__ = "2.15.0"

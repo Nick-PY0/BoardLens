@@ -5,7 +5,7 @@ import argparse,hashlib,json,re,shutil,zipfile
 ROOT=Path(__file__).resolve().parents[1]
 SKIP={'.venv','.git','.gradle','build','.idea','__pycache__','.pytest_cache','xcuserdata'}
 def include(path):
-    return not any(p in SKIP for p in path.parts) and path.name not in {'local.properties','.DS_Store'} and path.suffix not in {'.pyc','.xcuserstate','.jks','.keystore','.p12','.pem'}
+    return not ('qa-components' in path.parts and 'assets' in path.parts) and not any(p in SKIP for p in path.parts) and path.name not in {'local.properties','.DS_Store'} and path.suffix not in {'.pyc','.xcuserstate','.jks','.keystore','.p12','.pem'}
 def files(root):return [p for p in sorted(root.rglob('*')) if p.is_file() and include(p.relative_to(root))]
 def archive(destination,root,prefix):
     with zipfile.ZipFile(destination,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as out:

@@ -4,7 +4,7 @@ import uuid
 from .core import data_dir
 from .storage import atomic_json
 
-FIELDS=('eval_engine','eval_seconds','eval_depth','eval_human_elo','predict_continuations','playing_style','strength_mode','engine_skill','engine_elo','human_elo','seconds','depth','mode','threads','hash_mb','multipv','early_suggestions','arrow_count','show_white','show_black','show_reply','rank_best','rank_second','rank_others','arrow_labels','only_my_color','stick_to_move','steady_arrows','dashed_reply','threats_enabled','threat_attacks','threat_mates')
+FIELDS=('prediction_plies','prediction_seconds','eval_engine','eval_seconds','eval_depth','eval_human_elo','predict_continuations','playing_style','strength_mode','engine_skill','engine_elo','human_elo','seconds','depth','mode','threads','hash_mb','multipv','early_suggestions','arrow_count','show_white','show_black','show_reply','rank_best','rank_second','rank_others','arrow_labels','only_my_color','stick_to_move','steady_arrows','dashed_reply','threats_enabled','threat_attacks','threat_mates')
 DEFAULTS=[
  {'id':'quick','name':'Quick analysis','builtin':True,'settings':{'engine_identity':'stockfish','mode':'Time','seconds':.3,'multipv':1,'arrow_count':1,'threads':1,'hash_mb':64,'strength_mode':0,'playing_style':0,'rank_best':True,'rank_second':False,'rank_others':False,'steady_arrows':True}},
  {'id':'deep','name':'Deep analysis','builtin':True,'settings':{'engine_identity':'stockfish','mode':'Time + depth','seconds':5.,'depth':22,'multipv':3,'arrow_count':3,'strength_mode':0,'playing_style':0,'rank_best':True,'rank_second':True,'rank_others':True,'steady_arrows':True}},

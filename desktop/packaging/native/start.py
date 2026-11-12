@@ -1,5 +1,5 @@
 """Run a private, bundled Python runtime; the user's GUI settings live separately."""
-import importlib.util,json,os,re,sys,time
+import importlib.util,json,os,re,sys,time,runpy
 from pathlib import Path
 
 package=Path(__file__).resolve().parent
@@ -23,4 +23,6 @@ engine=next((p for p in (package/'engine').iterdir() if p.is_file() and p.name.s
 if engine:os.environ.setdefault('STOCKFISH_EXECUTABLE',str(engine))
 os.environ.update(BOARDLENS_NATIVE_PYTHON=str(python),PYTHONNOUSERSITE='1',PYTHONUNBUFFERED='1')
 os.chdir(app)
-os.execv(str(python),[str(python),str(app/'launch.py')])
+if os.environ.get('BOARDLENS_EMBEDDED_PYTHON'):
+    sys.path.insert(0,str(app));runpy.run_path(str(app/'launch.py'),run_name='__main__')
+else:os.execv(str(python),[str(python),str(app/'launch.py')])

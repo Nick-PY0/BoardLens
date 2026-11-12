@@ -42,6 +42,7 @@ static class BoardLensLauncher {
         ProcessStartInfo info=new ProcessStartInfo(Path.Combine(Package,"runtime","pythonw.exe"),"\""+Path.Combine(Package,"start.py")+"\"");info.UseShellExecute=false;info.CreateNoWindow=true;info.WorkingDirectory=Package;info.RedirectStandardOutput=true;info.RedirectStandardError=true;
         foreach(string key in new[]{"PYTHONHOME","PYTHONPATH","VIRTUAL_ENV","__PYVENV_LAUNCHER__"})info.EnvironmentVariables.Remove(key);
         info.EnvironmentVariables["BOARDLENS_NATIVE_DATA"]=Root;
+        info.EnvironmentVariables["BOARDLENS_NATIVE_LAUNCHER"]=Application.ExecutablePath;
         if(Smoke!=null){info.EnvironmentVariables["BOARDLENS_NATIVE_SMOKE"]=Smoke;info.EnvironmentVariables["BOARDLENS_DATA_DIR"]=Path.Combine(Path.GetDirectoryName(Smoke),"smoke-data");info.EnvironmentVariables["BOARDLENS_TEST_MODE"]="1";info.EnvironmentVariables["PYNPUT_BACKEND"]="dummy";info.EnvironmentVariables["QT_QPA_PLATFORM"]="offscreen";}
         var process=new Process {StartInfo=info};object gate=new object();string log=Path.Combine(logs,"latest.log");DataReceivedEventHandler received=(s,e)=>{if(e.Data!=null)lock(gate)File.AppendAllText(log,e.Data+Environment.NewLine);};process.OutputDataReceived+=received;process.ErrorDataReceived+=received;process.Start();process.BeginOutputReadLine();process.BeginErrorReadLine();
         if(Smoke!=null){for(int i=0;i<1800;i++){if(File.Exists(Smoke))return 0;System.Threading.Thread.Sleep(100);}throw new Exception("The application self-test timed out; see "+log);}

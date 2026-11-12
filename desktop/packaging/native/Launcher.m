@@ -1,6 +1,8 @@
 #import <Cocoa/Cocoa.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <unistd.h>
+#import <dlfcn.h>
+#include <Python.h>
 
 static NSString *digest(NSString *path) {
     NSInputStream *input=[NSInputStream inputStreamWithFileAtPath:path];[input open];
@@ -42,7 +44,31 @@ int main(int argc,const char *argv[]) {
                     unsetenv("PYTHONHOME");unsetenv("PYTHONPATH");unsetenv("VIRTUAL_ENV");unsetenv("__PYVENV_LAUNCHER__");setenv("BOARDLENS_NATIVE_DATA",base.fileSystemRepresentation,1);
                     if(smoke){setenv("BOARDLENS_NATIVE_SMOKE",smoke.fileSystemRepresentation,1);NSString *data=[[smoke stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"smoke-data"];setenv("BOARDLENS_DATA_DIR",data.fileSystemRepresentation,1);setenv("BOARDLENS_TEST_MODE","1",1);setenv("PYNPUT_BACKEND","dummy",1);if(!getenv("BOARDLENS_VISIBLE_TEST"))setenv("QT_QPA_PLATFORM","offscreen",1);}
                     NSString *python=[target stringByAppendingPathComponent:@"runtime/bin/python3"],*script=[target stringByAppendingPathComponent:@"start.py"];
-                    const char *args[]={python.fileSystemRepresentation,script.fileSystemRepresentation,NULL};execv(args[0],(char *const *)args);fail(@"Could not open the bundled Python runtime. See Library/Application Support/BoardLens/native/logs/latest.log.");
+                    // Keep the signed app as the running process, so macOS grants
+                    // screen/Accessibility permissions to BoardLens rather than
+                    // a changing private Python executable.
+                    NSString *home=[target stringByAppendingPathComponent:@"runtime"];
+                    void *library=dlopen([[home stringByAppendingPathComponent:@"lib/libpython3.12.dylib"] fileSystemRepresentation],RTLD_NOW|RTLD_GLOBAL);
+                    if(!library){fail(@"Could not load the bundled Python runtime.");return;}
+                    void (*initConfig)(PyConfig *)=dlsym(library,"PyConfig_InitPythonConfig");
+                    PyStatus (*setArgv)(PyConfig *,Py_ssize_t,char *const *)=dlsym(library,"PyConfig_SetBytesArgv");
+                    PyStatus (*setString)(PyConfig *,wchar_t **,const char *)=dlsym(library,"PyConfig_SetBytesString");
+                    PyStatus (*initialize)(const PyConfig *)=dlsym(library,"Py_InitializeFromConfig");
+                    void (*clearConfig)(PyConfig *)=dlsym(library,"PyConfig_Clear");
+                    int (*runMain)(void)=dlsym(library,"Py_RunMain");
+                    if(!initConfig||!setArgv||!setString||!initialize||!clearConfig||!runMain){fail(@"The bundled Python runtime is incomplete.");return;}
+                    setenv("BOARDLENS_EMBEDDED_PYTHON","1",1);setenv("PYTHONNOUSERSITE","1",1);
+                    setenv("BOARDLENS_NATIVE_LAUNCHER",NSBundle.mainBundle.bundlePath.fileSystemRepresentation,1);
+                    char *args[]={(char *)python.fileSystemRepresentation,(char *)script.fileSystemRepresentation,NULL};
+                    PyConfig config;initConfig(&config);config.user_site_directory=0;
+                    PyStatus state=setArgv(&config,2,args);
+                    if(!state._type)state=setString(&config,&config.executable,python.fileSystemRepresentation);
+                    if(!state._type)state=setString(&config,&config.home,home.fileSystemRepresentation);
+                    if(!state._type)state=initialize(&config);
+                    clearConfig(&config);
+                    if(state._type){fail(state.err_msg?[NSString stringWithUTF8String:state.err_msg]:@"Python could not start.");return;}
+                    [window orderOut:nil];
+                    exit(runMain());
                 });
             } @catch(NSException *error){dispatch_async(dispatch_get_main_queue(),^{fail(error.reason);});}
         });

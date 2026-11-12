@@ -113,7 +113,9 @@ final class PhoneRemote {
             .put("moves", settings.moves())
             .put("mode", settings.mode())
             .put("rating", settings.p.getInt("rating", 1500))
-            .put("predict", settings.predict());
+            .put("predict", settings.predict())
+            .put("prediction_plies", settings.predictionPlies())
+            .put("prediction_seconds", settings.predictionSeconds());
     api("api/command", new JSONObject().put("command", "analyze_phone").put("data", payload));
     long until = System.currentTimeMillis() + 180000;
     String last = "", lastEval = "";

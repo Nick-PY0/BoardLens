@@ -1,0 +1,13 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'app.boardlens.components'
+ compileSdk 36
+ defaultConfig { applicationId 'app.boardlens.components'; minSdk 26; targetSdk 36; ndk { abiFilters 'arm64-v8a' }; versionCode 1; versionName 'component-preview' }
+ compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+ sourceSets {
+  main.java.srcDirs += ['../app/src/main/java']
+  main.java.includes = ['**/ComponentActivity.java','**/MobileUi.java','**/PhoneDashboard.java','**/BoardGeometry.java','**/BoardReader.java','**/ContextPieces.java','**/ProjectedBoards.java','**/GradientBoards.java','**/Streams.java']
+  main.assets.srcDirs += ['../app/src/main/assets']
+ }
+}
+dependencies { implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.24.3'; implementation 'org.opencv:opencv:4.12.0' }

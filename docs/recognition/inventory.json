@@ -1,0 +1,1228 @@
+{
+  "sources": [
+    "https://github.com/lichess-org/lila/blob/master/modules/pref/src/main/PieceSet.scala",
+    "https://github.com/lichess-org/lila/blob/master/modules/pref/src/main/Theme.scala",
+    "https://github.com/GiorgioMegrelli/chess.com-boards-and-pieces/blob/v2.x/default-config.json"
+  ],
+  "entries": [
+    {
+      "id": "lichess-2d/cburnett",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "cburnett"
+    },
+    {
+      "id": "lichess-2d/merida",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "merida"
+    },
+    {
+      "id": "lichess-2d/alpha",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "alpha"
+    },
+    {
+      "id": "lichess-2d/pirouetti",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "pirouetti"
+    },
+    {
+      "id": "lichess-2d/chessnut",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "chessnut"
+    },
+    {
+      "id": "lichess-2d/chess7",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "chess7"
+    },
+    {
+      "id": "lichess-2d/reillycraig",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "reillycraig"
+    },
+    {
+      "id": "lichess-2d/companion",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "companion"
+    },
+    {
+      "id": "lichess-2d/riohacha",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "riohacha"
+    },
+    {
+      "id": "lichess-2d/kosal",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "kosal"
+    },
+    {
+      "id": "lichess-2d/leipzig",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "leipzig"
+    },
+    {
+      "id": "lichess-2d/fantasy",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "fantasy"
+    },
+    {
+      "id": "lichess-2d/spatial",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "spatial"
+    },
+    {
+      "id": "lichess-2d/celtic",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "celtic"
+    },
+    {
+      "id": "lichess-2d/california",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "california"
+    },
+    {
+      "id": "lichess-2d/caliente",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "caliente"
+    },
+    {
+      "id": "lichess-2d/pixel",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "pixel"
+    },
+    {
+      "id": "lichess-2d/firi",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "firi"
+    },
+    {
+      "id": "lichess-2d/rhosgfx",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "rhosgfx"
+    },
+    {
+      "id": "lichess-2d/maestro",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "maestro"
+    },
+    {
+      "id": "lichess-2d/fresca",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "fresca"
+    },
+    {
+      "id": "lichess-2d/cardinal",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "cardinal"
+    },
+    {
+      "id": "lichess-2d/gioco",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "gioco"
+    },
+    {
+      "id": "lichess-2d/tatiana",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "tatiana"
+    },
+    {
+      "id": "lichess-2d/staunty",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "staunty"
+    },
+    {
+      "id": "lichess-2d/cooke",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "cooke"
+    },
+    {
+      "id": "lichess-2d/monarchy",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "monarchy"
+    },
+    {
+      "id": "lichess-2d/papercut",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "papercut"
+    },
+    {
+      "id": "lichess-2d/minimal-warmth",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "minimal-warmth"
+    },
+    {
+      "id": "lichess-2d/governor",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "governor"
+    },
+    {
+      "id": "lichess-2d/dubrovny",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "dubrovny"
+    },
+    {
+      "id": "lichess-2d/shahi-ivory-brown",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "shahi-ivory-brown"
+    },
+    {
+      "id": "lichess-2d/icpieces",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "icpieces"
+    },
+    {
+      "id": "lichess-2d/mpchess",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "mpchess"
+    },
+    {
+      "id": "lichess-2d/kiwen-suwi",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "kiwen-suwi"
+    },
+    {
+      "id": "lichess-2d/totoy",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "totoy"
+    },
+    {
+      "id": "lichess-2d/horsey",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "horsey"
+    },
+    {
+      "id": "lichess-2d/anarcandy",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "anarcandy"
+    },
+    {
+      "id": "lichess-2d/xkcd",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "xkcd"
+    },
+    {
+      "id": "lichess-2d/shapes",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "shapes"
+    },
+    {
+      "id": "lichess-2d/letter",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "letter"
+    },
+    {
+      "id": "lichess-2d/disguised",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "disguised"
+    },
+    {
+      "id": "lichess-3d/Basic",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Basic"
+    },
+    {
+      "id": "lichess-3d/Wood",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Wood"
+    },
+    {
+      "id": "lichess-3d/Metal",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Metal"
+    },
+    {
+      "id": "lichess-3d/RedVBlue",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "RedVBlue"
+    },
+    {
+      "id": "lichess-3d/ModernJade",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "ModernJade"
+    },
+    {
+      "id": "lichess-3d/ModernWood",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "ModernWood"
+    },
+    {
+      "id": "lichess-3d/Glass",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Glass"
+    },
+    {
+      "id": "lichess-3d/Trimmed",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Trimmed"
+    },
+    {
+      "id": "lichess-3d/Experimental",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Experimental"
+    },
+    {
+      "id": "lichess-3d/Staunton",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Staunton"
+    },
+    {
+      "id": "lichess-3d/CubesAndPi",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "CubesAndPi"
+    },
+    {
+      "id": "chesscom/ejgfv",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Neo"
+    },
+    {
+      "id": "chesscom/8qetl",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Neo Angle"
+    },
+    {
+      "id": "chesscom/game_room",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Game Room"
+    },
+    {
+      "id": "chesscom/wood",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Wood"
+    },
+    {
+      "id": "chesscom/glass",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Glass"
+    },
+    {
+      "id": "chesscom/gothic",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Gothic"
+    },
+    {
+      "id": "chesscom/classic",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Classic"
+    },
+    {
+      "id": "chesscom/metal",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Metal"
+    },
+    {
+      "id": "chesscom/bases",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Bases"
+    },
+    {
+      "id": "chesscom/neo_wood",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Neo-Wood"
+    },
+    {
+      "id": "chesscom/icy_sea",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Icy Sea"
+    },
+    {
+      "id": "chesscom/club",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Club"
+    },
+    {
+      "id": "chesscom/ocean",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Ocean"
+    },
+    {
+      "id": "chesscom/newspaper",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Newspaper"
+    },
+    {
+      "id": "chesscom/space",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Space"
+    },
+    {
+      "id": "chesscom/cases",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Cases"
+    },
+    {
+      "id": "chesscom/condal",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Condal"
+    },
+    {
+      "id": "chesscom/3d_chesskid",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "chess.com",
+      "name": "3D - ChessKid"
+    },
+    {
+      "id": "chesscom/8_bit",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "8-Bit"
+    },
+    {
+      "id": "chesscom/marble",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Marble"
+    },
+    {
+      "id": "chesscom/book",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Book"
+    },
+    {
+      "id": "chesscom/alpha",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Alpha"
+    },
+    {
+      "id": "chesscom/bubblegum",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Bubblegum"
+    },
+    {
+      "id": "chesscom/dash",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Dash"
+    },
+    {
+      "id": "chesscom/graffiti",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Graffiti"
+    },
+    {
+      "id": "chesscom/light",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Light"
+    },
+    {
+      "id": "chesscom/lolz",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Lolz"
+    },
+    {
+      "id": "chesscom/luca",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Luca"
+    },
+    {
+      "id": "chesscom/maya",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Maya"
+    },
+    {
+      "id": "chesscom/modern",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Modern"
+    },
+    {
+      "id": "chesscom/nature",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Nature"
+    },
+    {
+      "id": "chesscom/neon",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Neon"
+    },
+    {
+      "id": "chesscom/sky",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Sky"
+    },
+    {
+      "id": "chesscom/tigers",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Tigers"
+    },
+    {
+      "id": "chesscom/tournament",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Tournament"
+    },
+    {
+      "id": "chesscom/vintage",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Vintage"
+    },
+    {
+      "id": "chesscom/3d_wood",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "chess.com",
+      "name": "Real 3D"
+    },
+    {
+      "id": "chesscom/3d_staunton",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "chess.com",
+      "name": "3D - Staunton"
+    },
+    {
+      "id": "chesscom/3d_plastic",
+      "kind": "pieces",
+      "projection": "3d-sprite",
+      "site": "chess.com",
+      "name": "3D - Plastic"
+    },
+    {
+      "id": "chesscom/ca09k",
+      "kind": "pieces",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Band Class"
+    },
+    {
+      "id": "board-lichess/brown",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "brown"
+    },
+    {
+      "id": "board-lichess/wood",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "wood"
+    },
+    {
+      "id": "board-lichess/wood2",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "wood2"
+    },
+    {
+      "id": "board-lichess/wood3",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "wood3"
+    },
+    {
+      "id": "board-lichess/wood4",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "wood4"
+    },
+    {
+      "id": "board-lichess/maple",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "maple"
+    },
+    {
+      "id": "board-lichess/maple2",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "maple2"
+    },
+    {
+      "id": "board-lichess/horsey",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "horsey"
+    },
+    {
+      "id": "board-lichess/leather",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "leather"
+    },
+    {
+      "id": "board-lichess/blue",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "blue"
+    },
+    {
+      "id": "board-lichess/blue2",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "blue2"
+    },
+    {
+      "id": "board-lichess/blue3",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "blue3"
+    },
+    {
+      "id": "board-lichess/canvas",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "canvas"
+    },
+    {
+      "id": "board-lichess/blue-marble",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "blue-marble"
+    },
+    {
+      "id": "board-lichess/ic",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "ic"
+    },
+    {
+      "id": "board-lichess/green",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "green"
+    },
+    {
+      "id": "board-lichess/marble",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "marble"
+    },
+    {
+      "id": "board-lichess/green-plastic",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "green-plastic"
+    },
+    {
+      "id": "board-lichess/olive",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "olive"
+    },
+    {
+      "id": "board-lichess/grey",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "grey"
+    },
+    {
+      "id": "board-lichess/metal",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "metal"
+    },
+    {
+      "id": "board-lichess/newspaper",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "newspaper"
+    },
+    {
+      "id": "board-lichess/purple",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "purple"
+    },
+    {
+      "id": "board-lichess/purple-diag",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "purple-diag"
+    },
+    {
+      "id": "board-lichess/pink",
+      "kind": "board",
+      "projection": "flat",
+      "site": "lichess",
+      "name": "pink"
+    },
+    {
+      "id": "board-lichess/Woodi",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Woodi"
+    },
+    {
+      "id": "board-lichess/Black-White-Aluminium",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Black-White-Aluminium"
+    },
+    {
+      "id": "board-lichess/Brushed-Aluminium",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Brushed-Aluminium"
+    },
+    {
+      "id": "board-lichess/China-Blue",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "China-Blue"
+    },
+    {
+      "id": "board-lichess/China-Green",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "China-Green"
+    },
+    {
+      "id": "board-lichess/China-Grey",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "China-Grey"
+    },
+    {
+      "id": "board-lichess/China-Scarlet",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "China-Scarlet"
+    },
+    {
+      "id": "board-lichess/China-Yellow",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "China-Yellow"
+    },
+    {
+      "id": "board-lichess/Classic-Blue",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Classic-Blue"
+    },
+    {
+      "id": "board-lichess/Gold-Silver",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Gold-Silver"
+    },
+    {
+      "id": "board-lichess/Green-Glass",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Green-Glass"
+    },
+    {
+      "id": "board-lichess/Light-Wood",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Light-Wood"
+    },
+    {
+      "id": "board-lichess/Power-Coated",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Power-Coated"
+    },
+    {
+      "id": "board-lichess/Purple-Black",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Purple-Black"
+    },
+    {
+      "id": "board-lichess/Rosewood",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Rosewood"
+    },
+    {
+      "id": "board-lichess/Wood-Glass",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Wood-Glass"
+    },
+    {
+      "id": "board-lichess/Marble",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Marble"
+    },
+    {
+      "id": "board-lichess/Wax",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Wax"
+    },
+    {
+      "id": "board-lichess/Jade",
+      "kind": "board",
+      "projection": "3d-sprite",
+      "site": "lichess",
+      "name": "Jade"
+    },
+    {
+      "id": "board-chesscom/9rdwe",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Green"
+    },
+    {
+      "id": "board-chesscom/dark_wood",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Wood"
+    },
+    {
+      "id": "board-chesscom/glass",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Glass"
+    },
+    {
+      "id": "board-chesscom/brown",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Brown"
+    },
+    {
+      "id": "board-chesscom/icy_sea",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Icy Sea"
+    },
+    {
+      "id": "board-chesscom/newspaper",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Newspaper"
+    },
+    {
+      "id": "board-chesscom/walnut",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Walnut"
+    },
+    {
+      "id": "board-chesscom/sky",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Sky"
+    },
+    {
+      "id": "board-chesscom/lolz",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Lolz"
+    },
+    {
+      "id": "board-chesscom/stone",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Stone"
+    },
+    {
+      "id": "board-chesscom/bases",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Bases"
+    },
+    {
+      "id": "board-chesscom/8_bit",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "8-Bit"
+    },
+    {
+      "id": "board-chesscom/marble",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Marble"
+    },
+    {
+      "id": "board-chesscom/purple",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Purple"
+    },
+    {
+      "id": "board-chesscom/translucent",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Overlay"
+    },
+    {
+      "id": "board-chesscom/metal",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Metal"
+    },
+    {
+      "id": "board-chesscom/tournament",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Tournament"
+    },
+    {
+      "id": "board-chesscom/dash",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Dash"
+    },
+    {
+      "id": "board-chesscom/burled_wood",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Burled Wood"
+    },
+    {
+      "id": "board-chesscom/blue",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Dark Blue"
+    },
+    {
+      "id": "board-chesscom/bubblegum",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Bubblegum"
+    },
+    {
+      "id": "board-chesscom/checkers",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Checkers"
+    },
+    {
+      "id": "board-chesscom/graffiti",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Graffiti"
+    },
+    {
+      "id": "board-chesscom/light",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Light"
+    },
+    {
+      "id": "board-chesscom/neon",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Neon"
+    },
+    {
+      "id": "board-chesscom/orange",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Orange"
+    },
+    {
+      "id": "board-chesscom/parchment",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Parchment"
+    },
+    {
+      "id": "board-chesscom/red",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Red"
+    },
+    {
+      "id": "board-chesscom/sand",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Sand"
+    },
+    {
+      "id": "board-chesscom/tan",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Tan"
+    },
+    {
+      "id": "board-chesscom/4fs27",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Blue"
+    },
+    {
+      "id": "board-chesscom/g715q",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Pink"
+    },
+    {
+      "id": "board-chesscom/my2xa",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Chess The Musical"
+    },
+    {
+      "id": "board-chesscom/bju81",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Event - Naroditsky Memorial"
+    },
+    {
+      "id": "board-chesscom/z4m3d",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Event - Esports World Cup 2026"
+    },
+    {
+      "id": "board-chesscom/6m5lc",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Sky and Sea"
+    },
+    {
+      "id": "board-chesscom/ohdxn",
+      "kind": "board",
+      "projection": "flat",
+      "site": "chess.com",
+      "name": "Band Class"
+    }
+  ],
+  "artwork_bundled": false
+}

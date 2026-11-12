@@ -43,7 +43,7 @@ def profile(window,index):
 def summary(window):
     settings=window.search_settings();kind=window.engine_kind.currentIndex()
     strength=f'human rating {settings.human_elo}' if is_human(window) else f'Skill {settings.skill}/20' if settings.strength=='Skill level' else f'Elo {settings.elo}' if settings.strength=='Elo rating' else 'maximum strength'
-    limit='one model prediction' if is_human(window) else f'{settings.seconds:g}s' if settings.mode=='Time' else f'depth {settings.depth}' if settings.mode=='Depth' else f'{settings.seconds:g}s / depth {settings.depth}'
+    limit=f'one model pass · prediction {settings.prediction_plies} plies / {settings.prediction_seconds:g}s reply budget' if is_human(window) else f'{settings.seconds:g}s' if settings.mode=='Time' else f'depth {settings.depth}' if settings.mode=='Depth' else f'{settings.seconds:g}s / depth {settings.depth}'
     strength=f'reference Elo {entry(window).rating}' if is_tiny(window) else f'target {settings.human_elo}' if entry(window).kind=='flounder' else strength
     return f'{ENGINE_NAMES[kind]} · {strength}\n{limit} · {window.multipv.value()} recommended moves\nStyle: {settings.style}'
 

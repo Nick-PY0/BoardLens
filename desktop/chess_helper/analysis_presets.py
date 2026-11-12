@@ -19,7 +19,7 @@ class AnalysisPresets:
         identity=self.store.save(name,self.preset_values(),identity);self.refresh_presets();return identity
 
     def refresh_presets(self):
-        w=self.window;w.preset_combo.blockSignals(True);w.preset_combo.clear();w.preset_combo.addItem('Custom settings',None)
+        w=self.window;w.preset_combo.blockSignals(True);w.preset_combo.clear();w.preset_combo.addItem('Manual',None)
         for item in self.store.list():w.preset_combo.addItem(item['name'],item['id'])
         w.preset_combo.blockSignals(False)
 

@@ -10,6 +10,7 @@ final class ArrowOverlay extends View {
   private final WindowManager wm;
   private boolean attached;
   private volatile Rect board;
+  private volatile BoardGeometry projection;
   private volatile boolean bottom = true;
   private volatile List<String> moves = Collections.emptyList();
   private volatile float[] segments = new float[0];
@@ -23,19 +24,24 @@ final class ArrowOverlay extends View {
   }
 
   void show(Rect rect, boolean whiteBottom, List<String> arrows) {
-    board = new Rect(rect);
+    show(BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom),whiteBottom,arrows);
+  }
+
+  void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows){
+    projection=geometry;double[] bounds=geometry.bounds();
+    board=new Rect((int)bounds[0],(int)bounds[1],(int)Math.ceil(bounds[2]),(int)Math.ceil(bounds[3]));
     bottom = whiteBottom;
     moves = new ArrayList<>(arrows);
-    float[] geometry = new float[arrows.size() * 4];
+    float[] arrowSegments = new float[arrows.size() * 4];
     for (int i = 0; i < arrows.size(); i++) {
       String m = arrows.get(i);
       PointF a = point(m.substring(0, 2)), b = point(m.substring(2, 4));
-      geometry[i * 4] = a.x;
-      geometry[i * 4 + 1] = a.y;
-      geometry[i * 4 + 2] = b.x;
-      geometry[i * 4 + 3] = b.y;
+      arrowSegments[i * 4] = a.x;
+      arrowSegments[i * 4 + 1] = a.y;
+      arrowSegments[i * 4 + 2] = b.x;
+      arrowSegments[i * 4 + 3] = b.y;
     }
-    segments = geometry;
+    segments = arrowSegments;
     if (!attached) {
       WindowManager.LayoutParams p =
           new WindowManager.LayoutParams(
@@ -97,11 +103,7 @@ final class ArrowOverlay extends View {
   }
 
   private PointF point(String square) {
-    int x = square.charAt(0) - 'a', y = square.charAt(1) - '1';
-    float c = board.width() / 8f;
-    return new PointF(
-        board.left + (bottom ? x + .5f : 7.5f - x) * c,
-        board.top + (bottom ? 7.5f - y : y + .5f) * c);
+    double[] point=projection.square(square,bottom);return new PointF((float)point[0],(float)point[1]);
   }
 
   @Override

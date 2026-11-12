@@ -81,8 +81,13 @@ class EngineJob:
         pipeline_started=time.monotonic()
         result=self._search_once(engine,board,settings)
         if not result or self.cancelled.is_set() or not settings.predict_continuations:return result
+        target=max(1,min(12,int(settings.prediction_plies)))
+        budget=max(.1,min(60.,float(settings.prediction_seconds)))
+        for line in result['lines']:
+            existing=line.get('pv_moves') or [line['move']]
+            if len(existing)>target:line.update(describe_continuation(board,existing[:target]))
         lead=result['lines'][0]
-        if len(lead.get('pv_moves',[]))>=3:return result
+        if len(lead.get('pv_moves',[]))>=target:return result
         # One-move providers can still predict a continuation. Publish the
         # current move first; subsequent positions never replace its identity.
         if self.on_update:self.on_update(dict(deepcopy(result),continuation_pending=True))
@@ -92,19 +97,31 @@ class EngineJob:
             if move not in probe.legal_moves:return result
             probe.push(move)
         callback=self.on_update;self.on_update=None
+        deadline=time.monotonic()+budget;prediction_error=''
         try:
-            while len(moves)<3 and not probe.is_game_over() and not self.cancelled.is_set():
-                next_result=self._search_once(engine,probe,replace(settings,multipv=1,predict_continuations=False))
+            while len(moves)<target and not probe.is_game_over() and not self.cancelled.is_set():
+                remaining=deadline-time.monotonic()
+                if remaining<=0:break
+                # This is a follow-up budget, never a delay or a pretend Maia
+                # search depth. A model pass already in progress may finish.
+                followup=replace(settings,multipv=1,predict_continuations=False,
+                                 seconds=min(settings.seconds,remaining),
+                                 mode='Time + depth' if settings.mode=='Depth' else settings.mode)
+                try:next_result=self._search_once(engine,probe,followup)
+                except (ValueError,chess.engine.EngineError) as error:
+                    prediction_error=str(error);break
                 if not next_result:break
                 move=chess.Move.from_uci(next_result['lines'][0]['move'])
                 if move not in probe.legal_moves:break
                 moves.append(move.uci());probe.push(move)
                 if callback:
-                    update=deepcopy(result);update['lines'][0].update(describe_continuation(board,moves));update['continuation_pending']=len(moves)<3;callback(update)
+                    update=deepcopy(result);update['lines'][0].update(describe_continuation(board,moves));update['continuation_pending']=len(moves)<target;callback(update)
         finally:self.on_update=callback
         if self.cancelled.is_set():return None
         refreshed=describe_continuation(board,moves)
         result['lines'][0].update(refreshed);result['continuation_pending']=False;result['primary_elapsed']=result.get('elapsed',0);result['elapsed']=time.monotonic()-pipeline_started
+        result['prediction']={'requested_plies':target,'completed_plies':len(moves),
+                              'reply_budget':budget,'error':prediction_error,'budget_exhausted':len(moves)<target and time.monotonic()>=deadline}
         return result
 
     def _search_once(self,engine,board,settings):
