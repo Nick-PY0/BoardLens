@@ -46,10 +46,10 @@ final class ContextPieces implements AutoCloseable {
    for(int i=0;i<64;i++){int best=0;for(int j=1;j<13;j++)if(probs[i][j]>probs[i][best])best=j;shown[i]=labels.charAt(best);sum+=probs[i][best];min=Math.min(min,probs[i][best]);if(best>0){three+=projection[i][0];occupied++;}}
   }
   projectedArtwork=occupied>0&&three/occupied>.65;
-  if(min<.97||sum/64<.99)return null;
+  if(min<.9||sum/64<.98)return null;
   int wk=0,bk=0,wp=0,bp=0;double wy=0,by=0;int whiteKing=0,blackKing=0;
   for(int i=0;i<64;i++){char ch=shown[i];if(ch=='K'){wk++;whiteKing=i/8;}if(ch=='k'){bk++;blackKing=i/8;}if(ch=='P'){wp++;wy+=i/8;}if(ch=='p'){bp++;by+=i/8;}}
-  if(wk!=1||bk!=1)return null;
+  if(wk!=1||bk!=1||!BoardReader.plausible(shown))return null;
   boolean bottom=orientation.equals("White at bottom")||!orientation.equals("Black at bottom")&&(wp>0&&bp>0?wy/wp>by/bp:whiteKing>blackKing);
   StringBuilder placement=new StringBuilder();for(int row=0;row<8;row++){int empty=0;for(int col=0;col<8;col++){char ch=shown[bottom?row*8+col:63-row*8-col];if(ch=='.')empty++;else{if(empty>0){placement.append(empty);empty=0;}placement.append(ch);}}if(empty>0)placement.append(empty);if(row<7)placement.append('/');}
   return new BoardReader.Read(new Rect((int)Math.floor(bounds[0]),(int)Math.floor(bounds[1]),(int)Math.ceil(bounds[2]),(int)Math.ceil(bounds[3])),placement.toString(),bottom,sum/64,geometry);

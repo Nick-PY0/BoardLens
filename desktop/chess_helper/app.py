@@ -1059,10 +1059,10 @@ class MainWindow(QMainWindow):
     def native_access_changed(self,enabled):
         if not enabled or sys.platform!='darwin' or os.environ.get('BOARDLENS_TEST_MODE'):return
         try:
-            from .native_chess import request_access
-            self._native_access_ok=request_access()
-            if not self._native_access_ok:self.status('Chess.app needs Accessibility · enable BoardLens/Python in System Settings → Privacy & Security → Accessibility.')
-        except Exception as exc:self.status('Could not request Chess.app access: '+str(exc))
+            from .native_chess import accessibility_allowed
+            self._native_access_ok=accessibility_allowed()
+            if not self._native_access_ok and self._ready:self.status('Local 3D reading needs Accessibility. Open Board → App → Permissions.')
+        except Exception as exc:self.status('Could not check local 3D access: '+str(exc))
 
     def update_foreground(self,kind=None):
         self._native_enabled=self.native_reader_button.isChecked()

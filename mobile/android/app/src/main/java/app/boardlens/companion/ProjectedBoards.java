@@ -57,7 +57,7 @@ final class ProjectedBoards {
       int[] m=new int[3];for(int c=0;c<3;c++){Arrays.sort(rgb[c]);m[c]=(rgb[c][1]+rgb[c][2])/2;}int pixel=Color.rgb(m[0],m[1],m[2]);colors[row*8+col]=pixel;samples[(row+col)%2][n[(row+col)%2]++]=pixel;
     }
     int[] center=new int[2];for(int parity=0;parity<2;parity++){int[][] rgb=new int[3][32];for(int i=0;i<32;i++){rgb[0][i]=Color.red(samples[parity][i]);rgb[1][i]=Color.green(samples[parity][i]);rgb[2][i]=Color.blue(samples[parity][i]);}for(int[] a:rgb)Arrays.sort(a);center[parity]=Color.rgb(rgb[0][16],rgb[1][16],rgb[2][16]);}
-    double contrast=distance(center[0],center[1]);if(contrast<600)return 0;int good=0;for(int r=0;r<8;r++)for(int c=0;c<8;c++)if(distance(colors[r*8+c],center[(r+c)%2])<Math.max(700,contrast*.18))good++;return good/64.;
+    double contrast=distance(center[0],center[1]);if(contrast<64)return 0;int good=0;int[] rows=new int[8],cols=new int[8];for(int r=0;r<8;r++)for(int c=0;c<8;c++){int expected=center[(r+c)%2],other=center[1-(r+c)%2];if(distance(colors[r*8+c],expected)<Math.max(700,contrast*.18)&&distance(colors[r*8+c],expected)<distance(colors[r*8+c],other)){good++;rows[r]++;cols[c]++;}}if(rows[0]<6||rows[7]<6||cols[0]<6||cols[7]<6)return 0;return good/64.;
   }
   private static double distance(int a,int b){double r=Color.red(a)-Color.red(b),g=Color.green(a)-Color.green(b),bl=Color.blue(a)-Color.blue(b);return r*r+g*g+bl*bl;}
 }

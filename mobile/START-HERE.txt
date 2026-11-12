@@ -1,4 +1,4 @@
-BOARDLENS MOBILE 1.6 / DESKTOP 2.15 — NOVEMBER 11, 2026
+BOARDLENS MOBILE 1.6 / DESKTOP 2.15.1 — NOVEMBER 11, 2026
 
 One companion app. Phone analysis is a feature in its menu and uses the same
 colors, typography, buttons and spacing as the computer companion.

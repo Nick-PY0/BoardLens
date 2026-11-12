@@ -1,4 +1,11 @@
-# Desktop apps
+# Install BoardLens
+
+On Mac, download the DMG for Apple silicon or Intel. Open it, drag **BoardLens** into **Applications**, eject the installer and open BoardLens there. Quit an existing copy before replacing it. Saved settings and downloaded engines stay in Application Support.
+
+The installer verifies its disk image and the copied app signature during packaging. It does not change macOS permissions. Screen Recording is required for screen pixels. Accessibility is optional for local 3D reading and is checked without prompting; use Board → App → Permissions to request it explicitly. Keep using the installed copy so grants are associated with the same app.
+
+On Windows, extract the Windows ZIP and open BoardLens.exe. The native launcher opens no Terminal/console window.
+
 
 Download the matching ZIP from [Releases](https://github.com/Nick-PY0/BoardLens/releases/latest).
 

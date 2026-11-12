@@ -21,6 +21,12 @@ int main(int argc,const char *argv[]) {
         NSString *base=[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/BoardLens/native"];
         NSString *key=meta[@"payload_sha256"],*target=[[base stringByAppendingPathComponent:@"packages"] stringByAppendingPathComponent:[key substringToIndex:20]];
         NSString *smoke=nil;for(int i=1;i+1<argc;i++)if(strcmp(argv[i],"--self-test")==0)smoke=[NSString stringWithUTF8String:argv[i+1]];
+        if(!smoke && [NSBundle.mainBundle.bundlePath hasPrefix:@"/Volumes/"]){
+            NSAlert *install=[NSAlert new];install.alertStyle=NSAlertStyleInformational;
+            install.messageText=@"Install BoardLens first";
+            install.informativeText=@"Drag BoardLens to Applications in the installer window, then open it from Applications. This keeps macOS permissions tied to one installed copy.";
+            [install addButtonWithTitle:@"OK"];[install runModal];return 0;
+        }
         NSWindow *window=[[NSWindow alloc] initWithContentRect:NSMakeRect(0,0,420,130) styleMask:NSWindowStyleMaskTitled backing:NSBackingStoreBuffered defer:NO];window.title=@"BoardLens";[window center];
         NSTextField *label=[NSTextField labelWithString:@"Preparing BoardLens…"];label.font=[NSFont systemFontOfSize:17 weight:NSFontWeightMedium];label.frame=NSMakeRect(28,74,370,26);[window.contentView addSubview:label];
         NSProgressIndicator *progress=[[NSProgressIndicator alloc] initWithFrame:NSMakeRect(28,38,364,18)];progress.style=NSProgressIndicatorStyleBar;progress.indeterminate=YES;[progress startAnimation:nil];[window.contentView addSubview:progress];

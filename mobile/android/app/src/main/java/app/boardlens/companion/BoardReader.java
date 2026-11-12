@@ -59,6 +59,7 @@ final class BoardReader implements AutoCloseable {
       Read result = classify(image, r, orientation);
       if (result != null) return result;
     }
+    for(Rect r:detectRectangular(image)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read result=context.classify(image,g,orientation);if(result!=null){tracked=g;contextualTrack=true;diagnostic="";return result;}}
     for(Rect r:GradientBoards.detectProjected(image)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read result=context.classify(image,g,orientation);if(result!=null){tracked=g;contextualTrack=true;diagnostic="";return result;}}
     for(BoardGeometry geometry:ProjectedBoards.detect(image)){Read result=context.classify(image,geometry,orientation);if(result!=null){tracked=geometry;contextualTrack=true;return result;}}
     tracked=null;return null;
@@ -131,7 +132,7 @@ final class BoardReader implements AutoCloseable {
         by += i / 8;
       }
     }
-    if (wk != 1 || bk != 1) {
+    if (wk != 1 || bk != 1 || !plausible(chars)) {
       diagnostic = "king counts=" + wk + "," + bk;
       return null;
     }
@@ -166,6 +167,12 @@ final class BoardReader implements AutoCloseable {
     }
     diagnostic = "";
     return new Read(new Rect(r), placement.toString(), bottom, sum / 64);
+  }
+
+  static boolean plausible(char[] shown){
+    int white=0,black=0,wp=0,bp=0,wk=-1,bk=-1;
+    for(int i=0;i<64;i++){char ch=shown[i];if(ch=='.')continue;if(Character.isUpperCase(ch))white++;else black++;if(ch=='P')wp++;if(ch=='p')bp++;if((ch=='P'||ch=='p')&&(i<8||i>=56))return false;if(ch=='K')wk=i;if(ch=='k')bk=i;}
+    return white<=16&&black<=16&&wp<=8&&bp<=8&&wk>=0&&bk>=0&&(Math.abs(wk/8-bk/8)>1||Math.abs(wk%8-bk%8)>1);
   }
 
   private static int distance(int a, int b) {
@@ -228,21 +235,21 @@ final class BoardReader implements AutoCloseable {
       Arrays.sort(bb);
       center[p] = Color.rgb(rr[16], gg[16], bb[16]);
     }
-    if ((Color.red(center[0]) - Color.red(center[1])) * .299
-            + (Color.green(center[0]) - Color.green(center[1])) * .587
-            + (Color.blue(center[0]) - Color.blue(center[1])) * .114
-        < -5) return 0;
     int contrast = distance(center[0], center[1]);
-    if (contrast < 484) return 0;
+    if (contrast < 64) return 0;
     double limit = Math.max(400, contrast * .1024);
-    int good = 0;
-    for (int row = 0; row < 8; row++)
-      for (int col = 0; col < 8; col++)
-        if (distance(all[row * 8 + col], center[(row + col) % 2]) < limit) good++;
-    return good / 64.;
+    int good=0;int[] rows=new int[8],cols=new int[8];
+    for(int row=0;row<8;row++)for(int col=0;col<8;col++){
+      int at=all[row*8+col],expected=center[(row+col)%2],other=center[1-(row+col)%2];
+      if(distance(at,expected)<limit&&distance(at,expected)<distance(at,other)){good++;rows[row]++;cols[col]++;}
+    }
+    if(rows[0]<6||rows[7]<6||cols[0]<6||cols[7]<6)return 0;
+    return good/64.;
   }
 
-  static List<Rect> detect(Bitmap image) {
+  static List<Rect> detect(Bitmap image) {return detect(image,false);}
+  static List<Rect> detectRectangular(Bitmap image){return detect(image,true);}
+  private static List<Rect> detect(Bitmap image,boolean rectangular) {
     float scale = Math.min(1f, 1200f / Math.max(image.getWidth(), image.getHeight()));
     Bitmap small =
         Bitmap.createScaledBitmap(
@@ -310,19 +317,19 @@ final class BoardReader implements AutoCloseable {
         int tw = maxX - minX + 1, th = maxY - minY + 1, cell = Math.round((tw + th) / 2f);
         if (tw < 20
             || tw > Math.min(w, h) / 5
-            || tw / (float) th < .94
-            || tw / (float) th > 1.06
+            || tw / (float) th < (rectangular?.65:.94)
+            || tw / (float) th > (rectangular?1.4:1.06)
             || tail < tw * th * .42) continue;
         for (int row = 0; row < 8; row++) {
-          int yy = minY - row * cell;
-          if (yy < 0 || yy + 8 * cell > h) continue;
+          int yy = minY - row * (rectangular?th:cell);
+          if (yy < 0 || yy + 8 * (rectangular?th:cell) > h) continue;
           for (int col = 0; col < 8; col++) {
-            int xx = minX - col * cell;
-            if (xx < 0 || xx + 8 * cell > w) continue;
+            int xx = minX - col * (rectangular?tw:cell);
+            if (xx < 0 || xx + 8 * (rectangular?tw:cell) > w) continue;
             String key =
-                Math.round(xx / 4f) + ":" + Math.round(yy / 4f) + ":" + Math.round(cell / 2f);
+                Math.round(xx / 4f) + ":" + Math.round(yy / 4f) + ":" + Math.round((rectangular?tw:cell)/2f)+":"+Math.round((rectangular?th:cell)/2f);
             int[] v = votes.get(key);
-            if (v == null) votes.put(key, new int[] {1, xx, yy, cell * 8});
+            if (v == null) votes.put(key, new int[] {1,xx,yy,(rectangular?tw:cell)*8,(rectangular?th:cell)*8});
             else v[0]++;
           }
         }
@@ -333,13 +340,13 @@ final class BoardReader implements AutoCloseable {
     List<Rect> found = new ArrayList<>();
     for (int i = 0; i < Math.min(70, order.size()); i++) {
       int[] v = order.get(i);
-      if (checker(pix, w, h, v[1], v[2], v[3]) < .86) continue;
+      if(rectangular){if(ProjectedBoards.checker(image,BoardGeometry.rectangle(v[1]/scale,v[2]/scale,(v[1]+v[3])/scale,(v[2]+v[4])/scale))<.82)continue;}else if(checker(pix,w,h,v[1],v[2],v[3])<.86)continue;
       Rect r =
           new Rect(
               Math.round(v[1] / scale),
               Math.round(v[2] / scale),
               Math.round((v[1] + v[3]) / scale),
-              Math.round((v[2] + v[3]) / scale));
+              Math.round((v[2] + v[4]) / scale));
       boolean duplicate = false;
       for (Rect p : found)
         if (Math.abs(p.left - r.left) < r.width() * .1 && Math.abs(p.top - r.top) < r.width() * .1)

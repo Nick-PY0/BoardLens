@@ -69,7 +69,7 @@ class Permissions(QObject):
         self.ax_status.setWordWrap(True)
         layout.addWidget(self.ax_status)
         self.ax_button = QPushButton('Accessibility settings')
-        self.ax_button.clicked.connect(lambda: self.open_settings('Privacy_Accessibility'))
+        self.ax_button.clicked.connect(self.request_accessibility)
         layout.addWidget(self.ax_button)
         layout.addSpacing(18)
         bottom = QHBoxLayout()
@@ -106,6 +106,12 @@ class Permissions(QObject):
             Quartz.CGRequestScreenCaptureAccess()
         except Exception as error:
             self.window.status('Could not request screen access: ' + str(error))
+        self.refresh()
+
+    def request_accessibility(self):
+        # Only an explicit button press can ask macOS. Startup and polling are read-only.
+        from .native_chess import request_access
+        if not request_access():self.open_settings('Privacy_Accessibility')
         self.refresh()
 
     def direct_available(self):
@@ -153,6 +159,7 @@ class Permissions(QObject):
         if self.window.closing:
             return
         self.access = self.reader()
+        self.window._native_access_ok=self.access.accessibility
         if not self.window.practice:
             self.window.update_foreground()
         self.render()
@@ -183,7 +190,9 @@ class Permissions(QObject):
             self.detail.setText('Could not check permissions: ' + self.access.error)
         self.screen_status.setText('Screen Recording: ' + ('Allowed' if self.access.screen else 'Required for screen scanning'))
         self.ax_status.setText('Accessibility: ' + ('Allowed' if self.access.accessibility else
-                              'Not enabled · optional for global shortcuts and local 3D reading'))
+                              'Not enabled for this BoardLens copy · only needed for the local 3D reader'))
+        if not self.access.accessibility and os.environ.get('BOARDLENS_NATIVE_LAUNCHER'):
+            self.ax_status.setText(self.ax_status.text()+'\nEnable Applications → BoardLens.app. Entries for Python or another copy do not grant this app access.')
         self.allow.setVisible(not self.access.screen)
         self.ax_button.setVisible(not self.access.accessibility)
         self.back.setEnabled(not required)

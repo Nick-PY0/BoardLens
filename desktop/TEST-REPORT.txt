@@ -1,7 +1,7 @@
 BOARDLENS 2.15 / ANDROID 1.6 — NOVEMBER 11, 2026
 
-191 desktop automated tests passed on macOS with real Stockfish 19.
-Android source compilation and 8 JVM tests (rules and projected geometry) pass.
+193 desktop automated tests passed on macOS with real Stockfish 19.
+Android source compilation and 10 JVM tests (rules and projected geometry) pass.
 The shared companion UI rendered at 384 CSS pixels without horizontal overflow
 in an isolated Android component harness. Header and navigation clear system
 bars. This harness has no capture, overlay, engine or network permission.
@@ -26,3 +26,5 @@ Automatic updates preserve settings and optional engine data.
 Earlier full development-app live capture tests are historical evidence only.
 Play Protect blocked the 1.5.0/code7 release candidate, which remains retained
 for review. No successful release upgrade or physical-device result is inferred.
+
+Final synthetic Android discovery sweep: 160/186 exact, 26 rejected, zero accepted wrong. No universal theme/3D claim.

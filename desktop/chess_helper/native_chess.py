@@ -81,7 +81,14 @@ class NativeChessReader:
         return self.cached
 
 
+def accessibility_allowed():
+    if sys.platform!='darwin':return False
+    import ApplicationServices as AX
+    return bool(AX.AXIsProcessTrusted())
+
+
 def request_access():
     if sys.platform!='darwin':return False
     import ApplicationServices as AX
+    if AX.AXIsProcessTrusted():return True
     return bool(AX.AXIsProcessTrustedWithOptions({AX.kAXTrustedCheckOptionPrompt:True}))

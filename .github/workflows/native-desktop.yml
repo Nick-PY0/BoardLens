@@ -37,6 +37,17 @@ jobs:
       - name: Build Mac app
         if: runner.os == 'macOS'
         run: uv run --python 3.12.13 --no-project python desktop/packaging/build_native.py --work native-work --out native-dist
+      - name: Build drag-to-Applications installer
+        if: runner.os == 'macOS'
+        run: |
+          python - <<'PYCODE'
+          import json,subprocess
+          from pathlib import Path
+          runtime=Path('native-work/payload/runtime/bin/python3').resolve()
+          subprocess.run([str(runtime),'-m','pip','install','dmgbuild==1.6.7'],check=True)
+          meta=json.loads(Path('native-dist/native-build.json').read_text())
+          subprocess.run([str(runtime),'desktop/packaging/build_dmg.py','--app',meta['app_path'],'--out','native-dist'],check=True)
+          PYCODE
       - name: Test Windows GUI app
         if: runner.os == 'Windows'
         shell: pwsh
@@ -81,13 +92,18 @@ jobs:
           with asset.open('rb') as f:
               for part in iter(lambda:f.read(1024*1024),b''): h.update(part)
           assert h.hexdigest()==data['sha256']
+          extra=[]
+          if data.get('dmg_asset'):
+              installer=Path('native-dist')/data['dmg_asset']
+              assert hashlib.sha256(installer.read_bytes()).hexdigest()==data['dmg_sha256']
+              extra.append(str(installer))
           smoke=json.loads(Path('native-dist/smoke.json').read_text())
           assert smoke['legal_move'] and not smoke.get('error')
           data.pop('app_path',None);smoke.pop('python',None)
           data['smoke']=smoke
           metadata=Path('native-dist')/('native-'+os.environ['BOARDLENS_PLATFORM']+'.json')
           metadata.write_text(json.dumps(data,indent=2))
-          subprocess.run(['gh','release','upload',tag,str(asset),str(metadata),'--clobber'],check=True)
+          subprocess.run(['gh','release','upload',tag,str(asset),str(metadata),*extra,'--clobber'],check=True)
       - name: Collect startup logs
         if: always()
         shell: python
@@ -107,6 +123,7 @@ jobs:
           name: BoardLens-${{ matrix.name }}
           path: |
             native-dist/*.zip
+            native-dist/*.dmg
             native-dist/native-build.json
             native-dist/smoke.json
             native-dist/*.log
