@@ -17,6 +17,12 @@ final class PhoneSettings {
     return p.getFloat("seconds", .5f);
   }
 
+  float evaluationSeconds(){return Math.max(.03f,Math.min(30f,p.getFloat("evaluation_seconds",.2f)));}
+  int evaluationDepth(){return Math.max(1,Math.min(40,p.getInt("evaluation_depth",18)));}
+  boolean evaluationEnabled(){return p.getBoolean("evaluation_enabled",true);}
+  boolean screenEvaluation(){return p.getBoolean("screen_evaluation",true);}
+  String evaluationPosition(){return p.getString("evaluation_position","Auto");}
+
   int depth() {
     return p.getInt("depth", 18);
   }

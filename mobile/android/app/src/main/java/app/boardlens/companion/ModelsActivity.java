@@ -11,7 +11,7 @@ public final class ModelsActivity extends Activity {
  @Override public void onCreate(Bundle saved){super.onCreate(saved);ui=new MobileUi(this);ScrollView root=new ScrollView(this);root.setBackgroundColor(MobileUi.BG);LinearLayout col=ui.column();col.setPadding(ui.dp(20),ui.dp(12),ui.dp(20),ui.dp(24));root.addView(col);
   col.addView(ui.button("‹ Phone analysis",false,this::finish),new LinearLayout.LayoutParams(-1,ui.dp(48)));ui.gap(col,16);col.addView(ui.text("Engine library",26,MobileUi.FG,true));ui.gap(col,8);col.addView(ui.text("Everything runs on this phone. Download only the data models you want.",14,MobileUi.MUTED,false));ui.gap(col,14);
   state=ui.text("",14,MobileUi.ACCENT,false);col.addView(state);
-  col.addView(ui.button("Download all models",true,()->download(new String[]{"stockfish","maia3-5m","maia3-23m","maia3-79m","maia2"})),new LinearLayout.LayoutParams(-1,ui.dp(50)));ui.gap(col,8);
+  col.addView(ui.button("Download all models",true,()->download(new String[]{"stockfish","maia3-5m","maia3-23m","maia3-79m","maia2","lc0"})),new LinearLayout.LayoutParams(-1,ui.dp(50)));ui.gap(col,8);
   col.addView(ui.button("Cancel download",false,()->startService(new Intent(this,ModelDownloads.class).setAction("CANCEL"))),new LinearLayout.LayoutParams(-1,ui.dp(48)));ui.gap(col,18);
   col.addView(ui.button("Test installed engines",false,this::check),new LinearLayout.LayoutParams(-1,ui.dp(48)));ui.gap(col,18);
   for(EngineCatalog.Entry engine:EngineCatalog.ALL){LinearLayout card=ui.card();card.addView(ui.text(engine.name(),18,MobileUi.FG,true));ui.gap(card,6);card.addView(ui.text(engine.detail(),13,MobileUi.MUTED,false));ui.gap(card,12);

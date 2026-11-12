@@ -28,6 +28,8 @@ Stockfish styles rerank close candidates where supported; these are GUI selectio
 
 Attributions and pinned upstream references are in `desktop/THIRD-PARTY.txt`.
 
-## Android 1.7 local engines
+## Android 1.8 local engines
 
-Phone screen analysis needs no computer. Stockfish, Maia 2, all Maia 3 sizes, Flounder strength mode and the twelve original Tiny bots run on the phone. Tiny bots are built in; neural-model data downloads are optional. Computer companion remains a separate desktop dashboard. [Phone setup, model sizes, controls and device-test limits →](../mobile/android/PHONE-SCREEN.md)
+Phone screen analysis needs no computer. Stockfish, Maia 2, all Maia 3 sizes, Flounder strength mode, LC0 and the twelve original Tiny bots run on the phone. Tiny bots are built in; neural-model data downloads are optional. Computer companion remains a separate desktop dashboard. [Phone setup, model sizes, controls and device-test limits →](../mobile/android/PHONE-SCREEN.md)
+
+LC0 0.32.1 is available for desktop and Android as an optional CPU engine/network download. The default network is 791556 from the official release; no GPU is required. It can be slower than Stockfish. Recommendation and evaluation selection remain independent.

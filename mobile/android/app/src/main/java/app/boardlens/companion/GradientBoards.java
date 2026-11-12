@@ -83,9 +83,11 @@ final class GradientBoards {
   }
 
   static List<Rect> detect(Bitmap image) {return detect(image,false);}
+  static List<Rect> detectFast(Bitmap image){return detect(image,false,960);}
   static List<Rect> detectProjected(Bitmap image){return detect(image,true);}
-  private static List<Rect> detect(Bitmap image,boolean projected) {
-    float scale = Math.min(1f, 1600f / Math.max(image.getWidth(), image.getHeight()));
+  private static List<Rect> detect(Bitmap image,boolean projected) {return detect(image,projected,1600);}
+  private static List<Rect> detect(Bitmap image,boolean projected,int maximum) {
+    float scale = Math.min(1f, maximum / (float)Math.max(image.getWidth(), image.getHeight()));
     Bitmap small =
         Bitmap.createScaledBitmap(
             image,

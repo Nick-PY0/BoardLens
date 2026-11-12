@@ -24,6 +24,12 @@
       "bytes": 84927752,
       "sha256": "71d96d7c61486f6b03eaef8018ac88cb4d0989470ccbde0bae1a18f3204ab5db",
       "url": "https://github.com/Nick-PY0/BoardLens/releases/download/phone-models-v1/maia2.onnx"
+    },
+    {
+      "id": "lc0",
+      "bytes": 18648209,
+      "sha256": "b1c7047582a8ad37620849bf328935cb46f2ccbbecb7f2696c30c6b913ed690d",
+      "url": "https://github.com/Nick-PY0/BoardLens/releases/download/engine-addons-v1/lc0-791556.pb.gz"
     }
   ]
 }

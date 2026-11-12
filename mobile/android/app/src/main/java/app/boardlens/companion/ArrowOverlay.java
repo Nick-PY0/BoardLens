@@ -14,6 +14,7 @@ final class ArrowOverlay extends View {
   private volatile boolean bottom = true;
   private volatile List<String> moves = Collections.emptyList();
   private volatile float[] segments = new float[0];
+  private boolean evaluationVisible;private String score="…",evaluationPosition="Auto";private float whiteShare=.5f;private volatile RectF evaluationBounds;
   private final Paint pen = new Paint(3);
   private final int[] colors = {0xffffd16c, 0xff51d9da, 0xffb0a4ff};
 
@@ -27,7 +28,10 @@ final class ArrowOverlay extends View {
     show(BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom),whiteBottom,arrows);
   }
 
-  void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows){
+  void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows){show(geometry,whiteBottom,arrows,false,"…",.5f,"Auto");}
+  void show(BoardGeometry geometry,boolean whiteBottom,List<String> arrows,boolean showEvaluation,String label,float share,String placement){
+    evaluationVisible=showEvaluation;score=label;whiteShare=Math.max(0,Math.min(1,share));evaluationPosition=placement;
+
     if(!android.provider.Settings.canDrawOverlays(getContext())){clear();remove();return;}
     projection=geometry;double[] bounds=geometry.bounds();
     board=new Rect((int)bounds[0],(int)bounds[1],(int)Math.ceil(bounds[2]),(int)Math.ceil(bounds[3]));
@@ -67,10 +71,13 @@ final class ArrowOverlay extends View {
   }
 
   void clear() {
-    segments = new float[0];
+    segments = new float[0];evaluationVisible=false;evaluationBounds=null;
     moves = Collections.emptyList();
     invalidate();
   }
+
+  boolean hasEvaluation(){return evaluationVisible;}
+  boolean hasContent(){return hasArrows()||evaluationVisible;}
 
   boolean hasArrows() {
     return segments.length > 0;
@@ -83,6 +90,7 @@ final class ArrowOverlay extends View {
   }
 
   boolean covers(int x, int y) {
+    RectF panel=evaluationBounds;if(evaluationVisible&&panel!=null&&panel.contains(x,y))return true;
     Rect r = board;
     if (r == null) return false;
     float cell = r.width() / 8f;
@@ -137,6 +145,22 @@ final class ArrowOverlay extends View {
       pen.setStyle(Paint.Style.FILL);
       canvas.drawPath(p, pen);
     }
+    if(evaluationVisible)drawEvaluation(canvas,location);
     canvas.restore();
+  }
+  private void drawEvaluation(Canvas canvas,int[] location){
+    float d=getResources().getDisplayMetrics().density;WindowInsets insets=getRootWindowInsets();int top=insets==null?0:insets.getStableInsetTop(),bottomInset=insets==null?0:insets.getStableInsetBottom();
+    OverlayLayout.Box box=OverlayLayout.place(projection.bounds(),getWidth()+location[0],getHeight()+location[1],d,top,bottomInset,evaluationPosition);
+    RectF r=new RectF(box.left(),box.top(),box.right(),box.bottom());evaluationBounds=r;
+    pen.setStyle(Paint.Style.FILL);pen.setColor(0xff12212a);canvas.drawRoundRect(r,10*d,10*d,pen);
+    pen.setTypeface(Typeface.create("sans-serif-medium",Typeface.NORMAL));pen.setTextAlign(Paint.Align.CENTER);pen.setColor(0xffc6ffe7);pen.setTextSize((box.vertical()?11:14)*d);
+    String text=box.vertical()?score:"W "+score;
+    if(pen.measureText(text)>r.width()-8*d)pen.setTextSize(pen.getTextSize()*(r.width()-8*d)/pen.measureText(text));
+    canvas.drawText(text,r.centerX(),r.top+18*d,pen);
+    RectF track=box.vertical()?new RectF(r.left+12*d,r.top+28*d,r.right-12*d,r.bottom-8*d):new RectF(r.left+10*d,r.top+28*d,r.right-10*d,r.bottom-9*d);
+    pen.setColor(0xff35434d);canvas.drawRoundRect(track,4*d,4*d,pen);canvas.save();Path clip=new Path();clip.addRoundRect(track,4*d,4*d,Path.Direction.CW);canvas.clipPath(clip);pen.setColor(0xfff4f7f4);
+    if(box.vertical()){float filled=track.height()*whiteShare;if(bottom)canvas.drawRect(track.left,track.bottom-filled,track.right,track.bottom,pen);else canvas.drawRect(track.left,track.top,track.right,track.top+filled,pen);}
+    else canvas.drawRect(track.left,track.top,track.left+track.width()*whiteShare,track.bottom,pen);
+    canvas.restore();pen.setTextAlign(Paint.Align.LEFT);
   }
 }

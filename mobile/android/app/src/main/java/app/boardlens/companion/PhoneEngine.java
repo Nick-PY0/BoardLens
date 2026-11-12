@@ -19,7 +19,10 @@ final class PhoneEngine implements AutoCloseable {
   private BufferedWriter input;
   private final BlockingQueue<String> output = new LinkedBlockingQueue<>();
   private volatile boolean cancelled;
-  private boolean searching;
+  private boolean searching;private volatile boolean initializing;private String processEngine="stockfish";
+  private final Map<String,String> options=new HashMap<>();
+  private void option(String name,String value)throws IOException{if(!value.equals(options.get(name))){send("setoption name "+name+" value "+value);options.put(name,value);}}
+  void prepare(Context c,String id)throws Exception{cancelled=false;start(c,id);}
 
   private synchronized void send(String s) throws IOException {
     if (input != null) {
@@ -31,7 +34,7 @@ final class PhoneEngine implements AutoCloseable {
 
   private String next(long end) throws Exception {
     while (System.currentTimeMillis() < end) {
-      if (cancelled) throw new CancellationException();
+      if (cancelled&&!initializing) throw new CancellationException();
       String s = output.poll(60, TimeUnit.MILLISECONDS);
       if (s != null) return s;
       if (process != null && !process.isAlive())
@@ -45,16 +48,19 @@ final class PhoneEngine implements AutoCloseable {
     while (!next(end).startsWith(marker)) {}
   }
 
-  private void start(Context c) throws Exception {
+  private void start(Context c,String engineId) throws Exception {
+    String selected=engineId.equals("lc0")?"lc0":"stockfish";
+    if(process!=null&&process.isAlive()&&!processEngine.equals(selected)){close();cancelled=false;}
     if (process != null && process.isAlive()) return;
+    processEngine=selected;
     if (android.os.Build.VERSION.SDK_INT < 29)
       throw new IOException("Phone engine requires Android 10 or later");
-    File executable = new File(c.getApplicationInfo().nativeLibraryDir, "libstockfish.so");
+    File executable = new File(c.getApplicationInfo().nativeLibraryDir, selected.equals("lc0")?"liblc0.so":"libstockfish.so");
     if (!executable.isFile())
       throw new IOException("No phone engine for this CPU. Use Computer companion.");
-    output.clear();searching=false;
+    output.clear();searching=false;options.clear();
     process =
-        new ProcessBuilder(executable.getAbsolutePath())
+        new ProcessBuilder(selected.equals("lc0")?java.util.Arrays.asList(executable.getAbsolutePath(),"--weights="+PhoneModels.file(c,"lc0").getAbsolutePath(),"--backend=eigen","--minibatch-size=1","--nncache=20000"):java.util.Arrays.asList(executable.getAbsolutePath()))
             .directory(c.getFilesDir())
             .redirectErrorStream(true)
             .start();
@@ -73,9 +79,14 @@ final class PhoneEngine implements AutoCloseable {
             "Stockfish-output");
     reader.setDaemon(true);
     reader.start();
-    send("uci");
-    until("uciok", 10000);
-    send("setoption name EvalFile value " + EngineFiles.network(c).getAbsolutePath());
+    initializing=true;
+    try{
+      send("uci");until("uciok",10000);
+      if(!selected.equals("lc0"))option("EvalFile",EngineFiles.network(c).getAbsolutePath());
+      send("isready");until("readyok",15000);
+    }catch(Exception error){process.destroy();process=null;input=null;throw error;}
+    finally{initializing=false;}
+
   }
 
   Result search(
@@ -86,22 +97,21 @@ final class PhoneEngine implements AutoCloseable {
 
   Result search(Context c,ChessPosition board,PhoneSettings settings,boolean evaluation,Update update,String engineId) throws Exception {
     cancelled = false;
-    start(c);
+    start(c,engineId);
     if(searching){send("stop");until("bestmove ",5000);searching=false;}
     output.clear();
     int count = evaluation ? 1 : settings.moves();
-    send("setoption name Threads value " + settings.threads());
-    send("setoption name Hash value 32");
-    send("setoption name MultiPV value " + count);
-    send("setoption name UCI_LimitStrength value "+(engineId.equals("flounder")?"true":"false"));
-    if(engineId.equals("flounder"))send("setoption name UCI_Elo value "+Math.max(1320,Math.min(3190,settings.rating())));
-    send("setoption name Skill Level value " + (evaluation ? 20 : settings.skill()));
+    option("Threads",String.valueOf(settings.threads()));
+    if(!engineId.equals("lc0"))option("Hash","32");option("MultiPV",String.valueOf(count));
+    if(!engineId.equals("lc0"))option("UCI_LimitStrength",engineId.equals("flounder")?"true":"false");
+    if(engineId.equals("flounder"))option("UCI_Elo",String.valueOf(Math.max(1320,Math.min(3190,settings.rating()))));
+    if(!engineId.equals("lc0"))option("Skill Level",String.valueOf(evaluation?20:settings.skill()));
     send("isready");
     until("readyok", 5000);
     send("position fen " + board.fen());
     String mode = evaluation ? "Time + depth" : settings.mode();
-    int depth = evaluation ? 18 : settings.depth();
-    long ms = evaluation ? 300 : Math.max(50, Math.round(settings.seconds() * 1000));
+    int depth = evaluation ? settings.evaluationDepth() : settings.depth();
+    long ms = evaluation ? Math.round(settings.evaluationSeconds()*1000) : Math.max(50, Math.round(settings.seconds() * 1000));
     String limit =
         mode.equals("Depth")
             ? " depth " + depth
@@ -140,12 +150,12 @@ final class PhoneEngine implements AutoCloseable {
       }
       if (pv.isEmpty() || !legal.contains(pv.get(0))) continue;
       lines.put(rank, new Line(pv.get(0), cp, mate, d, pv));
-      if (update != null && d >= 8 && System.currentTimeMillis() - last > 100) {
+      if (update != null && d >= (evaluation?1:2) && (last==0||System.currentTimeMillis() - last >= 40)) {
         last = System.currentTimeMillis();
         update.result(new Result(board.fen(), "Stockfish", new ArrayList<>(lines.values())));
       }
     }
-    if (cancelled) throw new CancellationException();
+    if (cancelled&&!initializing) throw new CancellationException();
     if (!legal.contains(best)) throw new IOException("Engine did not return a legal move");
     List<Line> ranked = new ArrayList<>(lines.values());
     String selected = best;
@@ -154,7 +164,7 @@ final class PhoneEngine implements AutoCloseable {
       ranked.add(0, new Line(best, null, null, 0, Collections.singletonList(best)));
     return new Result(
         board.fen(),
-        evaluation ? "Stockfish evaluation" : "Stockfish",
+        evaluation ? (engineId.equals("lc0")?"LC0 evaluation":"Stockfish evaluation") : (engineId.equals("lc0")?"LC0":"Stockfish"),
         ranked.subList(0, Math.min(count, ranked.size())));
   }
 

@@ -6,6 +6,7 @@ final class EngineCatalog {
  record Entry(String id,String name,String kind,String detail){boolean tiny(){return kind.equals("tiny");}boolean maia(){return kind.equals("maia");}}
  static final List<Entry> ALL=java.util.Arrays.asList(
   new Entry("stockfish","Stockfish","stockfish","Strongest analysis · local engine"),
+  new Entry("lc0","LC0 · CPU","lc0","Leela Chess Zero · optional network · CPU search"),
   new Entry("maia3-5m","Maia 3 · 5M","maia","Human moves · smallest Maia 3 model"),
   new Entry("maia3-23m","Maia 3 · 23M","maia","Human moves · optional larger model"),
   new Entry("maia3-79m","Maia 3 · 79M","maia","Human moves · large optional model"),
@@ -24,5 +25,5 @@ final class EngineCatalog {
   new Entry("tiny610","TinyHugeBot","tiny","Grandmaster · original reference rating 2513"),
   new Entry("tiny614","Boychesser","tiny","Strong tournament bot · reference rating 2772"));
  static Entry get(String id){if(id.equals("maia3"))id="maia3-5m";for(Entry e:ALL)if(e.id.equals(id))return e;return ALL.get(0);}
- static boolean ready(Context c,String id){Entry e=get(id);return e.tiny()?TinyLocal.available():e.maia()?PhoneModels.ready(c,e.id):EngineFiles.ready(c);}
+ static boolean ready(Context c,String id){Entry e=get(id);return e.tiny()?TinyLocal.available():(e.maia()||e.kind().equals("lc0"))?PhoneModels.ready(c,e.id):EngineFiles.ready(c);}
 }

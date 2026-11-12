@@ -28,40 +28,26 @@ final class BoardReader implements AutoCloseable {
     context=new ContextPieces(c);
   }
 
+  Read track(Bitmap image,Rect previous,String orientation)throws Exception{
+    if(previous==null)return null;
+    if(tracked!=null&&contextualTrack)return context.classify(image,tracked,orientation);
+    return classify(image,previous,orientation);
+  }
+
+  private static boolean fresh(Set<String> tried,Rect r){return tried.add(r.left+":"+r.top+":"+r.right+":"+r.bottom);}
   Read read(Bitmap image, Rect previous, String orientation) throws Exception {
-    if(previous!=null&&tracked!=null&&contextualTrack){Read read=context.classify(image,tracked,orientation);if(read!=null)return read;}
-    if (image.getWidth() == image.getHeight()) {
-      Read whole =
-          classify(image, new Rect(0, 0, image.getWidth(), image.getHeight()), orientation);
-      if (whole != null) return whole;
+    Set<String> tried=new HashSet<>();
+    if(previous!=null){fresh(tried,previous);Read known=track(image,previous,orientation);if(known!=null)return known;}
+    if(image.getWidth()==image.getHeight()){
+      Rect whole=new Rect(0,0,image.getWidth(),image.getHeight());
+      if(fresh(tried,whole)){Read read=classify(image,whole,orientation);if(read!=null)return read;}
     }
-    List<Rect> candidates = new ArrayList<>();
-    if (previous != null
-        && new Rect(0, 0, image.getWidth(), image.getHeight()).contains(previous)) {
-      Read tracked = classify(image, previous, orientation);
-      if (tracked != null) return tracked;
-    }
-    if (image.getWidth() == image.getHeight())
-      candidates.add(new Rect(0, 0, image.getWidth(), image.getHeight()));
-    for (Rect r : GradientBoards.detect(image)) {
-      Read found = classify(image, r, orientation);
-      if (found != null) return found;
-    }
-    for (Rect r : detect(image)) {
-      boolean duplicate = false;
-      for (Rect p : candidates)
-        if (Math.abs(p.left - r.left) < r.width() * .1
-            && Math.abs(p.top - r.top) < r.width() * .1
-            && Math.abs(p.width() - r.width()) < r.width() * .1) duplicate = true;
-      if (!duplicate) candidates.add(r);
-    }
-    for (Rect r : candidates) {
-      Read result = classify(image, r, orientation);
-      if (result != null) return result;
-    }
-    for(Rect r:detectRectangular(image)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read result=context.classify(image,g,orientation);if(result!=null){tracked=g;contextualTrack=true;diagnostic="";return result;}}
-    for(Rect r:GradientBoards.detectProjected(image)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read result=context.classify(image,g,orientation);if(result!=null){tracked=g;contextualTrack=true;diagnostic="";return result;}}
-    for(BoardGeometry geometry:ProjectedBoards.detect(image)){Read result=context.classify(image,geometry,orientation);if(result!=null){tracked=geometry;contextualTrack=true;return result;}}
+    for(Rect r:GradientBoards.detectFast(image))if(fresh(tried,r)){Read read=classify(image,r,orientation);if(read!=null)return read;}
+    for(Rect r:GradientBoards.detect(image))if(fresh(tried,r)){Read read=classify(image,r,orientation);if(read!=null)return read;}
+    for(Rect r:detect(image))if(fresh(tried,r)){Read read=classify(image,r,orientation);if(read!=null)return read;}
+    for(Rect r:detectRectangular(image))if(fresh(tried,r)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;return read;}}
+    for(Rect r:GradientBoards.detectProjected(image))if(fresh(tried,r)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;return read;}}
+    for(BoardGeometry g:ProjectedBoards.detect(image)){Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;return read;}}
     tracked=null;return null;
   }
 

@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.7
+# Phone screen analysis — Android 1.8
 
 The app has two sections in one menu:
 
@@ -7,15 +7,23 @@ The app has two sections in one menu:
 
 ## Start
 
-Android 10+ and an ARM64 phone are required for local analysis. Open Phone screen → Settings → Models & downloads. The twelve Tiny bots are built in. Download Stockfish's 99 MB evaluation file and any Maia models you choose. Optional Maia 2/3 files total about 509 MB; downloading everything including Stockfish is about 607 MB. Maia 3 79M uses more RAM and CPU than 5M.
+Android 10+ and an ARM64 phone are required for local analysis. Open Phone screen → Settings → Models & downloads. The twelve Tiny bots are built in. Download Stockfish's 99 MB evaluation file and any Maia models you choose. Optional Maia 2/3 files total about 509 MB; LC0 adds about 19 MB, for about 626 MB including Stockfish. Maia 3 79M uses more RAM and CPU than 5M.
 
 Select a move engine and a separate evaluation engine. Press Start, allow full-display screen sharing and, for arrows, Display over other apps. Press Home or Open another app. Keep the complete board visible. Analysis continues while the foreground-service session runs, including after leaving or dismissing the interface. Stop in the app or notification ends capture. Settings save automatically.
 
 Android requests approval for each new capture session. Locking, revoking access, force-stop, protected screens and OS power restrictions can interrupt it. The app does not silently restart screen sharing. It uses no Accessibility service or boot receiver. Screens are processed locally and not saved or uploaded. No autoplay, Study or coaching is included.
 
+## Times and on-screen evaluation
+
+Tap the timing button on the main Phone screen to edit move and evaluation seconds independently. Saving a move timer while in Depth mode selects Time + depth so the timer actually applies. Detailed depth/limit controls remain in Settings. Maia is one-pass inference, so its native timer is not faked.
+
+Evaluation Off cancels and unloads the evaluation engine, hides its bars and saves processing power. Screen evaluation is a separate display-only toggle: it can show a passive bar above/beside the board or at a chosen screen edge while other apps remain touchable. It reports the score from White's perspective and updates during Stockfish thinking.
+
 ## Local engines
 
 Stockfish 19 supports time, depth, threads, skill and multiple alternatives. Flounder is a labelled Stockfish-based strength mode. All four official Maia exports run through Android ONNX Runtime: Maia 2 Rapid, Maia 3 5M, 23M and 79M. Maia exposes rating, threads and continuation controls rather than a fictitious native search-depth setting. The original twelve C# Tiny bots execute inside the APK's .NET Android runtime and provide one recommendation each; they manage their own search depth and receive an adjustable clock budget.
+
+LC0 0.32.1 is an optional on-device CPU engine with a 19 MB network from the official release. It uses neural tree search and can be slower than Stockfish on a phone. Its depth is engine-specific; time limits are the simplest control. The bundled Android executable is built from the included GPL source with Eigen and 16 KB ELF alignment. Desktop LC0 downloads use a Mac universal Accelerate build or the official Windows OpenBLAS archive.
 
 Recommendation and evaluation are independent: for example, Maia moves with a Stockfish bar. Maia values are labelled human expected score. Tiny bots do not supply a numerical evaluation. Model downloads are optional, fixed-hash checked and usable offline after installation. No remote inference or computer pairing is used in Phone screen mode. See `model-tools/README.md` and `tiny-runtime/README.md` for sources, licenses and production build instructions.
 
@@ -23,7 +31,7 @@ Recommendation and evaluation are independent: for example, Maia moves with a St
 
 ## Recognition and testing limits
 
-Board polling is hardcoded to 75 ms, independent of engine time. Discovery is throttled to 250 ms. Unchanged boards use direct RGBA sampling without full-screen bitmap copies. A retained still frame lets startup/rescan confirmation complete even if Android supplies no further damaged frames. Recognition and engine inference add processing time; these intervals are not a promise of instant arrows. Scan now resets the target and position. The complete supported board must be visible. Unusual themes, occluded pieces and 3D camera angles can remain unreadable. A fresh midgame image cannot always establish turn or castling rights; use the overrides when necessary. Synthetic automatic discovery was exact for 160/186 fixtures, with 26 rejected and zero accepted incorrectly; this is not universal real-device coverage.
+New-frame callbacks request a read with a hardcoded 24 ms minimum interval and a 32 ms fallback, independent of engine time. Discovery retries are throttled to 120 ms. A smaller discovery pass runs first, retaining the full fallback. Unchanged boards use direct RGBA sampling without full-screen bitmap copies. A retained still frame and cached recognition let startup/rescan confirmation complete without waiting for animation or repeating the neural inference. Recognition and engine inference add processing time; these intervals are not a promise of instant arrows. Scan now resets the target and position. The complete supported board must be visible. Unusual themes, occluded pieces and 3D camera angles can remain unreadable. A fresh midgame image cannot always establish turn or castling rights; use the overrides when necessary. Synthetic automatic discovery was exact for 160/186 fixtures, with 26 rejected and zero accepted incorrectly; this is not universal real-device coverage.
 
 Models → **Test installed engines** performs actual inference and legal-move checks on the phone without screen-sharing permission. Stop screen analysis before running it. Host checks and component previews do not prove physical A35 installation, JNI performance, capture, overlay pass-through or background longevity. Those remain device tests for this APK.
 

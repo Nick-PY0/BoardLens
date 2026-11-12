@@ -1,10 +1,13 @@
-BOARDLENS ANDROID 1.7.0 / CODE 9
+BOARDLENS ANDROID 1.8.0 / CODE 10
 
 PHONE SCREEN — NO COMPUTER NEEDED
 Open BoardLens → Phone screen → Settings → Models & downloads.
 Twelve Tiny bots are built in. Download Stockfish's 99 MB model for the default
-move engine/evaluation, or choose optional Maia 2 / Maia 3 5M, 23M or 79M.
+move engine/evaluation, or choose optional Maia 2 / Maia 3 5M, 23M or 79M, or the LC0 CPU network.
 Select recommendation and evaluation engines separately. Settings save.
+The main screen has a button for move/evaluation times. Evaluation Off stops
+its separate engine to save power. Screen evaluation draws a passive bar over
+other apps; its position and display toggle are in Settings.
 Models → Test installed engines checks real engine execution on your device.
 
 Press Start, approve entire-screen sharing, and enable Display over other apps
@@ -39,4 +42,4 @@ This signed APK passes host/package checks, but A35 installation, live capture
 and background behavior for this exact release still need physical testing.
 Keep normal Android security checks enabled.
 
-https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.7.0
+https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.0

@@ -73,6 +73,25 @@ jobs:
           assert result['legal_move'] and not result.get('error'),result
           print(json.dumps(result,indent=2))
           PY
+      - name: Test optional LC0 on the build platform
+        shell: python
+        run: |
+          import os,subprocess,tempfile
+          from pathlib import Path
+          runtime=Path('native-work/payload/runtime')/('python.exe' if os.name=='nt' else 'bin/python3')
+          script="""import chess
+          from chess_helper import engine_library
+          from chess_helper.engine import EngineJob
+          from chess_helper.core import SearchSettings
+          engine_library.install('lc0')
+          result=EngineJob().run(engine_library.extra_command(engine_library.BY_ID['lc0']),chess.Board(),SearchSettings(engine_kind='lc0',engine_id='lc0',seconds=.3,multipv=3,predict_continuations=False))
+          assert len(result['lines'])==3
+          assert all(chess.Move.from_uci(line['move']) in chess.Board().legal_moves for line in result['lines'])
+          print('LC0 local engine: 3 legal alternatives on this build platform')
+          """
+          with tempfile.TemporaryDirectory(prefix='boardlens-lc0-test-') as data:
+              env=dict(os.environ,BOARDLENS_DATA_DIR=data)
+              subprocess.run([str(runtime.resolve()),'-c',script],cwd='desktop',env=env,check=True,timeout=300)
       - name: Upload verified app to draft release
         if: success() && inputs.release_tag != ''
         shell: python

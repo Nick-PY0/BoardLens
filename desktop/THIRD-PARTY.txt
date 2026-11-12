@@ -51,3 +51,10 @@ Both are separate optional runtimes; upstream licenses and package notices remai
 Flounder selection method adapted from bhale22/Blundermindwithbots (GPL-3.0):
 https://github.com/bhale22/Blundermindwithbots, src/40-engines.js.
 License: assets/licenses/Blundermind-GPL3.txt. BoardLens uses the local Stockfish build; published Flounder rating calibration is approximate here.
+
+Optional LC0 0.32.1: LeelaChessZero/lc0, GPL-3.0-or-later. CPU binaries/network
+are optional downloads. Mac builds use system Accelerate and include a default
+791556 network from the official Windows CPU release. Android uses Eigen 3.4
+(MPL-2.0) and Abseil 20240722 (Apache-2.0). Exact hashes and corresponding
+sources are provided in the engine-addons-v1 resource release and mobile
+engine-source/LC0-v0.32.1-corresponding-source.zip.

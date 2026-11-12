@@ -40,6 +40,7 @@ ENTRIES=[
  Entry('tiny614','Boychesser','tiny','Small bot source + shared .NET runtime',2772,bot=614,difficulty='Top tournament bot'),
  Entry('maia3-23m','Maia-3 · 23M model','maia3','About 95 MB model + shared Maia-3 runtime',heavy=True,model='maia3-23m'),
  Entry('maia3-79m','Maia-3 · 79M model','maia3','About 320 MB model + shared Maia-3 runtime',heavy=True,model='maia3-79m'),
+ Entry('lc0','LC0 · Leela Chess Zero','lc0','Optional CPU engine + 19 MB network'),
 ]
 BY_ID={e.identity:e for e in ENTRIES}
 BOT_HASHES={'17': '4b5aeb1a89b18e6c3bb2e9a3f993dd4be1b00b7113ad9012e7a84fb0a182acbc', '278': '3dc71df38ca3b076239f629e632f53f8883f8bc3dbd55fea17b79b1042cd7bfe', '153': 'f8af17ac167b43c5b7b72d26371bd11b013a3fe4123302be9ea99da7e25c4d0b', '70': 'd027e9e0fd000759f1b6d5dcb1a2c145a8889cba15f5a507b1bc783e61e5116f', '253': '1d964843ac03bdf93b950112475dd387bb2c16b21d49ff31cf3abdd331bcecf4', '425': 'f09b0152d6c7c8ff3f834c3936cae3e98d3c6a0106bcbb71d8b76fa49905c0da', '266': 'bf47651a80ba9b962b9290075e3584c0a13c605b83418251e255dfde74558d48', '303': '0e89f85049cde1288fe554707495113abeb80722aa5ec53bf2daf15af7f5093e', '628': 'ea027f0e874f1f63b8107cf5805f2e13eae280a1101c61d333095764ad66f947', '529': 'ad7cac0623707e721502159cc16549b518a48592da7952a94c4b44c284160280', '610': 'b207c388e07c9d052e74f66c1809c4950bc20555177168cf5c65e7cb783fc60a', '614': '8961dd5fe26591a265a9978ea500c9fce2eac9292ce886c77cb58119b5633c21'}
@@ -54,6 +55,9 @@ def available(entry):
     if entry.kind=='stockfish':return bool(find_engine())
     if entry.kind=='flounder':return bool(find_engine())
     if entry.kind=='custom':return True
+    if entry.kind=='lc0':
+        from .lc0_support import available as lc0_available
+        return lc0_available()
     if entry.kind=='tiny':return runtime_path().is_file() and bot_path(entry).is_file()
     if entry.kind=='maia3':
         size=entry.model.rsplit('-',1)[-1].upper()
@@ -105,6 +109,9 @@ def install(identity):
         if not find_engine():
             from .installer import install_stockfish
             install_stockfish(data_dir()/'engine')
+    elif entry.kind=='lc0':
+        from .lc0_support import install as install_lc0
+        install_lc0()
     elif entry.kind=='custom':raise ValueError('Custom UCI uses an executable you choose; no download is needed.')
     elif entry.kind=='tiny':
         ensure_tiny_runtime()
@@ -125,6 +132,9 @@ def install(identity):
 
 def extra_command(entry):
     if not available(entry):raise ValueError('This engine is not installed. Open Engine library and download it first.')
+    if entry.kind=='lc0':
+        from .lc0_support import command
+        return command()
     if entry.kind=='tiny':return [str(runtime_path()),str(Path(__file__).parent/'assets/tiny/BoardLensTiny.dll'),str(bot_path(entry)),entry.label]
     if entry.kind=='maia2':return [str(python_path(data_dir()/'maia2-runtime')),str(Path(__file__).with_name('maia2_uci.py')),'--model-dir',str(data_dir()/'maia2-models')]
     if entry.kind=='maia3':

@@ -1,0 +1,12 @@
+{
+  "version": "0.32.1",
+  "lc0_source_archive_sha256": "78b17e8e8d29da30492c86fdac69c519816f4a9d9c3b787dc41a6f9e8d20fde3",
+  "common_commit": "b326b154221a6eb91977bdccf11d6f89e8547875",
+  "network": "791556.pb.gz",
+  "network_sha256": "b1c7047582a8ad37620849bf328935cb46f2ccbbecb7f2696c30c6b913ed690d",
+  "network_source": "official LC0 v0.32.1 Windows CPU OpenBLAS release",
+  "android_backend": "Eigen CPU, minibatch 1, 16 KB ELF load alignment",
+  "mac_backend": "Accelerate BLAS CPU, universal Apple Silicon and Intel",
+  "windows_source": "official LC0 v0.32.1 CPU OpenBLAS package",
+  "sources": "LC0-v0.32.1-corresponding-source.zip"
+}

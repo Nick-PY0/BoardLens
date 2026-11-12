@@ -10,7 +10,7 @@ import org.json.*;
 /** Optional data models; fixed HTTPS sources, exact byte counts and SHA-256. */
 final class PhoneModels {
  static JSONObject entry(Context c,String id)throws Exception{try(InputStream in=c.getAssets().open("engines/models.json")){JSONArray all=new JSONObject(new String(Streams.read(in,65536),java.nio.charset.StandardCharsets.UTF_8)).getJSONArray("models");for(int i=0;i<all.length();i++)if(all.getJSONObject(i).getString("id").equals(id))return all.getJSONObject(i);}throw new IOException("Model not in this release");}
- static File file(Context c,String id){File folder=new File(c.getFilesDir(),"phone-models");folder.mkdirs();return new File(folder,id+".onnx");}
+ static File file(Context c,String id){File folder=new File(c.getFilesDir(),"phone-models");folder.mkdirs();return new File(folder,id.equals("lc0")?"lc0.pb.gz":id+".onnx");}
  static boolean ready(Context c,String id){try{JSONObject e=entry(c,id);File f=file(c,id);return f.isFile()&&f.length()==e.getLong("bytes")&&c.getSharedPreferences("phone-model-files",0).getString(id,"").equals(e.getString("sha256"));}catch(Exception missing){return false;}}
  static String size(Context c,String id){try{return String.format(Locale.ROOT,"%.0f MB",entry(c,id).getLong("bytes")/1000000.0);}catch(Exception e){return "Optional download";}}
  static synchronized void download(Context c,String id,BooleanSupplier cancelled,EngineFiles.Progress progress)throws Exception{

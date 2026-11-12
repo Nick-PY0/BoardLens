@@ -6,9 +6,15 @@ import java.util.function.BooleanSupplier;
 
 /** All phone engines share validation, prediction and cancellation; no network inference. */
 final class LocalEngines implements AutoCloseable {
- record Evaluated(String text,float whiteShare){}
+ record Evaluated(String text,float whiteShare,String badge){}
  private final PhoneEngine stockfish=new PhoneEngine();private final MaiaLocal maia=new MaiaLocal();private final TinyLocal tiny=new TinyLocal();
  private volatile boolean cancelled;
+ void prepare(Context c,PhoneSettings settings,boolean eval)throws Exception{
+  if(eval&&!settings.evaluationEnabled())return;
+  String id=eval?settings.evaluator():settings.engine();EngineCatalog.Entry engine=EngineCatalog.get(id);
+  if(EngineCatalog.ready(c,id)&&!engine.maia()&&!engine.tiny())stockfish.prepare(c,id);
+ }
+
  private PhoneEngine.Result one(Context c,ChessPosition board,PhoneSettings settings,String id,boolean eval,PhoneEngine.Update update)throws Exception{
   if(cancelled)throw new CancellationException();EngineCatalog.Entry engine=EngineCatalog.get(id);
   if(engine.maia())return maia.search(c,board,engine.id(),settings.rating(),eval?1:settings.moves(),settings.threads()).result();
@@ -31,15 +37,21 @@ final class LocalEngines implements AutoCloseable {
   }
   List<PhoneEngine.Line> lines=new ArrayList<>(root.lines());lines.set(0,new PhoneEngine.Line(first.move(),first.cp(),first.mate(),first.depth(),pv));return new PhoneEngine.Result(root.fen(),root.provider(),lines);
  }
- Evaluated evaluate(Context c,ChessPosition board,PhoneSettings settings)throws Exception{
+ static Evaluated score(String name,PhoneEngine.Line lead){
+  String score=lead.mate()!=null?"M"+lead.mate():lead.cp()!=null?String.format(Locale.ROOT,"%+.2f",lead.cp()/100.):"…";
+  float share=lead.mate()!=null?(lead.mate()>0?1:0):lead.cp()!=null?(float)(1/(1+Math.exp(-lead.cp()/250.))):.5f;
+  return new Evaluated(name+" · "+score+" · White’s perspective",share,score);
+ }
+ Evaluated evaluate(Context c,ChessPosition board,PhoneSettings settings)throws Exception{return evaluate(c,board,settings,null);}
+ Evaluated evaluate(Context c,ChessPosition board,PhoneSettings settings,java.util.function.Consumer<Evaluated> update)throws Exception{
+  if(!settings.evaluationEnabled()){close();return new Evaluated("Evaluation off",.5f,"Off");}
   cancelled=false;String id=EngineCatalog.get(settings.evaluator()).id();EngineCatalog.Entry engine=EngineCatalog.get(id);
   if(engine.maia()){
-   MaiaLocal.Prediction prediction=maia.search(c,board,id,settings.rating(),1,settings.threads());return new Evaluated(engine.name()+" · human expected score "+String.format(Locale.ROOT,"%.2f",prediction.whiteExpected()),prediction.whiteExpected());
+   MaiaLocal.Prediction prediction=maia.search(c,board,id,settings.rating(),1,settings.threads());String value=String.format(Locale.ROOT,"%.2f",prediction.whiteExpected());
+   Evaluated result=new Evaluated(engine.name()+" · human expected score "+value,prediction.whiteExpected(),value+" exp.");if(update!=null)update.accept(result);return result;
   }
-  PhoneEngine.Result result=one(c,board,settings,id,true,null);if(result.lines().isEmpty())return new Evaluated("No evaluation",.5f);PhoneEngine.Line lead=result.lines().get(0);
-  String score=lead.mate()!=null?"Mate "+lead.mate():lead.cp()!=null?String.format(Locale.ROOT,"%+.2f",lead.cp()/100.):"—";
-  float share=lead.mate()!=null?(lead.mate()>0?1:0):lead.cp()!=null?(float)(1/(1+Math.exp(-lead.cp()/250.))):.5f;
-  return new Evaluated(engine.name()+" · "+score+" · White’s perspective",share);
+  PhoneEngine.Result result=one(c,board,settings,id,true,update==null?null:r->{if(!r.lines().isEmpty())update.accept(score(engine.name(),r.lines().get(0)));});
+  if(result.lines().isEmpty())return new Evaluated("No evaluation",.5f,"…");return score(engine.name(),result.lines().get(0));
  }
  void cancel(){cancelled=true;stockfish.cancel();maia.cancel();tiny.cancel();}
  public void close(){cancel();stockfish.close();maia.close();tiny.close();}

@@ -11,7 +11,7 @@ from chess_helper.recommendation_styles import style_index,flounder_index
 def test_catalog_capabilities_and_no_automatic_engine_fallback(qt):
     w=MainWindow()
     try:
-        assert len(library.ENTRIES)==19
+        assert len(library.ENTRIES)==20
         assert [e.rating for e in library.ENTRIES if e.kind=='tiny']==[192,307,677,1085,1276,1569,1713,2001,2172,2246,2513,2772]
         for index,entry in enumerate(library.ENTRIES):
             w.engine_kind.setCurrentIndex(index)

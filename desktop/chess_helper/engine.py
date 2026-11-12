@@ -18,6 +18,8 @@ def engine_environment(path):
     if isinstance(path,list) and 'maia3.uci' in path:env['HF_HUB_OFFLINE']='1'
     if isinstance(path,list) and ('maia3.uci' in path or any('maia2_uci.py' in str(part) for part in path)):
         env.update(OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',VECLIB_MAXIMUM_THREADS='1')
+    if isinstance(path,list) and any(PathLike.endswith(('lc0','lc0.exe')) for PathLike in (str(part) for part in path)):
+        env.update(OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1',VECLIB_MAXIMUM_THREADS='1')
     return env
 
 
