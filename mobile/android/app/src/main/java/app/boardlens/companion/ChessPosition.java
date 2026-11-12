@@ -261,9 +261,15 @@ public final class ChessPosition {
   static ChessPosition sync(ChessPosition old, String placement, String turn) {
     if (old != null) {
       if (old.placement().equals(placement)) return old;
+      // A normal screen update is one move. Check all of those before considering
+      // skipped frames containing two moves (which generate hundreds of boards).
+      List<ChessPosition> successors = new ArrayList<>();
       for (String m : old.legal()) {
         ChessPosition n = old.play(m);
         if (n.placement().equals(placement)) return n;
+        successors.add(n);
+      }
+      for (ChessPosition n : successors) {
         for (String reply : n.legal()) {
           ChessPosition nn = n.play(reply);
           if (nn.placement().equals(placement)) return nn;

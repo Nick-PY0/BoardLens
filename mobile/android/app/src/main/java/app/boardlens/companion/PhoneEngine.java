@@ -22,7 +22,22 @@ final class PhoneEngine implements AutoCloseable {
   private boolean searching;private volatile boolean initializing;private String processEngine="stockfish";
   private final Map<String,String> options=new HashMap<>();
   private void option(String name,String value)throws IOException{if(!value.equals(options.get(name))){send("setoption name "+name+" value "+value);options.put(name,value);}}
-  void prepare(Context c,String id)throws Exception{cancelled=false;start(c,id);}
+  void prepare(Context c,String id,PhoneSettings settings,boolean evaluation)throws Exception{
+    cancelled=false;start(c,id);configure(id,settings,evaluation);
+  }
+
+  private void configure(String engineId,PhoneSettings settings,boolean evaluation)throws Exception {
+    Map<String,String> before=new HashMap<>(options);
+    option("Threads",String.valueOf(settings.threads()));
+    if(!engineId.equals("lc0"))option("Hash","32");
+    option("MultiPV",String.valueOf(evaluation?1:settings.moves()));
+    if(!engineId.equals("lc0"))option("UCI_LimitStrength",engineId.equals("flounder")?"true":"false");
+    if(engineId.equals("flounder"))option("UCI_Elo",String.valueOf(Math.max(1320,Math.min(3190,settings.rating()))));
+    if(!engineId.equals("lc0"))option("Skill Level",String.valueOf(evaluation?20:settings.skill()));
+    // Thread/hash allocation happens while warming, not after the board is read.
+    // UCI position/go need no extra ready round trip when options are unchanged.
+    if(!before.equals(options)){send("isready");until("readyok",5000);}
+  }
 
   private synchronized void send(String s) throws IOException {
     if (input != null) {
@@ -101,13 +116,7 @@ final class PhoneEngine implements AutoCloseable {
     if(searching){send("stop");until("bestmove ",5000);searching=false;}
     output.clear();
     int count = evaluation ? 1 : settings.moves();
-    option("Threads",String.valueOf(settings.threads()));
-    if(!engineId.equals("lc0"))option("Hash","32");option("MultiPV",String.valueOf(count));
-    if(!engineId.equals("lc0"))option("UCI_LimitStrength",engineId.equals("flounder")?"true":"false");
-    if(engineId.equals("flounder"))option("UCI_Elo",String.valueOf(Math.max(1320,Math.min(3190,settings.rating()))));
-    if(!engineId.equals("lc0"))option("Skill Level",String.valueOf(evaluation?20:settings.skill()));
-    send("isready");
-    until("readyok", 5000);
+    configure(engineId,settings,evaluation);
     send("position fen " + board.fen());
     String mode = evaluation ? "Time + depth" : settings.mode();
     int depth = evaluation ? settings.evaluationDepth() : settings.depth();
@@ -150,9 +159,9 @@ final class PhoneEngine implements AutoCloseable {
       }
       if (pv.isEmpty() || !legal.contains(pv.get(0))) continue;
       lines.put(rank, new Line(pv.get(0), cp, mate, d, pv));
-      if (update != null && d >= (evaluation?1:2) && (last==0||System.currentTimeMillis() - last >= 40)) {
+      if (update != null && d >= 1 && (last==0||System.currentTimeMillis() - last >= 40)) {
         last = System.currentTimeMillis();
-        update.result(new Result(board.fen(), "Stockfish", new ArrayList<>(lines.values())));
+        update.result(new Result(board.fen(), engineId.equals("lc0")?"LC0":"Stockfish", new ArrayList<>(lines.values())));
       }
     }
     if (cancelled&&!initializing) throw new CancellationException();

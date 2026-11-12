@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.8.1
+# Phone screen analysis — Android 1.8.2
 
 The app has two sections in one menu:
 
@@ -27,11 +27,13 @@ LC0 0.32.1 is an optional on-device CPU engine with a 19 MB network from the off
 
 Recommendation and evaluation are independent: for example, Maia moves with a Stockfish bar. Maia values are labelled human expected score. Tiny bots do not supply a numerical evaluation. Model downloads are optional, fixed-hash checked and usable offline after installation. No remote inference or computer pairing is used in Phone screen mode. See `model-tools/README.md` and `tiny-runtime/README.md` for sources, licenses and production build instructions.
 
-**Show moves while thinking** displays early results when available. A non-streaming model must finish its first inference first. **Predict replies** adds a possible continuation: three plies means your move, the opponent's reply and your response. The reply budget limits additional passes, not the primary move. **Steady arrows** reduces changes while thinking; **Lock move** holds the first suggestion until the position/settings change or Scan now is pressed. **Only my color** uses the side at the bottom. Arrows pass touches through.
+**Show moves while thinking** displays the first legal search result from depth one, marked Thinking while the chosen time/depth budget continues. A non-streaming model must finish its first inference first. The completed main move appears before optional reply searches, even when early suggestions are off. **Predict replies** adds a possible continuation: three plies means your move, the opponent's reply and your response. The reply budget limits additional passes, not the primary move. **Steady arrows** reduces changes while thinking; **Lock move** holds the first suggestion until the position/settings change or Scan now is pressed. **Only my color** uses the side at the bottom. Arrows pass touches through.
 
 ## Recognition and testing limits
 
 New-frame callbacks request a read with a hardcoded 24 ms minimum interval and a 32 ms fallback, independent of engine time. Discovery retries are throttled to 120 ms. A smaller discovery pass runs first, retaining the full fallback. Unchanged boards use direct RGBA sampling without full-screen bitmap copies. A retained still frame and cached recognition let startup/rescan confirmation complete without waiting for animation or repeating the neural inference. Recognition and engine inference add processing time; these intervals are not a promise of instant arrows. Scan now resets the target and position. The complete supported board must be visible. Unusual themes, occluded pieces and 3D camera angles can remain unreadable. A fresh midgame image cannot always establish turn or castling rights; use the overrides when necessary. Synthetic automatic discovery was exact for 160/186 fixtures, with 26 rejected and zero accepted incorrectly; this is not universal real-device coverage.
+
+Frequent captures now keep a pending board candidate's original stability timestamp rather than resetting it. Opening-board tests cover retained still captures, frequent polling and both orientations in a phone portrait fixture. Single-move tracking checks all legal single moves before searching for two skipped moves, and UCI thread/hash options are prepared before the first board and reused between positions. These changes do not lower confidence thresholds or engine thinking budgets.
 
 Models → **Test installed engines** performs actual inference and legal-move checks on the phone without screen-sharing permission. Stop screen analysis before running it. Host checks and component previews do not prove physical A35 installation, JNI performance, capture, overlay pass-through or background longevity. Those remain device tests for this APK.
 

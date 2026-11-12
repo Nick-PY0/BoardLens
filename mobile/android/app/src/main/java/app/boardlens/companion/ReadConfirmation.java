@@ -4,6 +4,7 @@ package app.boardlens.companion;
 final class ReadConfirmation<T> {
  private T candidate;private int[] fingerprint;private long since;
  void set(T read,int[] pixels,long now){candidate=read;fingerprint=pixels.clone();since=now;}
+ boolean pending(){return candidate!=null;}
  T poll(int[] pixels,long now){if(candidate==null)return null;if(different(fingerprint,pixels)){clear();return null;}return now-since>=24?candidate:null;}
  void clear(){candidate=null;fingerprint=null;}
  static boolean different(int[] a,int[] b){

@@ -282,7 +282,8 @@ public final class ScreenService extends Service {
     Bitmap frame = null;
     String key=settingsKey();
     try {
-      try (Image image = images.acquireLatestImage()) {
+      ImageReader source=images;
+      try (Image image = source==null?null:source.acquireLatestImage()) {
         if(phoneVisible)return;
         if(image==null){
           if(cachedFrame==null)return;
@@ -330,6 +331,10 @@ public final class ScreenService extends Service {
       if (target == null && SystemClock.elapsedRealtime() - lastScan < 120) return;
       lastScan = SystemClock.elapsedRealtime();
       BoardReader.Read read=target==null?null:confirmation.poll(fingerprint(frame,target),SystemClock.elapsedRealtime());
+      // A new capture can arrive before the stability interval has elapsed.
+      // Keep the candidate's original timestamp; re-reading here used to reset
+      // it repeatedly, so a still board could wait forever for a move.
+      if(read==null&&confirmation.pending())return;
       boolean confirmed=read!=null;
       if(read==null){reads++;read=target==null?reader.read(frame,null,settings.orientation()):reader.track(frame,target,settings.orientation());}
       diagnostic = reader.diagnostic;
@@ -409,7 +414,7 @@ public final class ScreenService extends Service {
           try {
             if(token!=generation.get()||!running)return;
             PhoneEngine.Result result = moves.recommend(this,board,settings,()->token==generation.get()&&running,
-                r -> { if(settings.early())publishMoves(r,board,rect,whiteBottom,token,false); });
+                (r,rootComplete) -> { if(rootComplete||settings.early())publishMoves(r,board,rect,whiteBottom,token,rootComplete); });
             publishMoves(result, board, rect, whiteBottom, token, true);
           } catch (CancellationException ignored) {
           } catch (Exception error) {
@@ -492,7 +497,7 @@ public final class ScreenService extends Service {
       arrows.addAll(lastArrows);
     }
     lastArrows = new ArrayList<>(arrows);
-    suggestion = text.length() == 0 ? "Waiting for your turn" : text.toString().trim();
+    suggestion = text.length() == 0 ? "Waiting for your turn" : text.toString().trim()+(finished?"":"\nThinking…");
     changed();
     if(token==generation.get())renderOverlay();
   }

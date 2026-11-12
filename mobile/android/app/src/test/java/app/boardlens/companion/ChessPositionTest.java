@@ -37,6 +37,17 @@ public class ChessPositionTest {
   }
 
   @Test
+  public void everySingleMovePreservesTurnAndRightsBeforeSkippedFrameSearch() {
+    ChessPosition board = new ChessPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    for (String move : board.legal()) {
+      ChessPosition next = board.play(move);
+      assertEquals(next.fen(), ChessPosition.sync(board, next.placement(), "Auto").fen());
+    }
+    ChessPosition castle = new ChessPosition("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 3 21");
+    assertEquals(castle.play("e1g1").fen(), ChessPosition.sync(castle, castle.play("e1g1").placement(), "Auto").fen());
+  }
+
+  @Test
   public void enPassantCannotExposeKing() {
     ChessPosition p = new ChessPosition("8/6bb/8/8/R1pP2k1/4P3/P7/K7 b - d3 0 1");
     assertFalse(p.legal().contains("c4d3"));

@@ -1,4 +1,4 @@
-BOARDLENS ANDROID 1.8.1 / CODE 11
+BOARDLENS ANDROID 1.8.2 / CODE 12
 
 PHONE SCREEN — NO COMPUTER NEEDED
 Open BoardLens → Phone screen → Settings → Models & downloads.
@@ -33,6 +33,10 @@ Predict replies: possible future moves. Three plies = your move, opponent reply,
 your response. Reply budget limits additional passes, not an artificial delay.
 Steady arrows reduces switching; Lock move holds one until a real change.
 Only my color follows the side at the bottom of the recognized board.
+Show moves while thinking displays the first legal engine result immediately.
+The chosen thinking time still runs. The completed main move appears before
+optional reply searches finish, even with early suggestions turned off.
+Still-board confirmation no longer restarts its timer on frequent captures.
 
 LIMITS
 Android 10+ / ARM64 for local analysis. Recognition is experimental for unusual
@@ -45,4 +49,4 @@ This signed APK passes host/package checks, but A35 installation, live capture
 and background behavior for this exact release still need physical testing.
 Keep normal Android security checks enabled.
 
-https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.1
+https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.2

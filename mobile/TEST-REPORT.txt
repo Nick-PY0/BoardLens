@@ -1,6 +1,6 @@
-BOARDLENS ANDROID 1.8.1 / CODE 11 — NOVEMBER 12, 2026
+BOARDLENS ANDROID 1.8.2 / CODE 12 — NOVEMBER 12, 2026
 
-38 Android JVM/Robolectric tests and release lint pass. New checks cover:
+46 Android JVM/Robolectric tests and release lint pass. New checks cover:
 - still-frame confirmation without a second neural inference;
 - animation invalidation and overlay-pixel masks;
 - independent move/evaluation timers, validation and persistence;
@@ -31,7 +31,7 @@ exports/model hashes are unchanged; their prior 156 parity checks and the twelve
 Tiny bots' 72 legal/terminal host checks still describe those unchanged files.
 
 The owner confirmed Android 1.7 scans the live A35 screen, with slow acquisition.
-This new 1.8 APK has not yet been installed/timed on the physical A35. Capture,
+This new 1.8.2 APK has not yet been installed/timed on the physical A35. Capture,
 overlay interaction and background longevity for this exact APK remain device
 checks. The owner chose to do phone installation/testing. Normal Android
 installation/security checks stay enabled.
@@ -50,3 +50,39 @@ These three optional real-model tests run when BOARDLENS_MAIA_TEST_MODELS is set
 ordinary CI can skip them when their large data files are absent. No new A35
 Maia inference result is inferred from host tests. The user's exact phone error
 was requested; a separate device-specific failure may still need its message.
+
+FIRST BOARD AND ENGINE LATENCY
+Fixed a repeated stability-timer reset: if another capture arrived before the
+24 ms interval elapsed, the old path ran recognition again and replaced the
+candidate's timestamp. A stream of frequent frames could indefinitely postpone
+the first board. Pending candidates now keep their original timestamp until
+confirmed or invalidated by an actual pixel change. Confidence thresholds,
+plausibility checks and legal-position validation are unchanged.
+
+Production reader/service tests cover an untouched opening-board crop, a full
+screen retained without new captures, rapid confirmation polling, and a phone
+portrait fixture with both board orientations. The screenshot artwork comes
+from the existing desktop regression fixtures. These are host simulations.
+
+The move adapter streams from the first legal depth-one result while preserving
+the selected time/depth limit. The completed main move is published before
+optional continuation searches, even with early suggestions off. UCI thread,
+hash and strength options warm before the first position, and unchanged options
+skip a redundant ready handshake. Stockfish and evaluation remain independent.
+
+Six real Stockfish 19 searches through the production Java adapter on the Mac
+host showed early legal moves in roughly 1–14 ms and completion near the chosen
+500 ms budget. This measures engine-to-callback time, not phone recognition or
+compositor latency. Protocol tests hold bestmove/reply responses back to verify
+that early/root callbacks are not blocked and the selected budget is unchanged.
+
+Single-move synchronization checks all legal single moves before two-move
+recovery. A separate same-JVM benchmark checked 246 successor positions: the
+old order took 63–217 ms total, the new order 3–13 ms total in four warmed runs.
+Those are component totals under host load, not A35 per-move latency.
+
+The optional real Stockfish test uses BOARDLENS_STOCKFISH_TEST_ENGINE. Together
+with the three real-Maia tests, it runs locally when its files are provided;
+CI without those external files skips four tests. The complete release APK
+includes all twelve Tiny bots and all on-phone engine adapters, preserves its
+release signing identity, and passes 16 KB native/ZIP alignment checks.
