@@ -1,6 +1,6 @@
 BOARDLENS ANDROID 1.8.2 / CODE 12 — NOVEMBER 12, 2026
 
-46 Android JVM/Robolectric tests and release lint pass. New checks cover:
+47 Android JVM/Robolectric tests and release lint pass. New checks cover:
 - still-frame confirmation without a second neural inference;
 - animation invalidation and overlay-pixel masks;
 - independent move/evaluation timers, validation and persistence;
@@ -75,6 +75,8 @@ host showed early legal moves in roughly 1–14 ms and completion near the chose
 500 ms budget. This measures engine-to-callback time, not phone recognition or
 compositor latency. Protocol tests hold bestmove/reply responses back to verify
 that early/root callbacks are not blocked and the selected budget is unchanged.
+A service regression also checks Only my color with Steady arrows: an invisible
+opponent line must not block the first available arrow for the user’s color.
 
 Single-move synchronization checks all legal single moves before two-move
 recovery. A separate same-JVM benchmark checked 246 successor positions: the

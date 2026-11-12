@@ -463,6 +463,7 @@ public final class ScreenService extends Service {
     PhoneEngine.Line first = result.lines().get(0);
     if (settings.steady()
         && !finished
+        && !lastArrows.isEmpty()
         && displayedFen.equals(result.fen())
         && !displayedMove.equals(first.move())) return;
     displayedFen = result.fen();
