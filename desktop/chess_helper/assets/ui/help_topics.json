@@ -115,7 +115,7 @@
     "id": "connections",
     "category": "Boards and connections",
     "title": "Screen scanning or an optional connection?",
-    "summary": "Standard 2D boards can use screen scanning alone. Browser and Local 3D chess are separate optional ways to read supported apps directly.",
+    "summary": "Standard 2D boards use screen scanning with Use browser extension off. Turning it on prefers connected browser boards; if no extension board is available, screen scanning continues. Local 3D chess is a separate option.",
     "questions": [
       "Do I need the browser reader for local 3D chess?",
       "Why are there two connections?",
@@ -138,13 +138,13 @@
     "id": "browser",
     "category": "Boards and connections",
     "title": "Connect the browser",
-    "summary": "Turn on Connect browser to reveal its status and pairing controls. One pairing key connects the optional local extension.",
+    "summary": "Turn on Use browser extension to prefer it for 2D and supported 3D/theme boards on Chess.com and Lichess. Turn it off for normal screen scanning. Optional connections contains status and pairing controls.",
     "questions": [
       "How do I connect Chess.com or Lichess?",
       "Where is the browser pairing key?"
     ],
     "steps": [
-      "Board \u2192 Computer screen \u2192 Optional connections \u2192 Connect browser.",
+      "Board \u2192 Computer screen \u2192 Use browser extension.",
       "Connection setup explains loading BoardLens 2/BrowserReader in Chrome or Edge.",
       "Copy pairing key. Paste it into the extension popup and choose Connect.",
       "Reload the chess tab and keep it visible."
@@ -166,7 +166,7 @@
       "The browser reader needs to reconnect"
     ],
     "steps": [
-      "Keep Connect browser enabled in BoardLens.",
+      "Keep Use browser extension enabled in BoardLens.",
       "If the key is rejected, copy the current key into the extension and reconnect.",
       "After an extension update, reload the extension once and reload the chess tab.",
       "Keep the chess tab visible; switching away normally releases its feed."

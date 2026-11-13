@@ -666,8 +666,8 @@ class MainWindow(QMainWindow):
         self.readers_toggle.toggled.connect(self.reader_options.setVisible)
         self.readers_toggle.toggled.connect(lambda enabled:self.readers_toggle.setText("Optional connections ▾" if enabled else "Optional connections ▸"))
         self.reader_options.hide()
-        browser_group=QGroupBox("Browser connection");browser_layout=QVBoxLayout(browser_group);browser_layout.setSpacing(9)
-        self.browser_reader_button=QCheckBox("Connect browser");browser_layout.addWidget(self.browser_reader_button)
+        browser_group=QGroupBox("Browser connection");self.browser_connection_group=browser_group;browser_group.hide();browser_layout=QVBoxLayout(browser_group);browser_layout.setSpacing(9)
+        self.browser_reader_button=QCheckBox("Use browser extension");self.browser_reader_button.setToolTip("Off: scan the screen normally. On: prefer the connected extension for Chess.com and Lichess, including 2D boards. Other apps keep using screen scanning.")
         self.browser_connection_details=QWidget();details=QVBoxLayout(self.browser_connection_details);details.setContentsMargins(0,0,0,0);details.setSpacing(8)
         self.browser_reader_status=QLabel("Browser connection off");self.browser_reader_status.setWordWrap(True);self.browser_reader_status.setStyleSheet("color:#a8c7b2;font-size:13px;");details.addWidget(self.browser_reader_status)
         self.browser_reader_key=QLineEdit();self.browser_reader_key.setReadOnly(True);self.browser_reader_key.setEchoMode(QLineEdit.EchoMode.Password);self.browser_reader_key.setPlaceholderText("Pairing key");self.browser_reader_key.setAccessibleName('Private browser pairing key')
@@ -675,16 +675,16 @@ class MainWindow(QMainWindow):
         self._button("Copy pairing key",lambda:self.copy_text(self.browser_reader_key.text()),details)
         self._button("Connection setup…",self.reader_setup,details)
         browser_layout.addWidget(self.browser_connection_details);self.browser_connection_details.hide()
-        self.browser_reader_button.toggled.connect(self.browser_connection_details.setVisible);self.browser_reader_button.toggled.connect(self.toggle_browser_reader)
+        self.browser_reader_button.toggled.connect(browser_group.setVisible);self.browser_reader_button.toggled.connect(self.browser_connection_details.setVisible);self.browser_reader_button.toggled.connect(self.toggle_browser_reader)
         reader_layout.addWidget(browser_group)
         self.native_connection_group=QGroupBox("Local 3D chess");native_layout=QVBoxLayout(self.native_connection_group)
         self.native_reader_button=QCheckBox("Read local 3D chess");self.native_reader_button.toggled.connect(self.native_access_changed);native_layout.addWidget(self.native_reader_button)
         self.native_connection_status=QLabel('Ready · open your local 3D chess board');self.native_connection_status.setWordWrap(True);self.native_connection_status.setStyleSheet('color:#a8c7b2;font-size:13px;');native_layout.addWidget(self.native_connection_status);self.native_connection_status.hide()
         self.native_reader_button.toggled.connect(self.native_connection_status.setVisible);self.native_connection_group.setVisible(sys.platform=='darwin');reader_layout.addWidget(self.native_connection_group)
         src.addWidget(self.reader_options)
-        self.connection_hint=QLabel('Optional. Standard 2D boards use screen scanning.');self.connection_hint.setWordWrap(True);self.connection_hint.setStyleSheet('font-size:13px;color:#9eb6a8;');src.addWidget(self.connection_hint)
+        self.connection_hint=QLabel('Screen scan · no extension needed');self.connection_hint.setWordWrap(True);self.connection_hint.setStyleSheet('font-size:13px;color:#9eb6a8;');src.addWidget(self.connection_hint)
         self.screen_setup=QGroupBox('Computer screen');screen_layout=QVBoxLayout(self.screen_setup);screen_layout.setSpacing(9)
-        for widget in (self.monitor_label,self.monitor,self.target_board,self.lock_target,self.target_status,self.region_label,self.readers_toggle,self.reader_options,self.connection_hint):
+        for widget in (self.monitor_label,self.monitor,self.target_board,self.lock_target,self.target_status,self.region_label,self.browser_reader_button,self.connection_hint,self.readers_toggle,self.reader_options):
             src.removeWidget(widget);screen_layout.addWidget(widget)
         src.insertWidget(4,self.screen_setup)
         app_settings=QGroupBox('App');app_settings_layout=QVBoxLayout(app_settings)
@@ -1093,17 +1093,35 @@ class MainWindow(QMainWindow):
         return reads[:3]
 
     def toggle_browser_reader(self,enabled):
-        if self.browser_reader:self.browser_reader.close();self.browser_reader=None
-        if not enabled:self.browser_reader_key.clear();return
-        try:
-            from .direct_boards import BrowserReader
-            self.browser_reader=BrowserReader();self.browser_reader_key.setText(self.browser_reader.token)
-            self.status("Browser reader ready · pair the extension with this key. Scan now follows its visible boards.")
-        except OSError as exc:
-            self.browser_reader_button.setChecked(False);self.status("Could not start browser reader: "+str(exc))
+        if self.browser_reader:
+            self.browser_reader.publish({})
+            self.browser_reader.close();self.browser_reader=None
+        if enabled:
+            try:
+                from .direct_boards import BrowserReader
+                self.browser_reader=BrowserReader();self.browser_reader_key.setText(self.browser_reader.token)
+            except OSError as exc:
+                self.browser_reader_button.setChecked(False);self.status("Could not start browser reader: "+str(exc));return
+        else:self.browser_reader_key.clear()
+        self.connection_hint.setText("Browser extension preferred · screen scan is the fallback" if enabled else "Screen scan · no extension needed")
+        if not self._ready:return
+        if enabled:self.readers_toggle.setChecked(True)
+        # Changing readers releases stale observations and arrows, without
+        # starting a stopped scanner or cancelling the local 3D reader.
+        if self.target_lock.active and self.target_lock.route=='browser':
+            self.lock_target.setChecked(False)
+        self._live_token+=1;self.live_worker.cancel();self._scan_busy=False;self._scan_again=False
+        self.region=None;self._last_read=None;self._last_read_at=0.;self._screen_confirmed=False
+        self._stable_key=None;self._stable_frames=0;self._position_locked=False;self._lost_frames=0;self._force_full_scan=True
+        self.multi.reset();self.invalidate(release_move=True)
+        if self.source.currentIndex()==1:
+            self.show_empty_board("Reading with browser extension…" if enabled else "Reading from screen…")
+            if self._monitoring:QTimer.singleShot(0,self.request_scan)
+        self.queue_autosave()
+        self.status("Browser extension enabled · connected 2D/3D boards take priority; screen scan is the fallback." if enabled else "Browser extension off · using normal screen scanning.")
 
     def reader_setup(self):
-        QMessageBox.information(self,"Connect a browser","This optional connection reads Chess.com and Lichess positions directly, including supported themes and 3D boards. Standard 2D boards can use Computer screen without it.\n\n1. Open chrome://extensions (or edge://extensions), enable Developer mode, click Load unpacked, and select BoardLens 2/BrowserReader.\n2. Copy the pairing key in BoardLens. Open the extension's toolbar popup, paste the key and click Connect.\n3. Reload the chess tab and keep it visible. BoardLens shows the connection status here.\n\nThe connection stays on this computer and never plays moves. The local 3D chess reader uses its separate option.")
+        QMessageBox.information(self,"Connect a browser","Use Board → Computer screen → Use browser extension to choose how browser boards are read. On prefers the extension for both 2D and supported 3D/theme boards; off uses normal screen scanning. Other apps keep using their usual reader.\n\n1. Open chrome://extensions (or edge://extensions), enable Developer mode, click Load unpacked, and select BoardLens 2/BrowserReader.\n2. Copy the pairing key in BoardLens. Open the extension's toolbar popup, paste the key and click Connect.\n3. Reload the chess tab and keep it visible. BoardLens shows the connection status here.\n\nThe connection stays on this computer and never plays moves. The local 3D chess reader uses its separate option.")
 
     def publish_reader_hints(self):
         self.browser_reader_status.setText(self.browser_reader.connection_status().replace('Reader','Browser connection') if self.browser_reader else 'Browser connection off')

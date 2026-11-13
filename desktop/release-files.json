@@ -196,6 +196,7 @@
   "tests/test_phone.py",
   "tests/test_phone_position_backend.py",
   "tests/test_prediction_controls.py",
+  "tests/test_reader_choice.py",
   "tests/test_removed_features.py",
   "tests/test_steady_hints.py",
   "tests/test_stick_move.py",
