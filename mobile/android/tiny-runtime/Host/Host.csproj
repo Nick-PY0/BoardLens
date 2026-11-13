@@ -1,4 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>BoardLens.Android</AssemblyName><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><AllowUnsafeBlocks>true</AllowUnsafeBlocks><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup>
- <ItemGroup><Reference Include="BoardLens.TinyHuge"><HintPath>../Vendor/TinyHuge/BoardLens.TinyHuge.dll</HintPath></Reference><Compile Include="../Core/**/*.cs"/><Compile Include="../Bots/*.cs"/><Compile Include="../TinyCore.cs"/><Compile Include="Program.cs"/></ItemGroup>
+ <ItemGroup><Compile Include="../Core/**/*.cs"/><Compile Include="../Bots/*.cs"/><Compile Include="../TinyCore.cs"/><Compile Include="Program.cs"/></ItemGroup>
 </Project>

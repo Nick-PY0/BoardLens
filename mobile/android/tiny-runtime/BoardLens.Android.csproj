@@ -10,7 +10,7 @@
   <RunAOTCompilation>false</RunAOTCompilation><AndroidLinkMode>None</AndroidLinkMode><EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   <JavacSourceVersion>17</JavacSourceVersion><JavacTargetVersion>17</JavacTargetVersion><AndroidUseDesignerAssembly>true</AndroidUseDesignerAssembly>
  </PropertyGroup>
- <ItemGroup><Reference Include="BoardLens.TinyHuge"><HintPath>Vendor/TinyHuge/BoardLens.TinyHuge.dll</HintPath></Reference>
+ <ItemGroup>
   <Compile Include="Core/**/*.cs"/><Compile Include="Bots/*.cs"/><Compile Include="TinyCore.cs"/><Compile Include="TinyRuntime.cs"/>
   <AndroidJavaSource Include="../app/src/main/java/**/*.java" Bind="false"/>
   <AndroidResource Include="../app/src/main/res/**/*"><Link>Resources/%(RecursiveDir)%(Filename)%(Extension)</Link></AndroidResource>

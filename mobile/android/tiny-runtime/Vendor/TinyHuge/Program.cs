@@ -3,6 +3,30 @@ using var assembly=AssemblyDefinition.ReadAssembly(args[0]);
 assembly.Name.Name="BoardLens.TinyHuge";assembly.MainModule.Name="BoardLens.TinyHuge.dll";
 assembly.MainModule.Mvid=new Guid("b802c4f1-08dc-48ef-a794-bd1430aa6c40");
 foreach(var reference in assembly.MainModule.AssemblyReferences){if(reference.Name=="Chess-Challenge")reference.Name="BoardLens.Android";if(reference.Name=="System.Runtime"){reference.Version=new Version(10,0,0,0);reference.PublicKeyToken=Convert.FromHexString("b03f5f7f11d50a3a");}}
+// The challenge compressor also encoded primitive/value-type signatures as
+// class references. CoreCLR tolerates these; Mono requires normal ECMA signatures.
+TypeReference Normal(TypeReference t){
+ if(t is ArrayType a)return new ArrayType(Normal(a.ElementType),a.Rank);
+ if(t is ByReferenceType b)return new ByReferenceType(Normal(b.ElementType));
+ if(t is PointerType p)return new PointerType(Normal(p.ElementType));
+ if(t is GenericInstanceType g){var r=new GenericInstanceType(Normal(g.ElementType));foreach(var arg in g.GenericArguments)r.GenericArguments.Add(Normal(arg));return r;}
+ var ts=assembly.MainModule.TypeSystem;
+ var primitive=t.FullName switch {"System.Boolean"=>ts.Boolean,"System.Byte"=>ts.Byte,"System.SByte"=>ts.SByte,"System.Int16"=>ts.Int16,"System.UInt16"=>ts.UInt16,"System.Int32"=>ts.Int32,"System.UInt32"=>ts.UInt32,"System.Int64"=>ts.Int64,"System.UInt64"=>ts.UInt64,"System.Char"=>ts.Char,"System.Single"=>ts.Single,"System.Double"=>ts.Double,"System.IntPtr"=>ts.IntPtr,"System.UIntPtr"=>ts.UIntPtr,"System.Void"=>ts.Void,_=>null};
+ if(primitive!=null)return primitive;
+ if(t.FullName is "ChessChallenge.API.Move" or "ChessChallenge.API.Square" or "ChessChallenge.API.PieceType" or "System.Span`1" or "System.RuntimeFieldHandle")t.IsValueType=true;
+ return t;
+}
+foreach(var type in assembly.MainModule.Types){
+ foreach(var field in type.Fields)field.FieldType=Normal(field.FieldType);
+ foreach(var method in type.Methods){method.ReturnType=Normal(method.ReturnType);foreach(var parameter in method.Parameters)parameter.ParameterType=Normal(parameter.ParameterType);
+ if(!method.HasBody)continue;foreach(var variable in method.Body.Variables)variable.VariableType=Normal(variable.VariableType);
+ foreach(var instruction in method.Body.Instructions){
+  if(instruction.Operand is TypeReference t)instruction.Operand=Normal(t);
+  if(instruction.Operand is FieldReference f){f.FieldType=Normal(f.FieldType);f.DeclaringType=Normal(f.DeclaringType);}
+  if(instruction.Operand is MethodReference m){m.ReturnType=Normal(m.ReturnType);m.DeclaringType=Normal(m.DeclaringType);foreach(var parameter in m.Parameters)parameter.ParameterType=Normal(parameter.ParameterType);}
+ }
+ }
+}
 int capped=0;
 foreach(var type in assembly.MainModule.Types){
  int fieldId=0,methodId=0;foreach(var field in type.Fields)if(string.IsNullOrWhiteSpace(field.Name))field.Name="field"+(fieldId++);

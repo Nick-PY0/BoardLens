@@ -31,4 +31,3 @@ foreach(var id in new[]{17,278,153,70,253,425,266,303,628,529,610,614}) {
 }
 Console.WriteLine("Fast screenshot checks: "+fast+"/36 · peak live managed bytes "+maximumManaged);
 if(maximumManaged>160L*1024*1024){Console.WriteLine("Mobile memory bound FAILED");Environment.ExitCode=1;}
-
