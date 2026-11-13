@@ -19,6 +19,9 @@ import java.util.concurrent.*;
  */
 public final class ScreenService extends Service {
   static volatile long frames = 0, reads = 0;
+  static volatile long lastFrameAt, lastBoardAt;
+  static volatile int captureWidth, captureHeight;
+  static volatile String scanStage="Stopped";
   static volatile String diagnostic = "";
   static volatile boolean running = false, phoneVisible = false;
   static volatile String status = "Stopped",
@@ -57,6 +60,7 @@ public final class ScreenService extends Service {
   private ImageReader images;
   private BoardReader reader;
   private Bitmap cachedFrame;
+  private final FramePixels framePixels=new FramePixels();
   private ArrowOverlay overlay;
   private PhoneSettings settings;
   private final android.content.SharedPreferences.OnSharedPreferenceChangeListener preferenceListener=(p,key)->preferenceChanged(key);
@@ -139,6 +143,8 @@ public final class ScreenService extends Service {
     if (running) return START_NOT_STICKY;
     try {
       active = this;
+      frames=reads=lastFrameAt=lastBoardAt=0;captureWidth=captureHeight=0;
+      scanStage="Starting capture";diagnostic="";fen="";preview=null;suggestion="Waiting for a board";
       settings = new PhoneSettings(this);
       settings.p.registerOnSharedPreferenceChangeListener(preferenceListener);
       getSharedPreferences("phone-model-files",0).registerOnSharedPreferenceChangeListener(modelListener);
@@ -288,22 +294,22 @@ public final class ScreenService extends Service {
     try {
       ImageReader source=images;
       try (Image image = source==null?null:source.acquireLatestImage()) {
-        if(phoneVisible)return;
+        if(phoneVisible){scanStage="Paused on BoardLens screen";return;}
         if(image==null){
-          if(cachedFrame==null)return;
-          if(target!=null&&baseline!=null&&!needsRead&&key.equals(lastSettings)){restoreArrows();return;}
+          if(cachedFrame==null){scanStage="Waiting for first screen frame";return;}
+          if(target!=null&&baseline!=null&&!needsRead&&key.equals(lastSettings)){scanStage="Board tracked";restoreArrows();return;}
           frame=cachedFrame;
         }else{
           frames++;
+          lastFrameAt=SystemClock.elapsedRealtime();captureWidth=image.getWidth();captureHeight=image.getHeight();
           Image.Plane plane=image.getPlanes()[0];
           if(target!=null&&baseline!=null&&key.equals(lastSettings)){
             int[] sampled=FrameFingerprint.read(plane.getBuffer(),image.getWidth(),image.getHeight(),plane.getRowStride(),plane.getPixelStride(),target.left,target.top,target.right,target.bottom,overlay::covers);
-            if(sampled!=null&&!different(baseline,sampled)){needsRead=false;cleanFrame=false;confirmation.clear();restoreArrows();return;}
+            if(sampled!=null&&!different(baseline,sampled)){scanStage="Board tracked";needsRead=false;cleanFrame=false;confirmation.clear();restoreArrows();return;}
           }
           needsRead=true;
-          int w=image.getWidth(),h=image.getHeight(),stride=plane.getRowStride()/plane.getPixelStride();
-          Bitmap padded=Bitmap.createBitmap(stride,h,Bitmap.Config.ARGB_8888);padded.copyPixelsFromBuffer(plane.getBuffer());
-          frame=Bitmap.createBitmap(padded,0,0,w,h);if(frame!=padded)padded.recycle();
+          frame=framePixels.bitmap(plane.getBuffer(),image.getWidth(),image.getHeight(),plane.getRowStride(),plane.getPixelStride());
+          if(frame==null){scanStage="Waiting for complete screen frame";diagnostic="Waiting for a complete captured frame";return;}
           if(cachedFrame!=null)cachedFrame.recycle();cachedFrame=frame;
         }
       }
@@ -322,6 +328,7 @@ public final class ScreenService extends Service {
         baseline = null;
       }
       if (target != null && baseline != null && !different(baseline, fingerprint(frame, target))) {
+        scanStage="Board tracked";
         needsRead=false;cleanFrame=false;confirmation.clear();restoreArrows();
         return;
       }
@@ -340,6 +347,7 @@ public final class ScreenService extends Service {
       // it repeatedly, so a still board could wait forever for a move.
       if(read==null&&confirmation.pending())return;
       boolean confirmed=read!=null;
+      scanStage=target==null?"Searching screen for board":"Reading board pieces";
       if(read==null){reads++;read=target==null?reader.read(frame,null,settings.orientation()):reader.track(frame,target,settings.orientation());}
       diagnostic = reader.diagnostic;
       if (read == null) {
@@ -356,16 +364,21 @@ public final class ScreenService extends Service {
       failures = 0;
       target = read.rect();targetGeometry=read.geometry();
       bottom = read.whiteBottom();
-      if(!confirmed){confirmation.set(read,fingerprint(frame,target),SystemClock.elapsedRealtime());return;}
+      // Highlights and selection effects can animate while every piece stays
+      // still. Two independent matching recognitions confirm that position.
+      if(!confirmed)confirmed=confirmation.agrees(read,SystemClock.elapsedRealtime(),ScreenService::sameRead);
+      if(!confirmed){scanStage="Confirming board position";confirmation.set(read,fingerprint(frame,target),SystemClock.elapsedRealtime());return;}
       confirmation.clear();
       ChessPosition synced = ChessPosition.sync(position, read.placement(), settings.turn());
       if (synced == null) {
+        scanStage="Waiting for legal position";
         status = "Waiting for a legal, stable position";
         changed();
         return;
       }
       boolean changedPosition = position == null || !position.fen().equals(synced.fen());
       position = synced;
+      lastBoardAt=SystemClock.elapsedRealtime();scanStage="Board tracked";
       fen = position.fen();
       baseline = fingerprint(frame, target);needsRead=false;
       Bitmap old = preview;
@@ -388,6 +401,7 @@ public final class ScreenService extends Service {
         analyze(position, new Rect(target), bottom);
       } else renderOverlay();
     } catch (Exception error) {
+      scanStage="Retrying screen read";
       status = "Read paused: " + error.getMessage();
       changed();
     } finally {
@@ -397,6 +411,12 @@ public final class ScreenService extends Service {
   }
 
   private String lastAnalyzedSettings = "";
+
+  static boolean sameRead(BoardReader.Read a,BoardReader.Read b){
+    if(!a.placement().equals(b.placement())||a.whiteBottom()!=b.whiteBottom())return false;
+    double[] x=a.geometry().corners,y=b.geometry().corners;double tolerance=Math.max(2,a.rect().width()*.005);
+    for(int i=0;i<8;i++)if(Math.abs(x[i]-y[i])>tolerance)return false;return true;
+  }
 
   private void analyze(ChessPosition board, Rect rect, boolean whiteBottom) {
     long token = generation.incrementAndGet();
@@ -516,6 +536,7 @@ public final class ScreenService extends Service {
     getSharedPreferences("engine-files",0).unregisterOnSharedPreferenceChangeListener(modelListener);
     active = null;
     running = false;
+    scanStage="Stopped";
     generation.incrementAndGet();
     moves.cancel();
     evaluator.cancel();

@@ -1,0 +1,19 @@
+<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{margin:0;background:#262421;color:#fff;font:16px sans-serif}
+header{padding:18px}#board{display:none;position:absolute;left:0;top:32vh;width:100vw;height:100vw}
+#pieces{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);width:100%;height:100%}
+.tile{background-image:url(opening.png);background-size:800% 800%}
+#highlight{position:absolute;left:62.5%;top:50%;width:12.5%;height:12.5%;background:#baca44;animation:pulse .35s infinite alternate}
+@keyframes pulse{from{opacity:.25}to{opacity:1}}
+nav{position:fixed;bottom:12px;left:12px;right:12px;display:flex;flex-wrap:wrap;gap:8px}button{padding:14px;background:#9bd6ac;border:0;border-radius:10px}
+</style>
+<header>Offline capture regression<br><span id="status">No board yet</span></header>
+<div id="board"><div id="pieces"></div><div id="highlight" hidden></div></div>
+<nav><button onclick="board.style.display='block';statusText('Still opening board')">Show board</button>
+<button onclick="board.style.top=board.style.top==='18vh'?'32vh':'18vh';statusText('Board moved without a chess move')">Move board</button>
+<button onclick="flipped=!flipped;render();statusText('Orientation changed')">Flip board</button>
+<button onclick="highlight.hidden=!highlight.hidden;statusText('Square animation changed')">Animate highlight</button>
+<button onclick="board.style.display='none';statusText('Board hidden')">Hide board</button></nav>
+<script>let flipped=false;function statusText(text){document.getElementById('status').textContent=text}
+function render(){pieces.replaceChildren();for(let i=0;i<64;i++){let at=flipped?63-i:i,t=document.createElement('div');t.className='tile';t.style.backgroundPosition=(at%8/7*100)+'% '+(Math.floor(at/8)/7*100)+'%';pieces.append(t)}}render();</script>

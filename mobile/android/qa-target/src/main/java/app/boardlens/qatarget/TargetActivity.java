@@ -11,6 +11,6 @@ public class TargetActivity extends Activity {
     w.getSettings().setJavaScriptEnabled(true);
     w.getSettings().setAllowFileAccess(true);
     setContentView(w);
-    w.loadUrl("file:///android_asset/board.html");
+    w.loadUrl("file:///android_asset/"+(getIntent().getBooleanExtra("fixture",false)?"fixture.html":"board.html"));
   }
 }

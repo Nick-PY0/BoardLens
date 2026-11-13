@@ -33,13 +33,18 @@ final class Diagnostics {
   try{text.append("Version: ").append(context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionName).append('\n');}catch(Exception ignored){}
   PhoneSettings settings=new PhoneSettings(context);text.append("Android ").append(Build.VERSION.SDK_INT).append(" · ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL)
    .append("\nMove engine: ").append(settings.engine()).append("\nEvaluation: ").append(settings.evaluationEnabled()?settings.evaluator():"Off")
-   .append("\nScanning: ").append(ScreenService.running).append("\nDownload: ").append(ModelDownloads.current.isEmpty()?"None":ModelDownloads.current);
+   .append("\nScanning: ").append(ScreenService.running).append("\nScanner stage: ").append(ScreenService.scanStage)
+   .append("\nCaptured frames: ").append(ScreenService.frames).append(" · recognition passes: ").append(ScreenService.reads)
+   .append("\nCapture size: ").append(ScreenService.captureWidth).append('x').append(ScreenService.captureHeight)
+   .append("\nLast frame: ").append(age(ScreenService.lastFrameAt)).append(" · last confirmed read: ").append(age(ScreenService.lastBoardAt))
+   .append("\nDownload: ").append(ModelDownloads.current.isEmpty()?"None":ModelDownloads.current);
   if(Build.VERSION.SDK_INT>=30)try{var exits=context.getSystemService(ActivityManager.class).getHistoricalProcessExitReasons(context.getPackageName(),0,3);
    for(var exit:exits)text.append("\nProcess exit: reason ").append(exit.getReason()).append(" · status ").append(exit.getStatus()).append(" · ").append(new java.util.Date(exit.getTimestamp()));
   }catch(RuntimeException ignored){}
   String crash=prefs.getString("lastCrash","");if(!crash.isEmpty())text.append("\nLast Java crash: ").append(new java.util.Date(prefs.getLong("when",0))).append("\nEngine at crash: ").append(prefs.getString("moveEngine","")).append("\nEvaluation enabled: ").append(prefs.getBoolean("evaluation",true)).append("\nDownload at crash: ").append(prefs.getString("downloading","")).append('\n').append(crash);
   else text.append("\nNo Java crash recorded.");return text.toString();
  }
+ private static String age(long at){return at==0?"None":Math.max(0,android.os.SystemClock.elapsedRealtime()-at)/1000+" s ago";}
  static void copy(Context context){
   context.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("BoardLens diagnostics",report(context)));
   android.widget.Toast.makeText(context,"Diagnostics copied to clipboard",android.widget.Toast.LENGTH_SHORT).show();

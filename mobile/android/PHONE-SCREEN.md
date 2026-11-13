@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.8.3
+# Phone screen analysis — Android 1.8.5
 
 The app has two sections in one menu:
 
@@ -12,6 +12,8 @@ Android 10+ and an ARM64 phone are required for local analysis. Open Phone scree
 Tap Use for moves on a downloaded model card, or select a move engine in Settings. The evaluation engine stays independent. Download completion and settings changes re-analyze the last recognized position, even while the app UI is visible. Press Start, allow full-display screen sharing and, for arrows, Display over other apps. Press Home or Open another app. Keep the complete board visible. Analysis continues while the foreground-service session runs, including after leaving or dismissing the interface. Stop in the app or notification ends capture. Settings save automatically.
 
 Android requests approval for each new capture session. Locking, revoking access, force-stop, protected screens and OS power restrictions can interrupt it. The app does not silently restart screen sharing. It uses no Accessibility service or boot receiver. Screens are processed locally and not saved or uploaded. No autoplay, Study or coaching is included.
+
+A still opening board should be acquired without making a move. **Scan now** clears the current target and retries in the existing sharing session; it does not require quitting the app. Under Help, **Copy diagnostics** includes capture-frame and recognition counts, screen size and the scanner stage, without screenshots or board positions. If no arrow appears, check whether the board preview was recognized, Screen arrows is on, and Only my color is waiting for the bottom side’s turn.
 
 ## Times and on-screen evaluation
 

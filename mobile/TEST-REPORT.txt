@@ -1,3 +1,52 @@
+BOARDLENS ANDROID 1.8.5 / CODE 15 — NOVEMBER 13, 2026
+
+68 Android JVM/Robolectric tests pass with all real Maia exports and real
+Stockfish adapter checks enabled; zero skipped. Release lint and the complete
+.NET Android APK build pass. The APK retains the public signing certificate
+and all 16 ARM64 native libraries pass 16 KB load/ZIP alignment checks.
+
+First-board fixes:
+- Normalize tiny rectangle-rounding errors before square classification. The
+  gradient locator also tolerates rounding against the screen edge. Genuine
+  crops, rectangular false candidates, missing kings and low-confidence reads
+  remain rejected.
+- Copy actual RGBA pixels from each capture row without requiring trailing
+  padding after the last row. Reuse the packed-frame buffer on padded captures;
+  truncated frames are skipped so the next complete frame can recover.
+- Confirm two matching piece/orientation/geometry reads when square highlights
+  animate. Still frames retain the one-inference fast confirmation path.
+- Local diagnostics now report scanner stage, captured-frame/recognition counts,
+  dimensions and age of the last capture/confirmed read. No frames or board
+  positions are added to diagnostics.
+
+Regression checks cover full-width 1080x2340 phone layouts at five header
+positions, one-pixel bounds errors, both board orientations, an untouched
+opening, a blank splash followed by a board, switching page geometry without
+restarting, animated highlights, and buffers with offsets/pixel/row padding.
+
+A host layout that previously fell back to the context classifier completed
+in about 395 ms before and 24 ms after normalization in the targeted runs.
+Those are component timings on the Mac host, not physical A35 latency.
+
+The exact signed release APK upgraded Android 1.8.4 to 1.8.5 in an isolated
+Android 36 ARM64 Google Play emulator with package verification enabled. Live
+MediaProjection with Boychesser (0.3 s), evaluation off and touch-through arrows
+was checked on an independent offline fixture using the existing Chess.com Neo
+screenshot artwork. Arrows appeared on an untouched full-width opening board,
+followed a changed page height, and reappeared after a blank screen when an
+upright Black-at-bottom opening board and animated empty-square highlight were
+shown. The foreground service stayed active for this roughly six-minute check;
+no BoardLens crash was recorded. This is not a Chess.com account/friend-match
+or all-day background test. No match or invitation was created.
+
+The owner reports intermittent first acquisition and missing arrows in the
+Chess.com Play a Friend flow. No physical phone is connected over ADB during
+this update. The exact native/web friend-mode failure remains unverified;
+synthetic/offline results must not be presented as proof that it is resolved.
+Prior physical A35 checks apply to 1.8.4 only; see docs/DEVICE-TEST-A35.md.
+
+HISTORICAL CHECKS — ANDROID 1.8.3
+
 BOARDLENS ANDROID 1.8.3 / CODE 13 — NOVEMBER 12, 2026
 
 51 Android JVM/Robolectric tests and release lint pass. New checks cover:

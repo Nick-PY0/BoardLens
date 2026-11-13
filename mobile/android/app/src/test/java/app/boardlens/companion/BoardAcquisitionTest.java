@@ -62,4 +62,43 @@ public class BoardAcquisitionTest {
       board.recycle();
     }
   }
+  @Test public void openingCanConfirmWithAnAnimatedEmptySquareAndNoPieceMove()throws Exception{
+    var controller=Robolectric.buildService(ScreenService.class).create();ScreenService service=controller.get();
+    PhoneSettings prefs=new PhoneSettings(service);prefs.p.edit().clear().putBoolean("evaluation_enabled",false).apply();
+    Bitmap frame;try(InputStream in=getClass().getClassLoader().getResourceAsStream("fixtures/chesscom-starting-board.png")){frame=BitmapFactory.decodeStream(in).copy(Bitmap.Config.ARGB_8888,true);}
+    set(service,"settings",prefs);set(service,"overlay",new ArrowOverlay(service));set(service,"reader",new BoardReader(service));set(service,"cachedFrame",frame);set(service,"lastScan",-1000L);
+    ScreenService.running=true;ScreenService.phoneVisible=false;ScreenService.fen="";long reads=ScreenService.reads;
+    try{
+      tick(service);assertEquals(reads+1,ScreenService.reads);
+      Canvas canvas=new Canvas(frame);Paint paint=new Paint();paint.setColor(0xffbaca44);int cell=frame.getWidth()/8;canvas.drawRect(5*cell,4*cell,6*cell,5*cell,paint);
+      SystemClock.sleep(32);tick(service);
+      assertTrue(ScreenService.status,ScreenService.fen.startsWith(START+" w KQkq"));assertEquals(reads+2,ScreenService.reads);
+    }finally{controller.destroy();Shadows.shadowOf(Looper.getMainLooper()).idle();}
+  }
+  @Test public void semanticConfirmationRejectsMovedPiecesOrientationAndGeometry(){
+    BoardReader.Read a=new BoardReader.Read(new Rect(0,100,800,900),START,true,.99f);
+    assertTrue(ScreenService.sameRead(a,new BoardReader.Read(new Rect(1,101,801,901),START,true,.99f)));
+    assertFalse(ScreenService.sameRead(a,new BoardReader.Read(new Rect(0,100,800,900),START,false,.99f)));
+    assertFalse(ScreenService.sameRead(a,new BoardReader.Read(new Rect(0,150,800,950),START,true,.99f)));
+    assertFalse(ScreenService.sameRead(a,new BoardReader.Read(new Rect(0,100,800,900),"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR",true,.99f)));
+  }
+  @Test public void splashThenBoardThenDifferentPageRecoversWithoutRestartOrMove()throws Exception{
+    var controller=Robolectric.buildService(ScreenService.class).create();ScreenService service=controller.get();
+    PhoneSettings prefs=new PhoneSettings(service);prefs.p.edit().clear().putBoolean("evaluation_enabled",false).apply();
+    Bitmap splash=Bitmap.createBitmap(1080,2340,Bitmap.Config.ARGB_8888);splash.eraseColor(0xff262421);
+    Bitmap board;try(InputStream in=getClass().getClassLoader().getResourceAsStream("fixtures/chesscom-starting-board.png")){board=BitmapFactory.decodeStream(in);}
+    set(service,"settings",prefs);set(service,"overlay",new ArrowOverlay(service));set(service,"reader",new BoardReader(service));set(service,"cachedFrame",splash);set(service,"lastScan",-1000L);
+    ScreenService.running=true;ScreenService.phoneVisible=false;ScreenService.fen="";
+    try{
+      tick(service);assertEquals("No board should be invented on a splash screen","",ScreenService.fen);
+      for(int top:new int[]{686,375}){
+        Bitmap phone=PhoneBoardLayoutTest.layout(board,1080,2340,0,top,1080);set(service,"cachedFrame",phone);set(service,"needsRead",true);
+        for(int i=0;i<5;i++){SystemClock.sleep(125);tick(service);}
+        Field field=ScreenService.class.getDeclaredField("target");field.setAccessible(true);Rect target=(Rect)field.get(service);
+        assertNotNull("Board should be acquired on page y="+top,target);assertTrue(target.toString(),Math.abs(target.top-top)<5);
+        assertTrue(ScreenService.status,ScreenService.fen.startsWith(START+" w KQkq"));
+        if(top==686)phone.recycle();
+      }
+    }finally{controller.destroy();Shadows.shadowOf(Looper.getMainLooper()).idle();splash.recycle();board.recycle();}
+  }
 }

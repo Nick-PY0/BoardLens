@@ -51,8 +51,18 @@ final class BoardReader implements AutoCloseable {
     tracked=null;return null;
   }
 
-  Read classify(Bitmap image, Rect r, String orientation)throws Exception{
-    if(r.width()<160||r.height()!=r.width()||!new Rect(0,0,image.getWidth(),image.getHeight()).contains(r))return null;
+  static Rect squareBounds(Rect candidate,int width,int height){
+    int side=Math.round((candidate.width()+candidate.height())/2f);
+    int tolerance=Math.max(2,Math.round(side*.003f));
+    if(side<160||Math.abs(candidate.width()-candidate.height())>tolerance||candidate.left < -tolerance||candidate.top < -tolerance||candidate.right>width+tolerance||candidate.bottom>height+tolerance)return null;
+    side=Math.min(side,Math.min(width,height));
+    int x=Math.max(0,Math.min(width-side,Math.round((candidate.left+candidate.right-side)/2f)));
+    int y=Math.max(0,Math.min(height-side,Math.round((candidate.top+candidate.bottom-side)/2f)));
+    return new Rect(x,y,x+side,y+side);
+  }
+
+  Read classify(Bitmap image, Rect candidate, String orientation)throws Exception{
+    Rect r=squareBounds(candidate,image.getWidth(),image.getHeight());if(r==null)return null;
     BoardGeometry geometry=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);
     Read flat=classifyFlat(image,r,orientation);
     if(flat!=null&&context.verifyFlat(image,geometry,flat)){tracked=geometry;contextualTrack=false;diagnostic="";return flat;}

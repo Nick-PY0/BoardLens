@@ -122,9 +122,11 @@ final class GradientBoards {
     for (int[] xx : xs)
       for (int[] yy : ys) {
         int width=xx[1]-xx[0],height=yy[1]-yy[0],size=Math.round((width+height)/2f);
-        if(size<160||xx[0]<0||yy[0]<0||xx[1]>w||yy[1]>h)continue;
+        if(size<160)continue;
         if(projected?(height/(float)width<.65||height/(float)width>1.1):Math.abs(width-height)>size*.025)continue;
         int x=projected?xx[0]:Math.round((xx[0]+xx[1]-size)/2f),y=projected?yy[0]:Math.round((yy[0]+yy[1]-size)/2f);
+        if(projected){if(x<0||y<0||x+width>w||y+height>h)continue;}
+        else{Rect fit=BoardReader.squareBounds(new Rect(x,y,x+size,y+size),w,h);if(fit==null)continue;x=fit.left;y=fit.top;size=fit.width();}
         double score=projected?ProjectedBoards.checker(image,BoardGeometry.rectangle(x/scale,y/scale,(x+width)/scale,(y+height)/scale)):BoardReader.checker(pixels,w,h,x,y,size);
         if(score<(projected?.82:.65))continue;
         boolean duplicate = false;
