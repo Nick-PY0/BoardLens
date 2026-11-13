@@ -33,6 +33,7 @@ final class BoardReader implements AutoCloseable {
     if(tracked!=null&&contextualTrack)return context.classify(image,tracked,orientation);
     return classify(image,previous,orientation);
   }
+  void resetTracking(){tracked=null;contextualTrack=false;}
 
   private static boolean fresh(Set<String> tried,Rect r){return tried.add(r.left+":"+r.top+":"+r.right+":"+r.bottom);}
   Read read(Bitmap image, Rect previous, String orientation) throws Exception {

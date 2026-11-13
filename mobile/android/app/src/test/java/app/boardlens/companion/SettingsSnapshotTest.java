@@ -16,5 +16,6 @@ public class SettingsSnapshotTest {
   var app=RuntimeEnvironment.getApplication();Diagnostics.record(app,new IllegalStateException("private-position-or-pairing-key"));String report=Diagnostics.report(app);
   assertTrue(report.contains("IllegalStateException"));assertFalse(report.contains("private-position-or-pairing-key"));assertTrue(report.contains("Engine at crash"));
   assertTrue(report.contains("Scanner stage:"));assertTrue(report.contains("Captured frames:"));assertTrue(report.contains("Capture size:"));
+  ScreenService.diagnostic="min=.5, mean=.9, symbols=private-board-position";report=Diagnostics.report(app);assertTrue(report.contains("min=.5, mean=.9"));assertFalse(report.contains("private-board-position"));ScreenService.diagnostic="";
  }
 }

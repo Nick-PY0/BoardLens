@@ -32,18 +32,18 @@ The evaluation provider is independent of the move provider: use Stockfish to sc
 Phone capture is explicit, user-started MediaProjection with an ongoing Stop notification. Display-over-other-apps permission enables touch-through arrows. No Accessibility service, boot receiver, screen recording or autoplay is included. Supported flat piece styles are recognized locally; arbitrary 3D themes are not promised. [Phone mode details →](mobile/android/PHONE-SCREEN.md)
 
 
-> **Android 1.8.5:** [Download the phone-only APK](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.5). Fixes first-board recognition around screen edges and animated highlights, and handles padded capture frames. All 68 Android host/model checks pass, and the signed APK passed live offline-board capture/arrow checks in an Android emulator. The exact Play a Friend failure still needs verification on the owner’s A35. [Test status →](mobile/TEST-REPORT.txt)
+> **Android 1.8.6:** [Download the phone-only APK](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.6). Adds notification Scan now, avoids repeating recognition on unchanged rejected frames, reports blank/blocked captures, and rejects stale arrows after a board is lost. All 75 host/model checks pass. The inspected native Chess.com live-game window withheld its pixels; protected content cannot be recognized. [Device findings →](docs/DEVICE-TEST-A35.md) · [Test status →](mobile/TEST-REPORT.txt)
 
 ## Download & start
 
-Get [desktop downloads](https://github.com/Nick-PY0/BoardLens/releases/latest) or [Android 1.8.5](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.5).
+Get [desktop downloads](https://github.com/Nick-PY0/BoardLens/releases/latest) or [Android 1.8.6](https://github.com/Nick-PY0/BoardLens/releases/tag/android-v1.8.6).
 
 | Device | Download | Start |
 | --- | --- | --- |
 | Mac (Apple Silicon) | `BoardLens-Mac-AppleSilicon.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Mac (Intel) | `BoardLens-Mac-Intel.dmg` | Extract, then open **BoardLens.app**. macOS 14+. |
 | Windows 10/11 (64-bit) | `BoardLens-Windows-x64.zip` | Extract the entire folder, then open **BoardLens.exe**. Keep Resources beside it. |
-| Android | [BoardLens Android APK](https://github.com/Nick-PY0/BoardLens/releases/download/android-v1.8.5/BoardLens-Companion-Android.apk) | Phone screen → Settings → Models & downloads, then Start. Computer companion is optional. |
+| Android | [BoardLens Android APK](https://github.com/Nick-PY0/BoardLens/releases/download/android-v1.8.6/BoardLens-Companion-Android.apk) | Phone screen → Settings → Models & downloads, then Start. Computer companion is optional. |
 | iPhone / iPad | Phone browser, or unsigned iOS source ZIP | Open the desktop companion address. Native source needs Xcode and your signing setup. |
 
 The desktop app includes a private Python runtime, recognition models and Stockfish 19. No Terminal or Python installation is required. The first launch prepares its files in your user profile; later launches reuse them. Settings and optional engines remain in the normal BoardLens app-data folder, including when upgrading from the source version. Optional engines download only when selected. The Mac apps are ad-hoc signed, not notarized; Windows is unsigned. [Desktop installation and build details →](docs/DESKTOP-APPS.md)
@@ -114,11 +114,11 @@ Different engines expose different capabilities. Maia predicts human moves; Tiny
 
 Desktop automatically checks and downloads checksum-verified stable updates, then applies them at the next launch with rollback and preserved user data. Switch this off under **Board → App**. Android automatically checks releases and opens GitHub for installation through Android; it has no custom APK installer or install-packages permission. [Update and release details →](docs/UPDATES.md)
 
-The first public release is **v1.0.0**. The new desktop is **2.16.2**, with Android **1.8.5** available separately. See the latest release for the exact downloadable build and installation-test status.
+The first public release is **v1.0.0**. The new desktop is **2.16.2**, with Android **1.8.6** available separately. See the latest release for the exact downloadable build and installation-test status.
 
 ## What is verified
 
-The validation report records **206 automated desktop tests**, plus packaged app tests on Apple Silicon macOS, Intel macOS and a Windows CI runner. Each packaged test launches the actual GUI app with its private runtime, recognizes a fixture and asks bundled Stockfish for a legal move. Windows verifies no console window. Android 1.8.4 was tested on a physical Samsung A35 with all 19 engines and live arrows on an offline board; see the [device report](docs/DEVICE-TEST-A35.md). The new 1.8.5 build still needs physical A35 verification. A Windows physical desktop and physical iOS devices have not been tested. The fixed screen-polling target is 75 ms; recognition, engine thinking, display capture and network time still affect end-to-end latency. Current native OS pixel capture has not been reverified; fixture tests are not proof of capture permission/behavior.
+The validation report records **206 automated desktop tests**, plus packaged app tests on Apple Silicon macOS, Intel macOS and a Windows CI runner. Each packaged test launches the actual GUI app with its private runtime, recognizes a fixture and asks bundled Stockfish for a legal move. Windows verifies no console window. Android 1.8.4 was tested on a physical Samsung A35 with all 19 engines and live arrows on an offline board; see the [device report](docs/DEVICE-TEST-A35.md). Android 1.8.5 was installed for the native-app follow-up; the 1.8.6 update still needs physical A35 verification. A Windows physical desktop and physical iOS devices have not been tested. The fixed screen-polling target is 75 ms; recognition, engine thinking, display capture and network time still affect end-to-end latency. Current native OS pixel capture has not been reverified; fixture tests are not proof of capture permission/behavior.
 
 Pixel reads need a clear board and cannot always recover turn, castling or en-passant history. Use exact FEN or a supported direct reader when that metadata matters. Threat checks and engine explanations are estimates. There is no autoplay, stealth/anti-detection guarantee, Study, coaching, puzzles or game-journal feature in this release. Use assistance where your game mode permits it.
 

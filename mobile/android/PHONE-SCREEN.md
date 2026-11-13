@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.8.5
+# Phone screen analysis — Android 1.8.6
 
 The app has two sections in one menu:
 
@@ -13,7 +13,11 @@ Tap Use for moves on a downloaded model card, or select a move engine in Setting
 
 Android requests approval for each new capture session. Locking, revoking access, force-stop, protected screens and OS power restrictions can interrupt it. The app does not silently restart screen sharing. It uses no Accessibility service or boot receiver. Screens are processed locally and not saved or uploaded. No autoplay, Study or coaching is included.
 
-A still opening board should be acquired without making a move. **Scan now** clears the current target and retries in the existing sharing session; it does not require quitting the app. Under Help, **Copy diagnostics** includes capture-frame and recognition counts, screen size and the scanner stage, without screenshots or board positions. If no arrow appears, check whether the board preview was recognized, Screen arrows is on, and Only my color is waiting for the bottom side’s turn.
+A still opening board should be acquired without making a move. **Scan now** is available in the app and beside **Stop** in the expanded notification. It clears the target and rejected-frame cache, then re-runs recognition in the existing sharing session, including on a still captured frame. Automatic scanning continues; no quit or new sharing approval is needed. Stop ends sharing. If Android has already ended sharing, Start and fresh OS approval are required. Under Help → **Diagnostics**, view or copy capture-frame and recognition counts, screen size and the scanner stage, without screenshots or board positions.
+
+Some apps mark windows secure. [Android withholds their pixels from screen capture](https://developer.android.com/security/fraud-prevention/activities). BoardLens cannot recover a chessboard from a black capture. It reports **Screen is blank or capture is blocked** in the app/notification, avoids repeatedly running recognition on blank pixels, and keeps watching for readable content to return. A loading screen can also be blank; the message does not identify protection from pixels alone. Old analysis cannot draw on a lost or unconfirmed target.
+
+If no arrow appears, check whether the board preview was recognized, Screen arrows is on, and Only my color is waiting for the bottom side’s turn.
 
 ## Times and on-screen evaluation
 

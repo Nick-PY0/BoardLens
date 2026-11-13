@@ -1,3 +1,47 @@
+BOARDLENS ANDROID 1.8.6 / CODE 16 — NOVEMBER 13, 2026
+
+75 Android JVM/Robolectric tests pass with real Maia and Stockfish model/adapter
+checks enabled, zero skipped. Release lint and the complete .NET APK build pass.
+
+- Ongoing capture notification has independent Scan now (REFRESH) and Stop
+  commands. Refresh invalidates the old target, tracking, rejected-frame cache
+  and work, then re-runs recognition without ending sharing. Still captured
+  pixels remain available when Android sends no new frame until a move.
+- Rejected static screenshots are not repeatedly sent through every recognition
+  fallback. A new captured frame or Scan now permits another attempt.
+- Black captured content is detected cheaply. The app and notification describe
+  it as blank or capture-blocked, and automatic reading resumes when visible
+  board pixels return. Protected capture is not bypassed or reconstructed.
+- Loss of a board cancels its analysis generation and clears arrows. Results
+  from the old generation are ignored; unconfirmed geometry cannot show them.
+  Reacquisition forces a new search, even when the FEN has not changed.
+- Help has a readable, copyable diagnostics dialog. Its numeric reader details
+  omit the raw recognized-square symbols and contain no screenshot or position.
+
+The signed release APK upgraded 1.8.5 in an isolated Android 36 ARM64 emulator
+with package verification enabled. Its notification exposed Scan now and Stop.
+Pressing Scan now retained the same MediaProjection session and foreground
+service. An owned QA window marked FLAG_SECURE produced the blank/blocked
+notification. Switching to an ordinary offline board automatically restored
+recognition and arrows without Scan now, a piece move or a restart.
+
+In regular emulator Chrome, Chess.com’s public analysis page was recognized
+without moving a piece. A manual d2-d4 drag through BoardLens’s overlay was
+accepted by the analysis board; BoardLens inferred Black to move and updated to
+Black d7-d5 with White b1-c3 as a predicted reply. Boychesser at 0.3 s with
+evaluation off was selected. This proves that page/capture path in the emulator,
+not the reported Chrome failure on the physical A35 or every online-game layout.
+No match/invitation was created. Native signature and 16 KB alignment checks pass.
+
+The actual A35 was upgraded to 1.8.5 before USB disconnected. Its native bot
+opening screenshot reads correctly through the production reader on the host.
+The inspected Chess.com live-game window had FLAG_SECURE, and captured content
+was black. This is a concrete capture restriction, not a piece-classifier miss.
+See docs/DEVICE-TEST-A35.md. Android 1.8.6 has not yet been installed on that phone,
+and the physical Chrome case remains unverified after USB disconnected.
+
+PREVIOUS CHECKS — ANDROID 1.8.5
+
 BOARDLENS ANDROID 1.8.5 / CODE 15 — NOVEMBER 13, 2026
 
 68 Android JVM/Robolectric tests pass with all real Maia exports and real

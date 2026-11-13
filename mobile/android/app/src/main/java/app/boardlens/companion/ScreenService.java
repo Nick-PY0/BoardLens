@@ -60,11 +60,13 @@ public final class ScreenService extends Service {
   private ImageReader images;
   private BoardReader reader;
   private Bitmap cachedFrame;
+  private Bitmap searchedFrame;
+  private String searchedSettings="";
   private final FramePixels framePixels=new FramePixels();
   private ArrowOverlay overlay;
   private PhoneSettings settings;
   private final android.content.SharedPreferences.OnSharedPreferenceChangeListener preferenceListener=(p,key)->preferenceChanged(key);
-  private Rect target;
+  private volatile Rect target;
   private BoardGeometry targetGeometry;
   private ChessPosition position;
   private boolean bottom = true;
@@ -76,8 +78,11 @@ public final class ScreenService extends Service {
   private final android.content.SharedPreferences.OnSharedPreferenceChangeListener modelListener=(p,key)->modelReady(key);
   private long lastScan = 0;
   private final java.util.concurrent.atomic.AtomicLong generation = new java.util.concurrent.atomic.AtomicLong();
-  private boolean cleanFrame = false,needsRead=true;
-  private int[] baseline;
+  private boolean cleanFrame = false;
+  private volatile boolean needsRead=true;
+  private volatile int[] baseline;
+  private long blankSince=-1;
+  private String notificationText="Scan now to refresh · Stop to end sharing";
   private volatile List<String> lastArrows = Collections.emptyList();
   private final LocalEngines moves = new LocalEngines(), evaluator = new LocalEngines();
   private final LatestWorkQueue moveWorker = new LatestWorkQueue("BoardLens-moves"),
@@ -122,21 +127,28 @@ public final class ScreenService extends Service {
       return START_NOT_STICKY;
     }
     if ("REFRESH".equals(intent.getAction())) {
+      if(!running){stopSelf();return START_NOT_STICKY;}
       generation.incrementAndGet();
       moves.cancel();
       evaluator.cancel();
       lastArrows = Collections.emptyList();
       if (overlay != null) overlay.clear();
-      status = "Refreshing phone board…";
+      status = "Refreshing · return to the board";
+      suggestion="Waiting for a fresh board read";
+      notifyStatus(status);
       changed();
       if (capture != null)
         capture.post(
             () -> {
-              target = null;targetGeometry=null;
-              baseline = null;
+              loseTarget();
               position = null;
-              confirmation.clear();
-              lastScan = 0;
+              if(reader!=null)reader.resetTracking();
+              searchedFrame=null;searchedSettings="";
+              blankSince=-1;needsRead=true;cleanFrame=false;
+              // Static displays may send no new image until something changes.
+              // Retain the last captured pixels and force recognition again.
+              lastScan = -1000;
+              requestTick();
             });
       return START_NOT_STICKY;
     }
@@ -149,29 +161,7 @@ public final class ScreenService extends Service {
       settings.p.registerOnSharedPreferenceChangeListener(preferenceListener);
       getSharedPreferences("phone-model-files",0).registerOnSharedPreferenceChangeListener(modelListener);
       getSharedPreferences("engine-files",0).registerOnSharedPreferenceChangeListener(modelListener);
-      NotificationManager nm = getSystemService(NotificationManager.class);
-      nm.createNotificationChannel(
-          new NotificationChannel(
-              "screen", "Phone screen analysis", NotificationManager.IMPORTANCE_LOW));
-      Intent stop = new Intent(this, ScreenService.class).setAction("STOP");
-      PendingIntent stopAction =
-          PendingIntent.getService(
-              this, 2, stop, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-      PendingIntent open =
-          PendingIntent.getActivity(
-              this,
-              1,
-              new Intent(this, PhoneScreenActivity.class),
-              PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-      Notification n =
-          new Notification.Builder(this, "screen")
-              .setSmallIcon(R.drawable.icon_foreground)
-              .setContentTitle("BoardLens is reading your screen")
-              .setContentText("Open BoardLens for results, or stop here.")
-              .setContentIntent(open)
-              .setOngoing(true)
-              .addAction(new Notification.Action.Builder(null, "Stop", stopAction).build())
-              .build();
+      Notification n = captureNotification(this);
       if(Build.VERSION.SDK_INT>=29)startForeground(7, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);else startForeground(7,n);
       captureThread = new HandlerThread("BoardLens-pixels");
       captureThread.start();
@@ -257,6 +247,33 @@ public final class ScreenService extends Service {
     main.post(() -> stopSelf());
   }
 
+  static Notification captureNotification(Context context){
+    return captureNotification(context,"Scan now to refresh · Stop to end sharing");
+  }
+  private static Notification captureNotification(Context context,String text){
+    context.getSystemService(NotificationManager.class).createNotificationChannel(new NotificationChannel("screen","Phone screen analysis",NotificationManager.IMPORTANCE_LOW));
+    int flags=PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT;
+    PendingIntent stop=PendingIntent.getService(context,2,new Intent(context,ScreenService.class).setAction("STOP"),flags);
+    PendingIntent scan=PendingIntent.getService(context,3,new Intent(context,ScreenService.class).setAction("REFRESH"),flags);
+    PendingIntent open=PendingIntent.getActivity(context,1,new Intent(context,PhoneScreenActivity.class),flags);
+    return new Notification.Builder(context,"screen").setSmallIcon(R.drawable.icon_foreground)
+      .setContentTitle("BoardLens screen analysis").setContentText(text)
+      .setContentIntent(open).setOngoing(true)
+      .addAction(new Notification.Action.Builder(null,"Scan now",scan).build())
+      .addAction(new Notification.Action.Builder(null,"Stop",stop).build()).build();
+  }
+  private void notifyStatus(String text){
+    if(!running||notificationText.equals(text))return;notificationText=text;
+    getSystemService(NotificationManager.class).notify(7,captureNotification(this,text));
+  }
+
+  private void loseTarget(){
+    if(target!=null||baseline!=null){generation.incrementAndGet();moves.cancel();evaluator.cancel();}
+    target=null;targetGeometry=null;baseline=null;confirmation.clear();needsRead=true;
+    lastArrows=Collections.emptyList();pinned=null;displayedFen="";displayedMove="";lastAnalyzedSettings="";
+    main.post(()->{if(overlay!=null)overlay.clear();});
+  }
+
   private String settingsKey() {
     var values=new java.util.TreeMap<>(settings.p.getAll());
     values.remove("arrows");values.remove("screen_evaluation");values.remove("evaluation_position");
@@ -278,7 +295,7 @@ public final class ScreenService extends Service {
   private void renderOverlay(){
     Rect latest=target;Rect rect=latest==null?null:new Rect(latest);BoardGeometry geometry=targetGeometry;boolean orientation=bottom;long token=generation.get();
     if(rect==null)return;
-    main.post(()->{if(token!=generation.get())return;if(!running||phoneVisible){overlay.clear();return;}overlay.show(geometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):geometry,orientation,settings.arrows()?lastArrows:Collections.emptyList(),settings.screenEvaluation()&&settings.evaluationEnabled()&&hasEvaluationValue,evaluationBadge,whiteShare,settings.evaluationPosition());});
+    main.post(()->{if(token!=generation.get())return;if(!running||phoneVisible||needsRead||baseline==null){overlay.clear();return;}if(latest!=target)return;overlay.show(geometry==null?BoardGeometry.rectangle(rect.left,rect.top,rect.right,rect.bottom):geometry,orientation,settings.arrows()?lastArrows:Collections.emptyList(),settings.screenEvaluation()&&settings.evaluationEnabled()&&hasEvaluationValue,evaluationBadge,whiteShare,settings.evaluationPosition());});
   }
   private void restoreArrows(){if((settings.arrows()&&!lastArrows.isEmpty()&&!overlay.hasArrows())||(settings.screenEvaluation()&&settings.evaluationEnabled()&&!overlay.hasEvaluation()))renderOverlay();}
   private void requestTick(){
@@ -313,6 +330,16 @@ public final class ScreenService extends Service {
           if(cachedFrame!=null)cachedFrame.recycle();cachedFrame=frame;
         }
       }
+      if(CaptureVisibility.blank(frame,overlay::covers)){
+        if(blankSince<0){blankSince=SystemClock.elapsedRealtime();loseTarget();}
+        if(SystemClock.elapsedRealtime()-blankSince>=400){
+          scanStage="Screen pixels blank or protected";diagnostic="Blank captured content";
+          String message="Screen is blank or capture is blocked · open a visible board";
+          if(!message.equals(status)){status=message;suggestion="No board pixels available";notifyStatus("Screen is blank or capture is blocked");changed();}
+        }
+        return;
+      }
+      blankSince=-1;
       if (!key.equals(lastSettings)) {
         lastSettings = key;
         if (!settings.turn().equals(lastTurn) && !settings.turn().equals("Auto")) position = null;
@@ -324,8 +351,7 @@ public final class ScreenService extends Service {
         confirmation.clear();
       }
       if (target != null && !new Rect(0, 0, frame.getWidth(), frame.getHeight()).contains(target)) {
-        target = null;targetGeometry=null;
-        baseline = null;
+        loseTarget();
       }
       if (target != null && baseline != null && !different(baseline, fingerprint(frame, target))) {
         scanStage="Board tracked";
@@ -340,6 +366,9 @@ public final class ScreenService extends Service {
       }
       cleanFrame = false;
       if (target == null && SystemClock.elapsedRealtime() - lastScan < 120) return;
+      // Recognition is deterministic: do not keep running every model on the
+      // same rejected screenshot while waiting for a new capture.
+      if(target==null&&frame==searchedFrame&&key.equals(searchedSettings))return;
       lastScan = SystemClock.elapsedRealtime();
       BoardReader.Read read=target==null?null:confirmation.poll(fingerprint(frame,target),SystemClock.elapsedRealtime());
       // A new capture can arrive before the stability interval has elapsed.
@@ -347,16 +376,17 @@ public final class ScreenService extends Service {
       // it repeatedly, so a still board could wait forever for a move.
       if(read==null&&confirmation.pending())return;
       boolean confirmed=read!=null;
+      boolean discovering=target==null;
       scanStage=target==null?"Searching screen for board":"Reading board pieces";
       if(read==null){reads++;read=target==null?reader.read(frame,null,settings.orientation()):reader.track(frame,target,settings.orientation());}
       diagnostic = reader.diagnostic;
       if (read == null) {
+        if(discovering){searchedFrame=frame;searchedSettings=key;status="Looking for a complete supported board";notifyStatus("Looking for a complete board · scanning automatically");changed();}
         confirmation.clear();
         if (++failures >= 3) {
-          target = null;targetGeometry=null;
-          baseline = null;
+          loseTarget();
           status = "Looking for a complete supported board";
-          main.post(() -> overlay.clear());
+          notifyStatus("Looking for a complete board · scanning automatically");
           changed();
         }
         return;
@@ -379,6 +409,7 @@ public final class ScreenService extends Service {
       boolean changedPosition = position == null || !position.fen().equals(synced.fen());
       position = synced;
       lastBoardAt=SystemClock.elapsedRealtime();scanStage="Board tracked";
+      notifyStatus("Board detected · scanning automatically");
       fen = position.fen();
       baseline = fingerprint(frame, target);needsRead=false;
       Bitmap old = preview;
@@ -522,6 +553,7 @@ public final class ScreenService extends Service {
       arrows.clear();
       arrows.addAll(lastArrows);
     }
+    if(token!=generation.get()||!running)return;
     lastArrows = new ArrayList<>(arrows);
     suggestion = text.length() == 0 ? "Waiting for your turn" : text.toString().trim()+(finished?"":"\nThinking…");
     changed();

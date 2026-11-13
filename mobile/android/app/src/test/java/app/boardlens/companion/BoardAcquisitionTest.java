@@ -91,6 +91,7 @@ public class BoardAcquisitionTest {
     ScreenService.running=true;ScreenService.phoneVisible=false;ScreenService.fen="";
     try{
       tick(service);assertEquals("No board should be invented on a splash screen","",ScreenService.fen);
+      long splashReads=ScreenService.reads;for(int i=0;i<3;i++){SystemClock.sleep(125);tick(service);}assertEquals("An unchanged rejected capture must not repeat neural discovery",splashReads,ScreenService.reads);
       for(int top:new int[]{686,375}){
         Bitmap phone=PhoneBoardLayoutTest.layout(board,1080,2340,0,top,1080);set(service,"cachedFrame",phone);set(service,"needsRead",true);
         for(int i=0;i<5;i++){SystemClock.sleep(125);tick(service);}
@@ -100,5 +101,16 @@ public class BoardAcquisitionTest {
         if(top==686)phone.recycle();
       }
     }finally{controller.destroy();Shadows.shadowOf(Looper.getMainLooper()).idle();splash.recycle();board.recycle();}
+  }
+  @Test public void blackCaptureSkipsNeuralSearchAndAutomaticallyRecovers()throws Exception{
+    var controller=Robolectric.buildService(ScreenService.class).create();ScreenService service=controller.get();
+    PhoneSettings prefs=new PhoneSettings(service);prefs.p.edit().clear().putBoolean("evaluation_enabled",false).apply();Bitmap black=Bitmap.createBitmap(1080,2340,Bitmap.Config.ARGB_8888);black.eraseColor(Color.BLACK);
+    set(service,"settings",prefs);set(service,"overlay",new ArrowOverlay(service));set(service,"reader",new BoardReader(service));set(service,"cachedFrame",black);set(service,"lastScan",-1000L);ScreenService.running=true;ScreenService.phoneVisible=false;long reads=ScreenService.reads;
+    try{
+      tick(service);SystemClock.sleep(450);tick(service);assertEquals(reads,ScreenService.reads);assertTrue(ScreenService.status,ScreenService.status.contains("capture is blocked"));
+      Bitmap board;try(InputStream in=getClass().getClassLoader().getResourceAsStream("fixtures/chesscom-starting-board.png")){board=BitmapFactory.decodeStream(in);}
+      Bitmap phone=PhoneBoardLayoutTest.layout(board,1080,2340,0,686,1080);board.recycle();set(service,"cachedFrame",phone);set(service,"needsRead",true);
+      tick(service);SystemClock.sleep(32);tick(service);assertTrue(ScreenService.status,ScreenService.fen.startsWith(START+" w KQkq"));assertEquals(reads+1,ScreenService.reads);
+    }finally{controller.destroy();Shadows.shadowOf(Looper.getMainLooper()).idle();black.recycle();}
   }
 }

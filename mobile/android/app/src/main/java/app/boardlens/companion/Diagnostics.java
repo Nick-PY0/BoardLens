@@ -5,7 +5,7 @@ import android.content.*;
 import android.os.Build;
 import java.io.*;
 
-/** Local crash metadata only. No frames, positions, pairing keys or network upload. */
+/** Local scanner/crash metadata. No frames, positions, pairing keys or network upload. */
 final class Diagnostics {
  private static boolean installed;
  static synchronized void install(Context context){
@@ -37,6 +37,7 @@ final class Diagnostics {
    .append("\nCaptured frames: ").append(ScreenService.frames).append(" · recognition passes: ").append(ScreenService.reads)
    .append("\nCapture size: ").append(ScreenService.captureWidth).append('x').append(ScreenService.captureHeight)
    .append("\nLast frame: ").append(age(ScreenService.lastFrameAt)).append(" · last confirmed read: ").append(age(ScreenService.lastBoardAt))
+   .append("\nReader detail: ").append(readerDetail(ScreenService.diagnostic))
    .append("\nDownload: ").append(ModelDownloads.current.isEmpty()?"None":ModelDownloads.current);
   if(Build.VERSION.SDK_INT>=30)try{var exits=context.getSystemService(ActivityManager.class).getHistoricalProcessExitReasons(context.getPackageName(),0,3);
    for(var exit:exits)text.append("\nProcess exit: reason ").append(exit.getReason()).append(" · status ").append(exit.getStatus()).append(" · ").append(new java.util.Date(exit.getTimestamp()));
@@ -45,6 +46,12 @@ final class Diagnostics {
   else text.append("\nNo Java crash recorded.");return text.toString();
  }
  private static String age(long at){return at==0?"None":Math.max(0,android.os.SystemClock.elapsedRealtime()-at)/1000+" s ago";}
+ private static String readerDetail(String detail){int pieces=detail.indexOf(", symbols=");if(pieces>=0)detail=detail.substring(0,pieces);return detail.isEmpty()?"None":detail.substring(0,Math.min(240,detail.length()));}
+ static void show(android.app.Activity activity){
+  android.widget.TextView text=new android.widget.TextView(activity);text.setText(report(activity));text.setTextSize(14);text.setTextIsSelectable(true);int pad=(int)(20*activity.getResources().getDisplayMetrics().density);text.setPadding(pad,pad,pad,pad);
+  android.widget.ScrollView scroll=new android.widget.ScrollView(activity);scroll.addView(text);
+  new android.app.AlertDialog.Builder(activity).setTitle("Scanner diagnostics").setView(scroll).setPositiveButton("Copy",(d,w)->copy(activity)).setNegativeButton("Close",null).show();
+ }
  static void copy(Context context){
   context.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("BoardLens diagnostics",report(context)));
   android.widget.Toast.makeText(context,"Diagnostics copied to clipboard",android.widget.Toast.LENGTH_SHORT).show();
