@@ -179,6 +179,7 @@
   "tests/test_engine_library.py",
   "tests/test_engine_profiles.py",
   "tests/test_engine_settings.py",
+  "tests/test_eval_animation.py",
   "tests/test_gui_layout.py",
   "tests/test_help.py",
   "tests/test_independent_evaluation.py",
