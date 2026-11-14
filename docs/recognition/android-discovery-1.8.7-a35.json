@@ -26,14 +26,24 @@
     "Primary and predicted-reply arrows on untouched opening",
     "Reacquisition after hiding and revealing the offline board",
     "Reacquisition after relocating the offline board",
-    "Capture service remained foreground at last connected check"
+    "Capture service remained foreground at last connected check",
+    "All 19 installed engines returned legal moves for the diagnostic position; zero failed/missing",
+    "Untouched cBurnett board displayed arrows",
+    "Tap-through g1-f3 accepted on offline board and suggestions updated for Black",
+    "Notification Scan now refreshed tracking without ending capture or requesting consent again",
+    "Flipped board located and arrows followed its geometry",
+    "Untouched Chess.com public analysis board in regular Chrome displayed arrows",
+    "Phone-screen Stop ended capture normally",
+    "No new process exit between resumed baseline and post-capture inspection",
+    "Final cleanup removed the QA app, stopped BoardLens and confirmed inactive capture; 1.8.7 retained"
   ],
   "pending": [
-    "Physical Chrome analysis page",
-    "Notification Scan now and Stop",
-    "Flipped-board arrows and highlighted-square recovery",
-    "Move-through-overlay update on this version",
-    "Post-test process-exit check and test-app cleanup"
+    "On-phone verification of 1.8.8 refresh fix; owner chose to keep 1.8.7",
+    "Physical Chrome move-following: attempted drag scrolled the page, no piece moved",
+    "Animated-highlight recovery on the physical phone",
+    "Final post-cleanup process-exit query; USB disconnected",
+    "Broader native/web layouts and all-day stability"
   ],
-  "limits": "Offline fixture on this device. No old-version phone baseline, all-day test, protected-screen bypass, or live human match. USB disconnected before pending checks."
+  "limits": "Warm timings are offline fixture acquisition, not arrow latency or an old-version comparison. Chrome opening-board reading and offline move-through-overlay succeeded. No live human match, invitation or protected-screen bypass. 1.8.8 remains a local candidate.",
+  "known_bug": "Scan now clears confirmed turn/history in 1.8.7. Reproduced after g1-f3: Black to move becomes inferred White. Fixed in local 1.8.8 candidate with a failing-before/passing-after regression; candidate phone installation rejected for insufficient storage."
 }

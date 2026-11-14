@@ -16,9 +16,14 @@ public class ScannerControlsTest {
  }
  @Test public void refreshKeepsSessionAndStillPixelsButDropsOldTarget()throws Exception{
   var c=Robolectric.buildService(ScreenService.class).create();ScreenService s=c.get();Bitmap frame=Bitmap.createBitmap(200,200,Bitmap.Config.ARGB_8888);
+  ChessPosition afterMove=new ChessPosition("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").play("g1f3");
+  set(s,"position",afterMove);
   set(s,"capture",new Handler(Looper.getMainLooper()));set(s,"cachedFrame",frame);set(s,"searchedFrame",frame);set(s,"target",new Rect(0,0,200,200));set(s,"baseline",new int[9216]);set(s,"needsRead",false);set(s,"lastArrows",List.of("e2e4"));ScreenService.running=true;
   try{s.onStartCommand(new Intent(s,ScreenService.class).setAction("REFRESH"),0,1);Shadows.shadowOf(Looper.getMainLooper()).idle();
    assertTrue(ScreenService.running);assertNull(get(s,"target"));assertSame(frame,get(s,"cachedFrame"));assertFalse(frame.isRecycled());assertNull(get(s,"searchedFrame"));assertEquals(List.of(),get(s,"lastArrows"));assertTrue((Boolean)get(s,"needsRead"));
+   ChessPosition retained=(ChessPosition)get(s,"position");assertNotNull("A rescan must retain the last confirmed chess state",retained);
+   ChessPosition same=ChessPosition.sync(retained,afterMove.placement(),"Auto");assertEquals(afterMove.fen(),same.fen());assertFalse("Scan now must not change Black's turn to White",same.white);
+   ChessPosition reply=afterMove.play("g8f6");assertEquals(reply.fen(),ChessPosition.sync(retained,reply.placement(),"Auto").fen());
   }finally{c.destroy();Shadows.shadowOf(Looper.getMainLooper()).idle();}
  }
  @Test public void lostBoardRejectsLateSearchResultsAndForcesNewAnalysis()throws Exception{

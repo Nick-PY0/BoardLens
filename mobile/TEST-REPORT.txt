@@ -1,3 +1,26 @@
+BOARDLENS ANDROID 1.8.8 CANDIDATE / CODE 18 — NOVEMBER 14, 2026
+
+Physical 1.8.7 testing exposed a Scan now bug: after g1-f3, a refresh discarded
+the confirmed position and inferred White to move again instead of Black.
+Refresh now invalidates visual tracking and search results while retaining
+the confirmed chess state. The new screen placement is still synchronized
+and checked before that state is reused. A regression test failed before the
+fix and passes afterward, checking the same FEN (turn and castling included)
+and a subsequent legal Black reply.
+
+All 78 host Android tests pass with real Maia and Stockfish checks, zero skipped.
+Release lint and the complete .NET APK build pass. The signed APK keeps the
+release certificate; all 16 packaged ARM64 native libraries and ZIP entries
+pass 16 KB alignment checks. No engine/capture timing setting changed.
+
+The A35 rejected installation with INSTALL_FAILED_INSUFFICIENT_STORAGE.
+The owner chose to finish testing 1.8.7 for now. Code 17 remains installed;
+1.8.8 has NOT been installed or live-tested on the phone. The candidate APK
+is a local build, not a new public release. No personal files or models were
+deleted to make space.
+
+PREVIOUS CHECKS — ANDROID 1.8.7
+
 BOARDLENS ANDROID 1.8.7 / CODE 17 — NOVEMBER 13, 2026
 
 78 host Android tests pass with real Maia and Stockfish checks enabled, zero
@@ -49,6 +72,25 @@ before/after speedup. USB disconnected before Chrome, notification actions,
 orientation arrows, move-update, final crash checks and cleanup were finished.
 The temporary test-board app remained installed at disconnect. No human game
 was started. See docs/DEVICE-TEST-A35.md and the anonymized A35 timing JSON.
+
+November 14 resumed A35 check: all 19 installed engines returned legal moves
+in the app's diagnostic position, zero failed/missing. Untouched cBurnett and
+Neo offline boards displayed primary/reply arrows. A g1-f3 tap through the
+overlay was accepted and arrows updated for Black. Notification Scan now
+re-read the board without ending sharing or requesting consent again, but
+revealed the turn-reset bug described above. A flipped board was located and
+arrows geometrically followed it; correct turn after refresh is not claimed.
+Chess.com's untouched public analysis board in regular Chrome was recognized
+and displayed arrows. A drag scrolled the mobile page instead of moving the
+piece, so Chrome move-following remains unverified in this physical session.
+No human match or invitation was created.
+
+Phone-screen Stop ended capture normally. Process exits were unchanged from
+the resumed baseline through the capture check. Final cleanup stopped
+BoardLens without opening another phone window, removed the temporary QA
+app, and confirmed MediaProjection was null and 1.8.7 remained installed.
+USB disconnected before a final post-cleanup process-exit query; no all-day
+stability claim is made. Saved model data and engine settings were retained.
 
 PREVIOUS CHECKS — ANDROID 1.8.6
 

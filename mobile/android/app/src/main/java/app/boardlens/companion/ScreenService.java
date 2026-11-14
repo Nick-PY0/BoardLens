@@ -141,7 +141,8 @@ public final class ScreenService extends Service {
         capture.post(
             () -> {
               loseTarget();
-              position = null;
+              // Re-read the screen, but keep confirmed turn/castling history.
+              // sync() validates the new placement before reusing this state.
               if(reader!=null)reader.resetTracking();
               searchedFrame=null;searchedSettings="";
               blankSince=-1;needsRead=true;cleanFrame=false;
