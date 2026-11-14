@@ -11,7 +11,23 @@ public class TargetActivity extends Activity {
     WebView w = new WebView(this);
     w.getSettings().setJavaScriptEnabled(true);
     w.getSettings().setAllowFileAccess(true);
-    setContentView(w);
+    android.widget.FrameLayout root = new android.widget.FrameLayout(this);
+    root.addView(w, new android.widget.FrameLayout.LayoutParams(-1, -1));
+    // Keep fixture controls above three-button navigation on edge-to-edge devices.
+    root.setOnApplyWindowInsetsListener((view, insets) -> {
+      if (android.os.Build.VERSION.SDK_INT >= 30) {
+        android.graphics.Insets bars = insets.getInsets(
+            android.view.WindowInsets.Type.systemBars()
+                | android.view.WindowInsets.Type.displayCutout());
+        view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+      } else {
+        view.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+            insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+      }
+      return insets;
+    });
+    setContentView(root);
+    root.requestApplyInsets();
     w.loadUrl("file:///android_asset/"+(getIntent().getBooleanExtra("fixture",false)?"fixture.html":"board.html"));
   }
 }

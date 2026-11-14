@@ -1,0 +1,39 @@
+{
+  "app_version": "1.8.7",
+  "version_code": 17,
+  "device_model": "Samsung Galaxy A35",
+  "android_api": 36,
+  "settings": {
+    "move_engine": "TinyHugeBot",
+    "move_time_seconds": 0.1,
+    "evaluation_enabled": false
+  },
+  "method": "Button tap to BoardLens recognition-notification update, using device timestamps. Query starts after two seconds to reduce polling interference. Includes input, paint, capture, confirmation and notification overhead; not engine or arrow latency.",
+  "warm_reveal_seconds": [
+    0.706,
+    0.503,
+    0.857
+  ],
+  "warm_median_seconds": 0.706,
+  "initial_sharing_start_host_observed_seconds": {
+    "lower": 1.281,
+    "upper": 1.717
+  },
+  "relocation_notification_seconds": 0.624,
+  "verified": [
+    "Upgrade from 1.8.5 without clearing saved data",
+    "Untouched opening recognized without making a move",
+    "Primary and predicted-reply arrows on untouched opening",
+    "Reacquisition after hiding and revealing the offline board",
+    "Reacquisition after relocating the offline board",
+    "Capture service remained foreground at last connected check"
+  ],
+  "pending": [
+    "Physical Chrome analysis page",
+    "Notification Scan now and Stop",
+    "Flipped-board arrows and highlighted-square recovery",
+    "Move-through-overlay update on this version",
+    "Post-test process-exit check and test-app cleanup"
+  ],
+  "limits": "Offline fixture on this device. No old-version phone baseline, all-day test, protected-screen bypass, or live human match. USB disconnected before pending checks."
+}

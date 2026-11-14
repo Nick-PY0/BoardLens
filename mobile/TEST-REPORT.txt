@@ -36,8 +36,19 @@ package verification enabled. It opened without the prior update-error dialog.
 Live capture recognized an untouched offline opening board and displayed
 arrows. A manual d2-d4 move through the overlay was accepted; suggestions and
 arrows updated for Black without Scan now. Boychesser at 0.3 s, evaluation off.
-No physical A35 is connected for this version, so actual phone latency and the
-reported phone Chrome failure remain unverified. No human game was started.
+Physical A35 follow-up: 1.8.7 upgraded 1.8.5 without clearing data; TinyHugeBot,
+0.1 s and evaluation off were retained. The untouched offline opening produced
+primary/reply arrows without a first move. Warm hide/reveal trials took 0.503,
+0.706 and 0.857 s from the fixture button tap to the recognition notification
+(median 0.706 s), using device timestamps with the first query delayed 2 s.
+These include input/paint/capture/confirmation/notification overhead, not engine
+or arrow latency. The sharing-start trial was observed in a 1.281–1.717 s host
+polling interval. Relocation was reacquired in 0.624 s by device timestamps.
+No old-version phone baseline was measured, so these are not a measured A35
+before/after speedup. USB disconnected before Chrome, notification actions,
+orientation arrows, move-update, final crash checks and cleanup were finished.
+The temporary test-board app remained installed at disconnect. No human game
+was started. See docs/DEVICE-TEST-A35.md and the anonymized A35 timing JSON.
 
 PREVIOUS CHECKS — ANDROID 1.8.6
 
