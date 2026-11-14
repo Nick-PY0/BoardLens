@@ -34,4 +34,13 @@ public class UpdateProgressTest {
   AlertDialog result=ShadowAlertDialog.getLatestAlertDialog();assertTrue(Shadows.shadowOf(result).getMessage().toString().contains("9.92"));assertEquals(3,manifests.get());result.dismiss();
   updater.check();AlertDialog second=ShadowAlertDialog.getLatestAlertDialog();await(()->ShadowAlertDialog.getLatestAlertDialog()!=second);assertEquals("Only unavailable manifest is retried",4,manifests.get());updater.close();
  }
+ @Test public void timeoutAfterPartialResultsDoesNotOfferAnUnselectedApk()throws Exception{
+  String list=new JSONArray().put(release(90)).put(release(92)).toString();CountDownLatch blocked=new CountDownLatch(1);
+  AppUpdater updater=new AppUpdater(activity,(url,max)->{if(url.startsWith("https://api.github.com/"))return list;if(url.contains("test90/"))return manifest(90);blocked.await();return manifest(92);},500);
+  try{
+   updater.check();AlertDialog progress=ShadowAlertDialog.getLatestAlertDialog();await(()->ShadowAlertDialog.getLatestAlertDialog()!=progress);AlertDialog error=ShadowAlertDialog.getLatestAlertDialog();
+   assertTrue("A partial result must have arrived",Shadows.shadowOf(progress).getMessage().toString().contains("1/2"));assertEquals("Update check incomplete",Shadows.shadowOf(error).getTitle());
+   assertTrue(error.getButton(AlertDialog.BUTTON_POSITIVE)==null||error.getButton(AlertDialog.BUTTON_POSITIVE).getVisibility()!=android.view.View.VISIBLE);
+  }finally{blocked.countDown();updater.close();}
+ }
 }

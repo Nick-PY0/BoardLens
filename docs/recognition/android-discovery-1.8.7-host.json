@@ -1,0 +1,3186 @@
+{
+  "platform": "Mac host JVM / Robolectric API 35 native graphics; not Android device timing",
+  "before": {
+    "cases": 186,
+    "correct": 158,
+    "rejected": 28,
+    "accepted_wrong": 0,
+    "median_ms": 20.943271000000003,
+    "p95_ms": 176.989709,
+    "max_ms": 298.076
+  },
+  "after": {
+    "cases": 186,
+    "correct": 158,
+    "rejected": 28,
+    "accepted_wrong": 0,
+    "median_ms": 21.2380415,
+    "p95_ms": 164.255375,
+    "max_ms": 315.821
+  },
+  "lost_correct_cases": [],
+  "rows": [
+    {
+      "image": "theme-0-0.png",
+      "style": "lichess-2d/cburnett",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-0-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 249.954292
+      },
+      "after": {
+        "image": "theme-0-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 241.28125
+      }
+    },
+    {
+      "image": "theme-0-1.png",
+      "style": "lichess-2d/cburnett",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-0-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 50.954583
+      },
+      "after": {
+        "image": "theme-0-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 56.967375
+      }
+    },
+    {
+      "image": "theme-1-0.png",
+      "style": "lichess-2d/merida",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-1-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 26.13675
+      },
+      "after": {
+        "image": "theme-1-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 27.63875
+      }
+    },
+    {
+      "image": "theme-1-1.png",
+      "style": "lichess-2d/merida",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-1-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 181.46
+      },
+      "after": {
+        "image": "theme-1-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 188.030583
+      }
+    },
+    {
+      "image": "theme-2-0.png",
+      "style": "lichess-2d/alpha",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-2-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 24.005584
+      },
+      "after": {
+        "image": "theme-2-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 22.179708
+      }
+    },
+    {
+      "image": "theme-2-1.png",
+      "style": "lichess-2d/alpha",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-2-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 28.86475
+      },
+      "after": {
+        "image": "theme-2-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 25.034583
+      }
+    },
+    {
+      "image": "theme-3-0.png",
+      "style": "lichess-2d/pirouetti",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-3-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 137.248459
+      },
+      "after": {
+        "image": "theme-3-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 150.833917
+      }
+    },
+    {
+      "image": "theme-3-1.png",
+      "style": "lichess-2d/pirouetti",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-3-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 161.459042
+      },
+      "after": {
+        "image": "theme-3-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 63.060292
+      }
+    },
+    {
+      "image": "theme-4-0.png",
+      "style": "lichess-2d/chessnut",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-4-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 23.573
+      },
+      "after": {
+        "image": "theme-4-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 23.0045
+      }
+    },
+    {
+      "image": "theme-4-1.png",
+      "style": "lichess-2d/chessnut",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-4-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 23.384292
+      },
+      "after": {
+        "image": "theme-4-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 22.278459
+      }
+    },
+    {
+      "image": "theme-5-0.png",
+      "style": "lichess-2d/chess7",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-5-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.884125
+      },
+      "after": {
+        "image": "theme-5-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.767375
+      }
+    },
+    {
+      "image": "theme-5-1.png",
+      "style": "lichess-2d/chess7",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-5-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 21.002417
+      },
+      "after": {
+        "image": "theme-5-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 21.277625
+      }
+    },
+    {
+      "image": "theme-6-0.png",
+      "style": "lichess-2d/reillycraig",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-6-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 22.509167
+      },
+      "after": {
+        "image": "theme-6-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 22.220583
+      }
+    },
+    {
+      "image": "theme-6-1.png",
+      "style": "lichess-2d/reillycraig",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-6-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 23.366625
+      },
+      "after": {
+        "image": "theme-6-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 24.422208
+      }
+    },
+    {
+      "image": "theme-7-0.png",
+      "style": "lichess-2d/companion",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-7-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 19.087916
+      },
+      "after": {
+        "image": "theme-7-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.51125
+      }
+    },
+    {
+      "image": "theme-7-1.png",
+      "style": "lichess-2d/companion",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-7-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.108916
+      },
+      "after": {
+        "image": "theme-7-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 19.850791
+      }
+    },
+    {
+      "image": "theme-8-0.png",
+      "style": "lichess-2d/riohacha",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-8-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.469459
+      },
+      "after": {
+        "image": "theme-8-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.561625
+      }
+    },
+    {
+      "image": "theme-8-1.png",
+      "style": "lichess-2d/riohacha",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-8-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.930334
+      },
+      "after": {
+        "image": "theme-8-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.037541
+      }
+    },
+    {
+      "image": "theme-9-0.png",
+      "style": "lichess-2d/kosal",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-9-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.010333
+      },
+      "after": {
+        "image": "theme-9-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.839708
+      }
+    },
+    {
+      "image": "theme-9-1.png",
+      "style": "lichess-2d/kosal",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-9-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.961833
+      },
+      "after": {
+        "image": "theme-9-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.017667
+      }
+    },
+    {
+      "image": "theme-10-0.png",
+      "style": "lichess-2d/leipzig",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-10-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.542959
+      },
+      "after": {
+        "image": "theme-10-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.184542
+      }
+    },
+    {
+      "image": "theme-10-1.png",
+      "style": "lichess-2d/leipzig",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-10-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.405459
+      },
+      "after": {
+        "image": "theme-10-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.044333
+      }
+    },
+    {
+      "image": "theme-11-0.png",
+      "style": "lichess-2d/fantasy",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-11-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.187458
+      },
+      "after": {
+        "image": "theme-11-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.076
+      }
+    },
+    {
+      "image": "theme-11-1.png",
+      "style": "lichess-2d/fantasy",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-11-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.720167
+      },
+      "after": {
+        "image": "theme-11-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.06375
+      }
+    },
+    {
+      "image": "theme-12-0.png",
+      "style": "lichess-2d/spatial",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-12-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.72425
+      },
+      "after": {
+        "image": "theme-12-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 21.198458
+      }
+    },
+    {
+      "image": "theme-12-1.png",
+      "style": "lichess-2d/spatial",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-12-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.1445
+      },
+      "after": {
+        "image": "theme-12-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.76175
+      }
+    },
+    {
+      "image": "theme-13-0.png",
+      "style": "lichess-2d/celtic",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-13-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 87.142541
+      },
+      "after": {
+        "image": "theme-13-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 106.372958
+      }
+    },
+    {
+      "image": "theme-13-1.png",
+      "style": "lichess-2d/celtic",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-13-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 65.748625
+      },
+      "after": {
+        "image": "theme-13-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 95.508167
+      }
+    },
+    {
+      "image": "theme-14-0.png",
+      "style": "lichess-2d/california",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-14-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.076584
+      },
+      "after": {
+        "image": "theme-14-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.557833
+      }
+    },
+    {
+      "image": "theme-14-1.png",
+      "style": "lichess-2d/california",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-14-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.510875
+      },
+      "after": {
+        "image": "theme-14-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.178541
+      }
+    },
+    {
+      "image": "theme-15-0.png",
+      "style": "lichess-2d/caliente",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-15-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.866458
+      },
+      "after": {
+        "image": "theme-15-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.019459
+      }
+    },
+    {
+      "image": "theme-15-1.png",
+      "style": "lichess-2d/caliente",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-15-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.271042
+      },
+      "after": {
+        "image": "theme-15-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.371334
+      }
+    },
+    {
+      "image": "theme-16-0.png",
+      "style": "lichess-2d/pixel",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-16-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.639042
+      },
+      "after": {
+        "image": "theme-16-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.244417
+      }
+    },
+    {
+      "image": "theme-16-1.png",
+      "style": "lichess-2d/pixel",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-16-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.862958
+      },
+      "after": {
+        "image": "theme-16-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.584375
+      }
+    },
+    {
+      "image": "theme-17-0.png",
+      "style": "lichess-2d/firi",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-17-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 298.076
+      },
+      "after": {
+        "image": "theme-17-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 267.130833
+      }
+    },
+    {
+      "image": "theme-17-1.png",
+      "style": "lichess-2d/firi",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-17-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 254.426292
+      },
+      "after": {
+        "image": "theme-17-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 315.821
+      }
+    },
+    {
+      "image": "theme-18-0.png",
+      "style": "lichess-2d/rhosgfx",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-18-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 196.376208
+      },
+      "after": {
+        "image": "theme-18-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 137.704125
+      }
+    },
+    {
+      "image": "theme-18-1.png",
+      "style": "lichess-2d/rhosgfx",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-18-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 153.258625
+      },
+      "after": {
+        "image": "theme-18-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 162.383125
+      }
+    },
+    {
+      "image": "theme-19-0.png",
+      "style": "lichess-2d/maestro",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-19-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.147834
+      },
+      "after": {
+        "image": "theme-19-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.174042
+      }
+    },
+    {
+      "image": "theme-19-1.png",
+      "style": "lichess-2d/maestro",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-19-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.323875
+      },
+      "after": {
+        "image": "theme-19-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.374792
+      }
+    },
+    {
+      "image": "theme-20-0.png",
+      "style": "lichess-2d/fresca",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-20-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.557416
+      },
+      "after": {
+        "image": "theme-20-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.596541
+      }
+    },
+    {
+      "image": "theme-20-1.png",
+      "style": "lichess-2d/fresca",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-20-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.944417
+      },
+      "after": {
+        "image": "theme-20-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.543958
+      }
+    },
+    {
+      "image": "theme-21-0.png",
+      "style": "lichess-2d/cardinal",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-21-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.837375
+      },
+      "after": {
+        "image": "theme-21-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.194708
+      }
+    },
+    {
+      "image": "theme-21-1.png",
+      "style": "lichess-2d/cardinal",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-21-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.143292
+      },
+      "after": {
+        "image": "theme-21-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.050833
+      }
+    },
+    {
+      "image": "theme-22-0.png",
+      "style": "lichess-2d/gioco",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-22-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 50.591084
+      },
+      "after": {
+        "image": "theme-22-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 58.423583
+      }
+    },
+    {
+      "image": "theme-22-1.png",
+      "style": "lichess-2d/gioco",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-22-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 48.533875
+      },
+      "after": {
+        "image": "theme-22-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 59.781833
+      }
+    },
+    {
+      "image": "theme-23-0.png",
+      "style": "lichess-2d/tatiana",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-23-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.242958
+      },
+      "after": {
+        "image": "theme-23-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.125583
+      }
+    },
+    {
+      "image": "theme-23-1.png",
+      "style": "lichess-2d/tatiana",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-23-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.659958
+      },
+      "after": {
+        "image": "theme-23-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 21.815542
+      }
+    },
+    {
+      "image": "theme-24-0.png",
+      "style": "lichess-2d/staunty",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-24-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.874208
+      },
+      "after": {
+        "image": "theme-24-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.928584
+      }
+    },
+    {
+      "image": "theme-24-1.png",
+      "style": "lichess-2d/staunty",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-24-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 63.881084
+      },
+      "after": {
+        "image": "theme-24-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 94.98475
+      }
+    },
+    {
+      "image": "theme-25-0.png",
+      "style": "lichess-2d/cooke",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-25-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 52.12175
+      },
+      "after": {
+        "image": "theme-25-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 71.87075
+      }
+    },
+    {
+      "image": "theme-25-1.png",
+      "style": "lichess-2d/cooke",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-25-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 53.138667
+      },
+      "after": {
+        "image": "theme-25-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 76.638375
+      }
+    },
+    {
+      "image": "theme-26-0.png",
+      "style": "lichess-2d/monarchy",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-26-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 143.013334
+      },
+      "after": {
+        "image": "theme-26-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 141.676375
+      }
+    },
+    {
+      "image": "theme-26-1.png",
+      "style": "lichess-2d/monarchy",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-26-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 60.473042
+      },
+      "after": {
+        "image": "theme-26-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 90.012834
+      }
+    },
+    {
+      "image": "theme-27-0.png",
+      "style": "lichess-2d/papercut",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-27-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 21.22275
+      },
+      "after": {
+        "image": "theme-27-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.639458
+      }
+    },
+    {
+      "image": "theme-27-1.png",
+      "style": "lichess-2d/papercut",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-27-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 19.385625
+      },
+      "after": {
+        "image": "theme-27-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.192709
+      }
+    },
+    {
+      "image": "theme-28-0.png",
+      "style": "lichess-2d/minimal-warmth",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-28-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 61.146292
+      },
+      "after": {
+        "image": "theme-28-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 98.701042
+      }
+    },
+    {
+      "image": "theme-28-1.png",
+      "style": "lichess-2d/minimal-warmth",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-28-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.79525
+      },
+      "after": {
+        "image": "theme-28-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 106.351084
+      }
+    },
+    {
+      "image": "theme-29-0.png",
+      "style": "lichess-2d/governor",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-29-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.605833
+      },
+      "after": {
+        "image": "theme-29-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.965833
+      }
+    },
+    {
+      "image": "theme-29-1.png",
+      "style": "lichess-2d/governor",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-29-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.600458
+      },
+      "after": {
+        "image": "theme-29-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.763958
+      }
+    },
+    {
+      "image": "theme-30-0.png",
+      "style": "lichess-2d/dubrovny",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-30-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.800791
+      },
+      "after": {
+        "image": "theme-30-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.873292
+      }
+    },
+    {
+      "image": "theme-30-1.png",
+      "style": "lichess-2d/dubrovny",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-30-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.496209
+      },
+      "after": {
+        "image": "theme-30-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.215042
+      }
+    },
+    {
+      "image": "theme-31-0.png",
+      "style": "lichess-2d/shahi-ivory-brown",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-31-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.590875
+      },
+      "after": {
+        "image": "theme-31-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.745041
+      }
+    },
+    {
+      "image": "theme-31-1.png",
+      "style": "lichess-2d/shahi-ivory-brown",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-31-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.55375
+      },
+      "after": {
+        "image": "theme-31-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.042917
+      }
+    },
+    {
+      "image": "theme-32-0.png",
+      "style": "lichess-2d/icpieces",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-32-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 62.842
+      },
+      "after": {
+        "image": "theme-32-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 84.83375
+      }
+    },
+    {
+      "image": "theme-32-1.png",
+      "style": "lichess-2d/icpieces",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-32-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.271666
+      },
+      "after": {
+        "image": "theme-32-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 96.363
+      }
+    },
+    {
+      "image": "theme-33-0.png",
+      "style": "lichess-2d/mpchess",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-33-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 38.847042
+      },
+      "after": {
+        "image": "theme-33-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 38.688125
+      }
+    },
+    {
+      "image": "theme-33-1.png",
+      "style": "lichess-2d/mpchess",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-33-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 38.668125
+      },
+      "after": {
+        "image": "theme-33-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 41.374125
+      }
+    },
+    {
+      "image": "theme-34-0.png",
+      "style": "lichess-2d/kiwen-suwi",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-34-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 145.297958
+      },
+      "after": {
+        "image": "theme-34-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 144.667417
+      }
+    },
+    {
+      "image": "theme-34-1.png",
+      "style": "lichess-2d/kiwen-suwi",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-34-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.895709
+      },
+      "after": {
+        "image": "theme-34-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 89.248916
+      }
+    },
+    {
+      "image": "theme-35-0.png",
+      "style": "lichess-2d/totoy",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-35-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.928792
+      },
+      "after": {
+        "image": "theme-35-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.844625
+      }
+    },
+    {
+      "image": "theme-35-1.png",
+      "style": "lichess-2d/totoy",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-35-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.747334
+      },
+      "after": {
+        "image": "theme-35-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.741667
+      }
+    },
+    {
+      "image": "theme-36-0.png",
+      "style": "lichess-2d/horsey",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-36-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 64.835958
+      },
+      "after": {
+        "image": "theme-36-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 98.535917
+      }
+    },
+    {
+      "image": "theme-36-1.png",
+      "style": "lichess-2d/horsey",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-36-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 60.914625
+      },
+      "after": {
+        "image": "theme-36-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 103.026833
+      }
+    },
+    {
+      "image": "theme-37-0.png",
+      "style": "lichess-2d/anarcandy",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-37-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.171042
+      },
+      "after": {
+        "image": "theme-37-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.934208
+      }
+    },
+    {
+      "image": "theme-37-1.png",
+      "style": "lichess-2d/anarcandy",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-37-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.163084
+      },
+      "after": {
+        "image": "theme-37-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.713667
+      }
+    },
+    {
+      "image": "theme-38-0.png",
+      "style": "lichess-2d/xkcd",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-38-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 150.081042
+      },
+      "after": {
+        "image": "theme-38-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 147.905792
+      }
+    },
+    {
+      "image": "theme-38-1.png",
+      "style": "lichess-2d/xkcd",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-38-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 60.631958
+      },
+      "after": {
+        "image": "theme-38-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 97.668125
+      }
+    },
+    {
+      "image": "theme-39-0.png",
+      "style": "lichess-2d/shapes",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-39-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.896209
+      },
+      "after": {
+        "image": "theme-39-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.32825
+      }
+    },
+    {
+      "image": "theme-39-1.png",
+      "style": "lichess-2d/shapes",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-39-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.532
+      },
+      "after": {
+        "image": "theme-39-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.661084
+      }
+    },
+    {
+      "image": "theme-40-0.png",
+      "style": "lichess-2d/letter",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-40-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.186334
+      },
+      "after": {
+        "image": "theme-40-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.860458
+      }
+    },
+    {
+      "image": "theme-40-1.png",
+      "style": "lichess-2d/letter",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-40-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.934291
+      },
+      "after": {
+        "image": "theme-40-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.319708
+      }
+    },
+    {
+      "image": "theme-41-0.png",
+      "style": "lichess-2d/disguised",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-41-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 183.707667
+      },
+      "after": {
+        "image": "theme-41-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 185.21375
+      }
+    },
+    {
+      "image": "theme-41-1.png",
+      "style": "lichess-2d/disguised",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-41-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 182.718125
+      },
+      "after": {
+        "image": "theme-41-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 180.091125
+      }
+    },
+    {
+      "image": "theme-42-0.png",
+      "style": "lichess-3d/Basic",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-42-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 54.032834
+      },
+      "after": {
+        "image": "theme-42-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 52.206666
+      }
+    },
+    {
+      "image": "theme-42-1.png",
+      "style": "lichess-3d/Basic",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-42-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 50.597958
+      },
+      "after": {
+        "image": "theme-42-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 55.102417
+      }
+    },
+    {
+      "image": "theme-43-0.png",
+      "style": "lichess-3d/Wood",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-43-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 157.40225
+      },
+      "after": {
+        "image": "theme-43-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 157.792166
+      }
+    },
+    {
+      "image": "theme-43-1.png",
+      "style": "lichess-3d/Wood",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-43-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 96.083708
+      },
+      "after": {
+        "image": "theme-43-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 100.253209
+      }
+    },
+    {
+      "image": "theme-44-0.png",
+      "style": "lichess-3d/Metal",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-44-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 93.325709
+      },
+      "after": {
+        "image": "theme-44-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 93.217209
+      }
+    },
+    {
+      "image": "theme-44-1.png",
+      "style": "lichess-3d/Metal",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-44-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 98.922833
+      },
+      "after": {
+        "image": "theme-44-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 94.96875
+      }
+    },
+    {
+      "image": "theme-45-0.png",
+      "style": "lichess-3d/RedVBlue",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-45-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 160.623708
+      },
+      "after": {
+        "image": "theme-45-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 156.86025
+      }
+    },
+    {
+      "image": "theme-45-1.png",
+      "style": "lichess-3d/RedVBlue",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-45-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 159.347625
+      },
+      "after": {
+        "image": "theme-45-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 161.78475
+      }
+    },
+    {
+      "image": "theme-46-0.png",
+      "style": "lichess-3d/ModernJade",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-46-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 98.298459
+      },
+      "after": {
+        "image": "theme-46-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 138.94
+      }
+    },
+    {
+      "image": "theme-46-1.png",
+      "style": "lichess-3d/ModernJade",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-46-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 156.46625
+      },
+      "after": {
+        "image": "theme-46-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 158.044334
+      }
+    },
+    {
+      "image": "theme-47-0.png",
+      "style": "lichess-3d/ModernWood",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-47-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 91.919791
+      },
+      "after": {
+        "image": "theme-47-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 97.05825
+      }
+    },
+    {
+      "image": "theme-47-1.png",
+      "style": "lichess-3d/ModernWood",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-47-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 156.353166
+      },
+      "after": {
+        "image": "theme-47-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 158.935083
+      }
+    },
+    {
+      "image": "theme-48-0.png",
+      "style": "lichess-3d/Glass",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-48-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 176.989709
+      },
+      "after": {
+        "image": "theme-48-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 175.301834
+      }
+    },
+    {
+      "image": "theme-48-1.png",
+      "style": "lichess-3d/Glass",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-48-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 219.691375
+      },
+      "after": {
+        "image": "theme-48-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 223.20425
+      }
+    },
+    {
+      "image": "theme-49-0.png",
+      "style": "lichess-3d/Trimmed",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-49-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 169.880084
+      },
+      "after": {
+        "image": "theme-49-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 164.203291
+      }
+    },
+    {
+      "image": "theme-49-1.png",
+      "style": "lichess-3d/Trimmed",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-49-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 97.992041
+      },
+      "after": {
+        "image": "theme-49-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 100.092917
+      }
+    },
+    {
+      "image": "theme-50-0.png",
+      "style": "lichess-3d/Experimental",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-50-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 154.262
+      },
+      "after": {
+        "image": "theme-50-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 152.48275
+      }
+    },
+    {
+      "image": "theme-50-1.png",
+      "style": "lichess-3d/Experimental",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-50-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 152.723042
+      },
+      "after": {
+        "image": "theme-50-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 156.066125
+      }
+    },
+    {
+      "image": "theme-51-0.png",
+      "style": "lichess-3d/Staunton",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-51-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 107.243959
+      },
+      "after": {
+        "image": "theme-51-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 107.790666
+      }
+    },
+    {
+      "image": "theme-51-1.png",
+      "style": "lichess-3d/Staunton",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-51-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 65.380208
+      },
+      "after": {
+        "image": "theme-51-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 64.793584
+      }
+    },
+    {
+      "image": "theme-52-0.png",
+      "style": "lichess-3d/CubesAndPi",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-52-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 148.079709
+      },
+      "after": {
+        "image": "theme-52-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 156.61075
+      }
+    },
+    {
+      "image": "theme-52-1.png",
+      "style": "lichess-3d/CubesAndPi",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-52-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 204.075375
+      },
+      "after": {
+        "image": "theme-52-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 198.130917
+      }
+    },
+    {
+      "image": "theme-53-0.png",
+      "style": "chesscom/ejgfv",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-53-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.6675
+      },
+      "after": {
+        "image": "theme-53-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.693333
+      }
+    },
+    {
+      "image": "theme-53-1.png",
+      "style": "chesscom/ejgfv",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-53-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.516792
+      },
+      "after": {
+        "image": "theme-53-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.432542
+      }
+    },
+    {
+      "image": "theme-54-0.png",
+      "style": "chesscom/8qetl",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-54-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.386417
+      },
+      "after": {
+        "image": "theme-54-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.064083
+      }
+    },
+    {
+      "image": "theme-54-1.png",
+      "style": "chesscom/8qetl",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-54-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.184417
+      },
+      "after": {
+        "image": "theme-54-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.245417
+      }
+    },
+    {
+      "image": "theme-55-0.png",
+      "style": "chesscom/game_room",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-55-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 160.429084
+      },
+      "after": {
+        "image": "theme-55-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 164.255375
+      }
+    },
+    {
+      "image": "theme-55-1.png",
+      "style": "chesscom/game_room",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-55-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.365916
+      },
+      "after": {
+        "image": "theme-55-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.942375
+      }
+    },
+    {
+      "image": "theme-56-0.png",
+      "style": "chesscom/wood",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-56-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 65.225916
+      },
+      "after": {
+        "image": "theme-56-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 67.110792
+      }
+    },
+    {
+      "image": "theme-56-1.png",
+      "style": "chesscom/wood",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-56-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 60.733541
+      },
+      "after": {
+        "image": "theme-56-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 62.108708
+      }
+    },
+    {
+      "image": "theme-57-0.png",
+      "style": "chesscom/glass",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-57-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.857625
+      },
+      "after": {
+        "image": "theme-57-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.480417
+      }
+    },
+    {
+      "image": "theme-57-1.png",
+      "style": "chesscom/glass",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-57-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.044458
+      },
+      "after": {
+        "image": "theme-57-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.137584
+      }
+    },
+    {
+      "image": "theme-58-0.png",
+      "style": "chesscom/gothic",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-58-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.412833
+      },
+      "after": {
+        "image": "theme-58-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.62175
+      }
+    },
+    {
+      "image": "theme-58-1.png",
+      "style": "chesscom/gothic",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-58-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 62.485833
+      },
+      "after": {
+        "image": "theme-58-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 103.76325
+      }
+    },
+    {
+      "image": "theme-59-0.png",
+      "style": "chesscom/classic",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-59-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.698792
+      },
+      "after": {
+        "image": "theme-59-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.478417
+      }
+    },
+    {
+      "image": "theme-59-1.png",
+      "style": "chesscom/classic",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-59-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.266625
+      },
+      "after": {
+        "image": "theme-59-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.518625
+      }
+    },
+    {
+      "image": "theme-60-0.png",
+      "style": "chesscom/metal",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-60-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.826958
+      },
+      "after": {
+        "image": "theme-60-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.649667
+      }
+    },
+    {
+      "image": "theme-60-1.png",
+      "style": "chesscom/metal",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-60-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.983084
+      },
+      "after": {
+        "image": "theme-60-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.888375
+      }
+    },
+    {
+      "image": "theme-61-0.png",
+      "style": "chesscom/bases",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-61-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.746458
+      },
+      "after": {
+        "image": "theme-61-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.989667
+      }
+    },
+    {
+      "image": "theme-61-1.png",
+      "style": "chesscom/bases",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-61-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.45475
+      },
+      "after": {
+        "image": "theme-61-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.099208
+      }
+    },
+    {
+      "image": "theme-62-0.png",
+      "style": "chesscom/neo_wood",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-62-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.591458
+      },
+      "after": {
+        "image": "theme-62-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.815334
+      }
+    },
+    {
+      "image": "theme-62-1.png",
+      "style": "chesscom/neo_wood",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-62-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.965292
+      },
+      "after": {
+        "image": "theme-62-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.660833
+      }
+    },
+    {
+      "image": "theme-63-0.png",
+      "style": "chesscom/icy_sea",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-63-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 106.013958
+      },
+      "after": {
+        "image": "theme-63-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 53.738667
+      }
+    },
+    {
+      "image": "theme-63-1.png",
+      "style": "chesscom/icy_sea",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-63-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.123125
+      },
+      "after": {
+        "image": "theme-63-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.051459
+      }
+    },
+    {
+      "image": "theme-64-0.png",
+      "style": "chesscom/club",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-64-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.610083
+      },
+      "after": {
+        "image": "theme-64-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.615917
+      }
+    },
+    {
+      "image": "theme-64-1.png",
+      "style": "chesscom/club",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-64-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.598375
+      },
+      "after": {
+        "image": "theme-64-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.370125
+      }
+    },
+    {
+      "image": "theme-65-0.png",
+      "style": "chesscom/ocean",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-65-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 48.102459
+      },
+      "after": {
+        "image": "theme-65-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 51.298916
+      }
+    },
+    {
+      "image": "theme-65-1.png",
+      "style": "chesscom/ocean",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-65-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 53.050917
+      },
+      "after": {
+        "image": "theme-65-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 52.933792
+      }
+    },
+    {
+      "image": "theme-66-0.png",
+      "style": "chesscom/newspaper",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-66-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.582167
+      },
+      "after": {
+        "image": "theme-66-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.787209
+      }
+    },
+    {
+      "image": "theme-66-1.png",
+      "style": "chesscom/newspaper",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-66-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.710708
+      },
+      "after": {
+        "image": "theme-66-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.054333
+      }
+    },
+    {
+      "image": "theme-67-0.png",
+      "style": "chesscom/space",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-67-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.778125
+      },
+      "after": {
+        "image": "theme-67-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.700291
+      }
+    },
+    {
+      "image": "theme-67-1.png",
+      "style": "chesscom/space",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-67-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.7415
+      },
+      "after": {
+        "image": "theme-67-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.628375
+      }
+    },
+    {
+      "image": "theme-68-0.png",
+      "style": "chesscom/cases",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-68-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.710375
+      },
+      "after": {
+        "image": "theme-68-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.454542
+      }
+    },
+    {
+      "image": "theme-68-1.png",
+      "style": "chesscom/cases",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-68-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.833042
+      },
+      "after": {
+        "image": "theme-68-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.069541
+      }
+    },
+    {
+      "image": "theme-69-0.png",
+      "style": "chesscom/condal",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-69-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 139.572667
+      },
+      "after": {
+        "image": "theme-69-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 141.187125
+      }
+    },
+    {
+      "image": "theme-69-1.png",
+      "style": "chesscom/condal",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-69-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.197083
+      },
+      "after": {
+        "image": "theme-69-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 94.419125
+      }
+    },
+    {
+      "image": "theme-70-0.png",
+      "style": "chesscom/3d_chesskid",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-70-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.035791
+      },
+      "after": {
+        "image": "theme-70-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 89.889041
+      }
+    },
+    {
+      "image": "theme-70-1.png",
+      "style": "chesscom/3d_chesskid",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-70-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 62.936458
+      },
+      "after": {
+        "image": "theme-70-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 82.350959
+      }
+    },
+    {
+      "image": "theme-71-0.png",
+      "style": "chesscom/8_bit",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-71-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.380917
+      },
+      "after": {
+        "image": "theme-71-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.260458
+      }
+    },
+    {
+      "image": "theme-71-1.png",
+      "style": "chesscom/8_bit",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-71-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.153333
+      },
+      "after": {
+        "image": "theme-71-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.767167
+      }
+    },
+    {
+      "image": "theme-72-0.png",
+      "style": "chesscom/marble",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-72-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.516417
+      },
+      "after": {
+        "image": "theme-72-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.097333
+      }
+    },
+    {
+      "image": "theme-72-1.png",
+      "style": "chesscom/marble",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-72-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.2955
+      },
+      "after": {
+        "image": "theme-72-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 21.682333
+      }
+    },
+    {
+      "image": "theme-73-0.png",
+      "style": "chesscom/book",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-73-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.040833
+      },
+      "after": {
+        "image": "theme-73-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.514584
+      }
+    },
+    {
+      "image": "theme-73-1.png",
+      "style": "chesscom/book",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-73-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.479708
+      },
+      "after": {
+        "image": "theme-73-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.67925
+      }
+    },
+    {
+      "image": "theme-74-0.png",
+      "style": "chesscom/alpha",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-74-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.468583
+      },
+      "after": {
+        "image": "theme-74-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.122959
+      }
+    },
+    {
+      "image": "theme-74-1.png",
+      "style": "chesscom/alpha",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-74-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.602666
+      },
+      "after": {
+        "image": "theme-74-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.681083
+      }
+    },
+    {
+      "image": "theme-75-0.png",
+      "style": "chesscom/bubblegum",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-75-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.135083
+      },
+      "after": {
+        "image": "theme-75-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.663959
+      }
+    },
+    {
+      "image": "theme-75-1.png",
+      "style": "chesscom/bubblegum",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-75-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.071083
+      },
+      "after": {
+        "image": "theme-75-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.574708
+      }
+    },
+    {
+      "image": "theme-76-0.png",
+      "style": "chesscom/dash",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-76-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 23.169958
+      },
+      "after": {
+        "image": "theme-76-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.404375
+      }
+    },
+    {
+      "image": "theme-76-1.png",
+      "style": "chesscom/dash",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-76-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.527667
+      },
+      "after": {
+        "image": "theme-76-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.701
+      }
+    },
+    {
+      "image": "theme-77-0.png",
+      "style": "chesscom/graffiti",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-77-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.027084
+      },
+      "after": {
+        "image": "theme-77-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.051125
+      }
+    },
+    {
+      "image": "theme-77-1.png",
+      "style": "chesscom/graffiti",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-77-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.49325
+      },
+      "after": {
+        "image": "theme-77-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.982292
+      }
+    },
+    {
+      "image": "theme-78-0.png",
+      "style": "chesscom/light",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-78-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.734167
+      },
+      "after": {
+        "image": "theme-78-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.504042
+      }
+    },
+    {
+      "image": "theme-78-1.png",
+      "style": "chesscom/light",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-78-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.922375
+      },
+      "after": {
+        "image": "theme-78-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 19.149292
+      }
+    },
+    {
+      "image": "theme-79-0.png",
+      "style": "chesscom/lolz",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-79-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.436291
+      },
+      "after": {
+        "image": "theme-79-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.788666
+      }
+    },
+    {
+      "image": "theme-79-1.png",
+      "style": "chesscom/lolz",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-79-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.619416
+      },
+      "after": {
+        "image": "theme-79-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.415292
+      }
+    },
+    {
+      "image": "theme-80-0.png",
+      "style": "chesscom/luca",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-80-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 142.883292
+      },
+      "after": {
+        "image": "theme-80-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 144.792875
+      }
+    },
+    {
+      "image": "theme-80-1.png",
+      "style": "chesscom/luca",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-80-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 97.732834
+      },
+      "after": {
+        "image": "theme-80-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 101.069708
+      }
+    },
+    {
+      "image": "theme-81-0.png",
+      "style": "chesscom/maya",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-81-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 51.536834
+      },
+      "after": {
+        "image": "theme-81-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 71.237542
+      }
+    },
+    {
+      "image": "theme-81-1.png",
+      "style": "chesscom/maya",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-81-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 48.466958
+      },
+      "after": {
+        "image": "theme-81-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 71.402584
+      }
+    },
+    {
+      "image": "theme-82-0.png",
+      "style": "chesscom/modern",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-82-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.470542
+      },
+      "after": {
+        "image": "theme-82-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.226041
+      }
+    },
+    {
+      "image": "theme-82-1.png",
+      "style": "chesscom/modern",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-82-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 19.771333
+      },
+      "after": {
+        "image": "theme-82-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.349542
+      }
+    },
+    {
+      "image": "theme-83-0.png",
+      "style": "chesscom/nature",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-83-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.008
+      },
+      "after": {
+        "image": "theme-83-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 18.53175
+      }
+    },
+    {
+      "image": "theme-83-1.png",
+      "style": "chesscom/nature",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-83-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.716959
+      },
+      "after": {
+        "image": "theme-83-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.708
+      }
+    },
+    {
+      "image": "theme-84-0.png",
+      "style": "chesscom/neon",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-84-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 60.714917
+      },
+      "after": {
+        "image": "theme-84-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 61.672334
+      }
+    },
+    {
+      "image": "theme-84-1.png",
+      "style": "chesscom/neon",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-84-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 59.000125
+      },
+      "after": {
+        "image": "theme-84-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 56.666167
+      }
+    },
+    {
+      "image": "theme-85-0.png",
+      "style": "chesscom/sky",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-85-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 60.310417
+      },
+      "after": {
+        "image": "theme-85-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 98.714333
+      }
+    },
+    {
+      "image": "theme-85-1.png",
+      "style": "chesscom/sky",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-85-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 60.843
+      },
+      "after": {
+        "image": "theme-85-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 85.960083
+      }
+    },
+    {
+      "image": "theme-86-0.png",
+      "style": "chesscom/tigers",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-86-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.876542
+      },
+      "after": {
+        "image": "theme-86-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 17.042542
+      }
+    },
+    {
+      "image": "theme-86-1.png",
+      "style": "chesscom/tigers",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-86-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.955458
+      },
+      "after": {
+        "image": "theme-86-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 20.227708
+      }
+    },
+    {
+      "image": "theme-87-0.png",
+      "style": "chesscom/tournament",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-87-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 117.2705
+      },
+      "after": {
+        "image": "theme-87-0.png",
+        "found": false,
+        "exact": false,
+        "ms": 116.835875
+      }
+    },
+    {
+      "image": "theme-87-1.png",
+      "style": "chesscom/tournament",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-87-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 123.3685
+      },
+      "after": {
+        "image": "theme-87-1.png",
+        "found": false,
+        "exact": false,
+        "ms": 120.811042
+      }
+    },
+    {
+      "image": "theme-88-0.png",
+      "style": "chesscom/vintage",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-88-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.82025
+      },
+      "after": {
+        "image": "theme-88-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.482416
+      }
+    },
+    {
+      "image": "theme-88-1.png",
+      "style": "chesscom/vintage",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-88-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.78875
+      },
+      "after": {
+        "image": "theme-88-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 16.699416
+      }
+    },
+    {
+      "image": "theme-89-0.png",
+      "style": "chesscom/3d_wood",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-89-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 144.484125
+      },
+      "after": {
+        "image": "theme-89-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 143.426833
+      }
+    },
+    {
+      "image": "theme-89-1.png",
+      "style": "chesscom/3d_wood",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-89-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 63.494875
+      },
+      "after": {
+        "image": "theme-89-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 97.827
+      }
+    },
+    {
+      "image": "theme-90-0.png",
+      "style": "chesscom/3d_staunton",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-90-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.923833
+      },
+      "after": {
+        "image": "theme-90-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 130.885625
+      }
+    },
+    {
+      "image": "theme-90-1.png",
+      "style": "chesscom/3d_staunton",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-90-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 60.689959
+      },
+      "after": {
+        "image": "theme-90-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 99.188541
+      }
+    },
+    {
+      "image": "theme-91-0.png",
+      "style": "chesscom/3d_plastic",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-91-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 62.683875
+      },
+      "after": {
+        "image": "theme-91-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 95.931042
+      }
+    },
+    {
+      "image": "theme-91-1.png",
+      "style": "chesscom/3d_plastic",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-91-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 58.663167
+      },
+      "after": {
+        "image": "theme-91-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 99.519709
+      }
+    },
+    {
+      "image": "theme-92-0.png",
+      "style": "chesscom/ca09k",
+      "orientation": "White at bottom",
+      "before": {
+        "image": "theme-92-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 59.722667
+      },
+      "after": {
+        "image": "theme-92-0.png",
+        "found": true,
+        "exact": true,
+        "ms": 93.437792
+      }
+    },
+    {
+      "image": "theme-92-1.png",
+      "style": "chesscom/ca09k",
+      "orientation": "Black at bottom",
+      "before": {
+        "image": "theme-92-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 141.731833
+      },
+      "after": {
+        "image": "theme-92-1.png",
+        "found": true,
+        "exact": true,
+        "ms": 144.425375
+      }
+    }
+  ]
+}

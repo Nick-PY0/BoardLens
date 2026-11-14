@@ -45,4 +45,22 @@ public class PhoneBoardLayoutTest {
    assertNull(reader.classify(phone,new Rect(0,686,1080,1650),"Auto"));board.recycle();phone.recycle();
   }
  }
+ @Test public void discoveryFindsPiecesDespiteAnotherEmptyCheckerboard()throws Exception{
+  try(InputStream in=getClass().getClassLoader().getResourceAsStream("fixtures/chesscom-starting-board.png");BoardReader reader=new BoardReader(RuntimeEnvironment.getApplication())){
+   Bitmap board=BitmapFactory.decodeStream(in),phone=layout(board,1080,2340,100,1250,850);Canvas canvas=new Canvas(phone);Paint paint=new Paint();
+   for(int row=0;row<8;row++)for(int col=0;col<8;col++){paint.setColor((row+col)%2==0?0xffeeeed2:0xff769656);canvas.drawRect(100+col*106.25f,100+row*106.25f,100+(col+1)*106.25f,100+(row+1)*106.25f,paint);}
+   long[] times=new long[5];
+   for(int i=0;i<times.length;i++){reader.resetTracking();long start=System.nanoTime();BoardReader.Read read=reader.read(phone,null,"Auto");times[i]=(System.nanoTime()-start)/1000000;assertNotNull(reader.diagnostic,read);assertEquals(START,read.placement());assertTrue(read.rect().toString(),read.rect().top>1200);}
+   Arrays.sort(times);System.out.println("Discovery with empty checkerboard median ms: "+times[2]+" runs="+Arrays.toString(times));board.recycle();phone.recycle();
+  }
+ }
+ @Test public void knownFlatBoardRejectsAnEmptyLoadingTransitionAndRecovers()throws Exception{
+  try(InputStream in=getClass().getClassLoader().getResourceAsStream("fixtures/chesscom-starting-board.png");BoardReader reader=new BoardReader(RuntimeEnvironment.getApplication())){
+   Bitmap board=BitmapFactory.decodeStream(in),phone=layout(board,1080,2340,0,686,1080),empty=Bitmap.createBitmap(1080,2340,Bitmap.Config.ARGB_8888);empty.eraseColor(0xff262421);Canvas canvas=new Canvas(empty);Paint p=new Paint();
+   for(int row=0;row<8;row++)for(int col=0;col<8;col++){p.setColor((row+col)%2==0?0xffeeeed2:0xff769656);canvas.drawRect(col*135,686+row*135,(col+1)*135,686+(row+1)*135,p);}
+   BoardReader.Read initial=reader.read(phone,null,"Auto");assertNotNull(initial);long[] times=new long[5];
+   for(int i=0;i<times.length;i++){long at=System.nanoTime();assertNull("Missing pieces must not become a guessed position",reader.track(empty,initial.rect(),"Auto"));times[i]=(System.nanoTime()-at)/1000000;}
+   Arrays.sort(times);System.out.println("Empty loading transition median ms: "+times[2]+" runs="+Arrays.toString(times));assertEquals(START,reader.read(phone,null,"Auto").placement());board.recycle();phone.recycle();empty.recycle();
+  }
+ }
 }

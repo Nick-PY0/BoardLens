@@ -25,8 +25,8 @@ public final class AppUpdater implements AutoCloseable {
  }
  private static final class Job {volatile boolean cancelled,manual;volatile String stage="Connecting to GitHub…";ExecutorService workers;Thread thread;}
  private record Release(long code,String version,String apk,String page){}
- private final Activity activity;private final Fetch fetch;private Job active;private AlertDialog progress;
- AppUpdater(Activity a){this(a,new HttpFetch());}AppUpdater(Activity a,Fetch fetch){activity=a;this.fetch=fetch;}
+ private final Activity activity;private final Fetch fetch;private final long timeoutMillis;private Job active;private AlertDialog progress;
+ AppUpdater(Activity a){this(a,new HttpFetch());}AppUpdater(Activity a,Fetch fetch){this(a,fetch,15000);}AppUpdater(Activity a,Fetch fetch,long timeoutMillis){activity=a;this.fetch=fetch;this.timeoutMillis=timeoutMillis;}
  public void check(){check(false);}
  static JSONObject assetInfo(JSONObject r,String name){JSONArray list=r.optJSONArray("assets");if(list!=null)for(int i=0;i<list.length();i++){JSONObject a=list.optJSONObject(i);if(a!=null&&name.equals(a.optString("name")))return a;}return new JSONObject();}
  static String asset(JSONObject r,String name){String url=assetInfo(r,name).optString("browser_download_url");return url.startsWith(ROOT+"/download/")?url:"";}
@@ -53,11 +53,11 @@ public final class AppUpdater implements AutoCloseable {
     if(job.cancelled)throw new CancellationException();String url=asset(release,"boardlens-update.json");JSONObject info=assetInfo(release,"boardlens-update.json");String key="manifest:"+url+":"+info.optString("updated_at")+":"+info.optString("digest");String cached=prefs.getString(key,"");String json=cached.isEmpty()?fetch.read(url,65536):cached;JSONObject android=new JSONObject(json).getJSONObject("android");
     if(!android.optString("asset").equals("BoardLens-Companion-Android.apk")||!android.optString("sha256").matches("[a-fA-F0-9]{64}"))throw new IOException("Invalid update manifest");if(cached.isEmpty()&&!job.cancelled)prefs.edit().putString(key,json).apply();return new Release(android.getLong("version_code"),android.optString("version"),asset(release,"BoardLens-Companion-Android.apk"),release.getString("html_url"));
    });
-   long until=System.nanoTime()+TimeUnit.SECONDS.toNanos(15);int inspected=0;
+   long until=System.nanoTime()+TimeUnit.MILLISECONDS.toNanos(timeoutMillis);int inspected=0;
    for(int done=0;done<candidates.size();done++){long remaining=until-System.nanoTime();Future<Release> result=remaining>0?checks.poll(remaining,TimeUnit.NANOSECONDS):null;if(result==null)throw new SocketTimeoutException();try{Release r=result.get();inspected++;if(best==null||r.code()>best.code())best=r;}catch(ExecutionException badRelease){}stage(job,"Checking Android releases · "+(done+1)+"/"+candidates.size());}
    if(inspected==0&&!candidates.isEmpty())throw new IOException("Release details unavailable");
    if(best!=null&&best.code()>current)message="Android "+best.version()+" is ready. Download the APK, then approve installation in Android.";else{best=null;message=candidates.isEmpty()?"No Android release is available yet.":"You have the latest Android version.";}if(!job.cancelled)prefs.edit().putLong("lastCheck",System.currentTimeMillis()).apply();
-  }catch(Exception error){if(job.cancelled)return;failed=true;message=error instanceof SocketTimeoutException?"GitHub took too long to respond. Check your connection and try again.":"Could not finish the update check. Check your connection and try again.";}
+  }catch(Exception error){if(job.cancelled)return;failed=true;best=null;message=error instanceof SocketTimeoutException?"GitHub took too long to respond. Check your connection and try again.":"Could not finish the update check. Check your connection and try again.";}
   finally{if(job.workers!=null)job.workers.shutdownNow();}
   String text=message;Release update=best;boolean error=failed;
   activity.runOnUiThread(()->{if(active!=job)return;active=null;if(progress!=null){progress.dismiss();progress=null;}if(!usable()||!job.manual&&(update==null||!activity.hasWindowFocus()))return;AlertDialog.Builder dialog=new AlertDialog.Builder(activity).setTitle(error?"Update check incomplete":"BoardLens updates").setMessage(text).setNegativeButton("Close",null);if(update!=null){dialog.setPositiveButton("Download APK",(d,w)->activity.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(update.apk()))));dialog.setNeutralButton("Release notes",(d,w)->activity.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(update.page()))));}dialog.show();});

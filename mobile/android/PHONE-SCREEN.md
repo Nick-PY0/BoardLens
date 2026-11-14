@@ -1,4 +1,4 @@
-# Phone screen analysis — Android 1.8.6
+# Phone screen analysis — Android 1.8.7
 
 The app has two sections in one menu:
 
@@ -46,3 +46,7 @@ Models → **Test installed engines** performs actual inference and legal-move c
 ## Updates
 
 The app checks public Android releases independently from the desktop release, normally no more than once per six hours. A manual Check for updates button is on the section picker. Android/browser handles download and installation after your approval. No silent installer or REQUEST_INSTALL_PACKAGES permission is used. Keep normal Android security checks enabled.
+
+## Faster 2D discovery
+
+The scanner prioritizes 2D candidates before full context-model fallback. Known 2D boards use the fast recognizer during loading or animation; losing the target triggers global rediscovery, including the existing context/theme fallbacks. Confidence thresholds and your engine thinking budget stay unchanged. Targeted host benchmarks improved, while the mixed-theme median stayed about the same. See the mobile test report for actual measurements and device limits.

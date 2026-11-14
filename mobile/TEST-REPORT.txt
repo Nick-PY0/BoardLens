@@ -1,3 +1,46 @@
+BOARDLENS ANDROID 1.8.7 / CODE 17 — NOVEMBER 13, 2026
+
+78 host Android tests pass with real Maia and Stockfish checks enabled, zero
+skipped; release lint and the complete .NET APK build pass. Engine thinking
+budgets, weights, confidence thresholds, legal-position checks and screen
+refresh intervals are unchanged.
+
+Discovery now checks the inexpensive 2D candidates before running a full
+64-square context inference on rejected grids. Context, rectangular and
+projected-board fallbacks remain available. Once a 2D board is known, a loading
+or animated frame stays on that fast path; global discovery recovers a changed
+theme after tracking is lost. Supported contextual tracking retains its model.
+
+Five-run Mac-host component benchmarks:
+- Real board below an empty false checkerboard: median 91 ms before, 42 ms
+  after the discovery change (35 ms in a later warmed audit run).
+- Rejected empty loading frame on a known 2D board: median 65 ms before,
+  13 ms after. The readable board was recognized again afterward.
+These are targeted component measurements, not A35 end-to-end timings.
+
+The same 186 local artwork fixtures were checked before and after in the host
+JVM: 158 exact reads, 28 rejected, zero accepted wrong, no lost exact cases.
+The overall median stayed near 21 ms; this is not an across-the-board speedup.
+The per-case report is docs/recognition/android-discovery-1.8.7-host.json.
+The earlier Android component audit used a different runtime and still stands
+separately; this host audit does not establish universal theme/3D coverage.
+
+Testing exposed an update-check bug: a deadline after partial release results
+could retain an unselected/older APK and surface an automatic error dialog.
+Failed checks now discard partial choices, so quiet failures do not interrupt
+startup and manual failures cannot offer that APK. A partial-result timeout
+regression test covers this behavior. The production update timeout is unchanged.
+
+The signed APK upgraded 1.8.6 in an isolated Android 36 ARM64 emulator with
+package verification enabled. It opened without the prior update-error dialog.
+Live capture recognized an untouched offline opening board and displayed
+arrows. A manual d2-d4 move through the overlay was accepted; suggestions and
+arrows updated for Black without Scan now. Boychesser at 0.3 s, evaluation off.
+No physical A35 is connected for this version, so actual phone latency and the
+reported phone Chrome failure remain unverified. No human game was started.
+
+PREVIOUS CHECKS — ANDROID 1.8.6
+
 BOARDLENS ANDROID 1.8.6 / CODE 16 — NOVEMBER 13, 2026
 
 75 Android JVM/Robolectric tests pass with real Maia and Stockfish model/adapter

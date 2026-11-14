@@ -30,7 +30,9 @@ final class BoardReader implements AutoCloseable {
 
   Read track(Bitmap image,Rect previous,String orientation)throws Exception{
     if(previous==null)return null;
-    if(tracked!=null&&contextualTrack)return context.classify(image,tracked,orientation);
+    // Do not run the full context model on each animation of a known 2D board.
+    // Global discovery still handles theme changes after tracking is lost.
+    if(tracked!=null)return contextualTrack?context.classify(image,tracked,orientation):classify2D(image,previous,orientation);
     return classify(image,previous,orientation);
   }
   void resetTracking(){tracked=null;contextualTrack=false;}
@@ -38,14 +40,18 @@ final class BoardReader implements AutoCloseable {
   private static boolean fresh(Set<String> tried,Rect r){return tried.add(r.left+":"+r.top+":"+r.right+":"+r.bottom);}
   Read read(Bitmap image, Rect previous, String orientation) throws Exception {
     Set<String> tried=new HashSet<>();
+    List<Rect> contextual=new ArrayList<>();
     if(previous!=null){fresh(tried,previous);Read known=track(image,previous,orientation);if(known!=null)return known;}
     if(image.getWidth()==image.getHeight()){
       Rect whole=new Rect(0,0,image.getWidth(),image.getHeight());
-      if(fresh(tried,whole)){Read read=classify(image,whole,orientation);if(read!=null)return read;}
+      if(fresh(tried,whole)){Read read=classify2D(image,whole,orientation);if(read!=null)return read;contextual.add(whole);}
     }
-    for(Rect r:GradientBoards.detectFast(image))if(fresh(tried,r)){Read read=classify(image,r,orientation);if(read!=null)return read;}
-    for(Rect r:GradientBoards.detect(image))if(fresh(tried,r)){Read read=classify(image,r,orientation);if(read!=null)return read;}
-    for(Rect r:detect(image))if(fresh(tried,r)){Read read=classify(image,r,orientation);if(read!=null)return read;}
+    // Exhaust the inexpensive 2D candidates before running a full 64-square
+    // context inference on false grids. Keep every context fallback available.
+    for(Rect r:GradientBoards.detectFast(image))if(fresh(tried,r)){Read read=classify2D(image,r,orientation);if(read!=null)return read;contextual.add(r);}
+    for(Rect r:GradientBoards.detect(image))if(fresh(tried,r)){Read read=classify2D(image,r,orientation);if(read!=null)return read;contextual.add(r);}
+    for(Rect r:detect(image))if(fresh(tried,r)){Read read=classify2D(image,r,orientation);if(read!=null)return read;contextual.add(r);}
+    for(Rect candidate:contextual){Rect r=squareBounds(candidate,image.getWidth(),image.getHeight());if(r==null)continue;BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;diagnostic="";return read;}}
     for(Rect r:detectRectangular(image))if(fresh(tried,r)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;return read;}}
     for(Rect r:GradientBoards.detectProjected(image))if(fresh(tried,r)){BoardGeometry g=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;return read;}}
     for(BoardGeometry g:ProjectedBoards.detect(image)){Read read=context.classify(image,g,orientation);if(read!=null){tracked=g;contextualTrack=true;return read;}}
@@ -65,9 +71,13 @@ final class BoardReader implements AutoCloseable {
   Read classify(Bitmap image, Rect candidate, String orientation)throws Exception{
     Rect r=squareBounds(candidate,image.getWidth(),image.getHeight());if(r==null)return null;
     BoardGeometry geometry=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);
-    Read flat=classifyFlat(image,r,orientation);
-    if(flat!=null&&context.verifyFlat(image,geometry,flat)){tracked=geometry;contextualTrack=false;diagnostic="";return flat;}
+    Read flat=classify2D(image,r,orientation);if(flat!=null)return flat;
     Read read=context.classify(image,geometry,orientation);if(read!=null){tracked=geometry;contextualTrack=true;diagnostic="";}return read;
+  }
+  private Read classify2D(Bitmap image,Rect candidate,String orientation)throws Exception{
+    Rect r=squareBounds(candidate,image.getWidth(),image.getHeight());if(r==null)return null;
+    BoardGeometry geometry=BoardGeometry.rectangle(r.left,r.top,r.right,r.bottom);Read flat=classifyFlat(image,r,orientation);
+    if(flat!=null&&context.verifyFlat(image,geometry,flat)){tracked=geometry;contextualTrack=false;diagnostic="";return flat;}return null;
   }
 
   private Read classifyFlat(Bitmap image, Rect r,String orientation)throws Exception{
